@@ -26,6 +26,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         });
     }
 
+
     private float semesterGPA(List<SubjectInfo> subjectInfo) {
         float res = 0.0f;
         int total_credit = 0;
