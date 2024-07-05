@@ -7,14 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".GPACalculatorActivity">
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="31dp" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="100dp"
@@ -123,4 +115,13 @@
             <TextView android:text="" />
         </TableRow>
     </TableLayout>
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="84dp"
+        android:layout_height="45dp"
+        app:srcCompat="@drawable/ppp_logo"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
