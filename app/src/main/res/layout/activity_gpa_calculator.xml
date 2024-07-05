@@ -7,31 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".GPACalculatorActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="100dp"
-        android:layout_height="14dp"
-        android:text="학기 전공 평점"
-        tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="291dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="100dp"
-        android:layout_height="14dp"
-        android:text="총 평점"
-        tools:layout_editor_absoluteX="295dp"
-        tools:layout_editor_absoluteY="291dp" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="100dp"
+            android:layout_height="14dp"
+            android:text="총 평점" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="100dp"
-        android:layout_height="14dp"
-        android:text="학기 평점"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="291dp" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="100dp"
+            android:layout_height="14dp"
+            android:text="학기 전공 평점" />
 
-    <TextView
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="100dp"
+            android:layout_height="14dp"
+            android:text="학기 평점" />
+    </LinearLayout>
+
+    <EditText
         android:id="@+id/textView6"
         android:layout_width="47dp"
         android:layout_height="20dp"
@@ -39,7 +42,7 @@
         tools:layout_editor_absoluteX="325dp"
         tools:layout_editor_absoluteY="331dp" />
 
-    <TextView
+    <EditText
         android:id="@+id/textView4"
         android:layout_width="47dp"
         android:layout_height="20dp"
@@ -47,7 +50,7 @@
         tools:layout_editor_absoluteX="42dp"
         tools:layout_editor_absoluteY="331dp" />
 
-    <TextView
+    <EditText
         android:id="@+id/textView5"
         android:layout_width="47dp"
         android:layout_height="20dp"
@@ -60,59 +63,47 @@
         android:layout_height="242dp"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="488dp"
-        android:stretchColumns="0">
+        android:stretchColumns="0"
+        >
 
-<!--        <TableRow-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
-<!--        -->
-
-<!--        <TableRow-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
-
-<!--        <TableRow-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
-
-<!--        <TableRow-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
         <TableRow>
-            <TextView
+            <EditText
                 android:text="과목명"
                 android:textSize="20dp"
                 />
-            <TextView android:text="학점"
+            <EditText
+                android:text="학점"
                 android:textSize="20dp"/>
-            <TextView android:text="성적"
+            <EditText
+                android:text="성적"
                 android:textSize="20dp"/>
-            <TextView android:text="전공"
+            <EditText
+                android:text="전공"
                 android:textSize="20dp"/>
         </TableRow>
         <TableRow>
-            <TextView android:text="" />
-            <TextView android:text="" />
-            <TextView android:text="" />
-            <TextView android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
         </TableRow>
         <TableRow>
-            <TextView android:text="" />
-            <TextView android:text="" />
-            <TextView android:text="" />
-            <TextView android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
         </TableRow>
         <TableRow>
-            <TextView android:text="" />
-            <TextView android:text="" />
-            <TextView android:text="" />
-            <TextView android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
         </TableRow>
         <TableRow>
-            <TextView android:text="" />
-            <TextView android:text="" />
-            <TextView android:text="" />
-            <TextView android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
+            <EditText android:text="" />
         </TableRow>
     </TableLayout>
 
@@ -120,8 +111,10 @@
         android:id="@+id/imageView7"
         android:layout_width="84dp"
         android:layout_height="45dp"
-        app:srcCompat="@drawable/ppp_logo"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ppp_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
