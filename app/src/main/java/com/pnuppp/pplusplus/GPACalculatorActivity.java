@@ -8,8 +8,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 public class GPACalculatorActivity extends AppCompatActivity {
 
@@ -23,6 +23,29 @@ public class GPACalculatorActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+
+    private float semesterGPA(List<SubjectInfo> subjectInfo) {
+        float res = 0.0f;
+        int total_credit = 0;
+        for (SubjectInfo s : subjectInfo) {
+            total_credit += s.credit;
+            res += (s.credit * s.grade) / total_credit;
+        }
+        return res;
+    }
+
+    private float majorGPA(List<SubjectInfo> subjectInfo) {
+        float res = 0.0f;
+        int total_majorCredit = 0;
+        for (SubjectInfo s : subjectInfo) {
+            if (s.isMajor) {
+                total_majorCredit += s.credit;
+                res += (s.credit * s.grade) / total_majorCredit;
+            }
+        }
+        return res;
     }
 
     private List<SubjectInfo> getEverytimeSubjectInfos(){
