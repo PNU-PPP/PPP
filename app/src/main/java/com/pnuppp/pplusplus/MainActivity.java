@@ -1,7 +1,8 @@
 package com.pnuppp.pplusplus;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Button buttonMyGPA = findViewById(R.id.button3);
+        buttonMyGPA.setOnClickListener(v->{
+            Intent myIntent = new Intent(MainActivity.this, GPACalculatorActivity.class);
+            startActivity(myIntent);
+        });
     }
-
-
 }
