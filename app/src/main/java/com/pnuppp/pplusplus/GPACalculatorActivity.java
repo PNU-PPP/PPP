@@ -9,8 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.List;
-
-import kotlinx.coroutines.selects.SelectUnbiasedKt;
+import java.util.ArrayList;
 
 public class GPACalculatorActivity extends AppCompatActivity {
 
@@ -47,5 +46,11 @@ public class GPACalculatorActivity extends AppCompatActivity {
             }
         }
         return res;
+    }
+
+    private List<SubjectInfo> getEverytimeSubjectInfos(){
+        //TODO
+        List<SubjectInfo> list = new ArrayList<>();
+        return list;
     }
 }
