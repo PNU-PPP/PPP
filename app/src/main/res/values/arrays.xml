@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gradeSpinnerItems">
+        <item>A+</item>
+        <item>A0</item>
+        <item>B+</item>
+        <item>B0</item>
+        <item>C+</item>
+        <item>C0</item>
+        <item>D+</item>
+        <item>D0</item>
+        <item>F</item>
+        <item>S</item>
+        <item>U</item>
+    </string-array>
+</resources>

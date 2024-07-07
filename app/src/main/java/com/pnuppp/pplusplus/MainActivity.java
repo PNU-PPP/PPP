@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         Button buttonMyGPA = findViewById(R.id.button3);
         buttonMyGPA.setOnClickListener(v->{
             Intent myIntent = new Intent(MainActivity.this, GPACalculatorActivity.class);
