@@ -145,90 +145,109 @@
         <TableRow>
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_weight="10"
-                android:text="" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:singleLine="true" />
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:text="" />
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center" />
 
             <Spinner
                 android:layout_width="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
                 android:layout_width="match_parent"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_weight="10"
-                android:text="" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:singleLine="true" />
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:text="" />
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center" />
 
             <Spinner
                 android:layout_width="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
                 android:layout_width="match_parent"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_weight="10"
-                android:text="" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:singleLine="true" />
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:text="" />
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center" />
 
             <Spinner
                 android:layout_width="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
                 android:layout_width="match_parent"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_weight="10"
-                android:text="" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:singleLine="true" />
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:text="" />
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center" />
 
             <Spinner
                 android:layout_width="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
                 android:layout_width="match_parent"
-                android:layout_weight="1" />
-        </TableRow>
+                android:layout_height="wrap_content" /></TableRow>
     </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
