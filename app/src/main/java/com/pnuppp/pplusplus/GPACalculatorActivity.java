@@ -1,6 +1,7 @@
 package com.pnuppp.pplusplus;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -37,6 +38,13 @@ public class GPACalculatorActivity extends AppCompatActivity {
         Toast.makeText(this, "semester: "+semesterGPA(tempSubjectInfo), Toast.LENGTH_LONG).show();
         Toast.makeText(this, "major: "+majorGPA(tempSubjectInfo), Toast.LENGTH_LONG).show();
         ////////////////////////////////////////////
+
+        //////////// Everytime 시간표 파싱 테스트 //////////////
+        Button buttonEverytime = findViewById(R.id.buttonEverytime);
+        buttonEverytime.setOnClickListener(v -> {
+            EverytimeTimetableParser.parse("b30NuC8130Bz1mLBaScr");
+        });
+        ////////////////////////////////////////////////////
     }
 
 

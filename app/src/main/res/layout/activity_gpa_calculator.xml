@@ -250,4 +250,12 @@
                 android:layout_height="wrap_content" /></TableRow>
     </TableLayout>
 
+    <Button
+        android:id="@+id/buttonEverytime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="에타 테스트 Logcat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
