@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button1"
         android:layout_width="54dp"
         android:layout_height="48dp"
         android:layout_marginTop="52dp"
@@ -44,10 +44,10 @@
         app:layout_constraintVertical_bias="0.281" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button4"
         android:layout_width="318dp"
         android:layout_height="48dp"
-        android:text="학과 공지사항/비교과 활동"
+        android:text="학과 공지사항 / 비교과 활동"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
@@ -56,7 +56,7 @@
         app:layout_constraintVertical_bias="0.357" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button5"
         android:layout_width="318dp"
         android:layout_height="48dp"
         android:text="Button"
@@ -67,7 +67,7 @@
         app:layout_constraintVertical_bias="0.871" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button6"
         android:layout_width="318dp"
         android:layout_height="48dp"
         android:text="Button"
@@ -82,6 +82,7 @@
         android:layout_width="133dp"
         android:layout_height="28dp"
         android:layout_marginStart="32dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/imageButton3"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/img_logo2" />

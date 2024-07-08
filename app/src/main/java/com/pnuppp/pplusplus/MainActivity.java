@@ -23,10 +23,26 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        Button buttonInfoEdit = findViewById(R.id.button2);
+        buttonInfoEdit.setOnClickListener(v -> {
+            Intent newIntent = new Intent(MainActivity.this, InfoEditActivity.class);
+            startActivity(newIntent);
+        });
+
         Button buttonMyGPA = findViewById(R.id.button3);
         buttonMyGPA.setOnClickListener(v->{
             Intent myIntent = new Intent(MainActivity.this, GPACalculatorActivity.class);
             startActivity(myIntent);
         });
+
+        Button buttonExternalManagement = findViewById(R.id.button4);
+        buttonExternalManagement.setOnClickListener(v -> {
+            Intent newIntent = new Intent(MainActivity.this, ExternalManagementActivity.class);
+            startActivity(newIntent);
+        });
+
+
+
+
     }
 }
