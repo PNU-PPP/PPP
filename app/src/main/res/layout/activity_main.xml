@@ -150,6 +150,6 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_logo" />
+        app:srcCompat="@drawable/ppp_logo_vector" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
