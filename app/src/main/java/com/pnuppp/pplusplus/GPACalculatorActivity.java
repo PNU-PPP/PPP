@@ -1,6 +1,7 @@
 package com.pnuppp.pplusplus;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,19 @@ public class GPACalculatorActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        /////////////// 학점 계산 테스트 용 //////////////
+        List<SubjectInfo> tempSubjectInfo = new ArrayList<>();
+        tempSubjectInfo.add(new SubjectInfo("C++", 4, 4.0f, true));
+        tempSubjectInfo.add(new SubjectInfo("데과입", 3, 3.5f, true));
+        tempSubjectInfo.add(new SubjectInfo("시소", 3, 3.0f, true));
+        tempSubjectInfo.add(new SubjectInfo("논회설", 3, 4.0f, true));
+        tempSubjectInfo.add(new SubjectInfo("유닉스", 3, 4.0f, true));
+        tempSubjectInfo.add(new SubjectInfo("교양", 3, 2.0f, false));
+
+        Toast.makeText(this, "semester: "+semesterGPA(tempSubjectInfo), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "major: "+majorGPA(tempSubjectInfo), Toast.LENGTH_LONG).show();
+        ////////////////////////////////////////////
     }
 
 
