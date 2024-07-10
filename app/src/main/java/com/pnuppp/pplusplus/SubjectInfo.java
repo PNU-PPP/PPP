@@ -6,6 +6,12 @@ public class SubjectInfo {
     float grade;
     boolean isMajor;
 
+    SubjectInfo(){
+        this.subjectName = "";
+        this.credit = 0;
+        this.grade = 4.5f;
+        this.isMajor = false;
+    }
     SubjectInfo(String subjectName, int credit, float grade, boolean isMajor){
         this.subjectName = subjectName;
         this.credit = credit;
