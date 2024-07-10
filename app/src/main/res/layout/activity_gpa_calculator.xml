@@ -18,6 +18,7 @@
         app:srcCompat="@drawable/ppp_logo_vector" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -56,6 +57,7 @@
                 android:textSize="24sp" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,6 +86,7 @@
                 android:textColor="#3F51B5"
                 android:textSize="24sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -160,6 +163,7 @@
                 android:textAlignment="center" />
 
             <Spinner
+                android:id="@+id/grade1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
@@ -187,6 +191,7 @@
                 android:textAlignment="center" />
 
             <Spinner
+                android:id="@+id/grade2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
@@ -214,6 +219,7 @@
                 android:textAlignment="center" />
 
             <Spinner
+                android:id="@+id/grade3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
@@ -241,6 +247,7 @@
                 android:textAlignment="center" />
 
             <Spinner
+                android:id="@+id/grade4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
@@ -257,5 +264,14 @@
         android:text="에타 테스트 Logcat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/semester"
+        android:layout_width="72dp"
+        android:layout_height="52dp"
+        android:entries="@array/semesterSelect"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
