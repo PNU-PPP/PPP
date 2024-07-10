@@ -160,6 +160,7 @@
                 android:textAlignment="center" />
 
             <Spinner
+                android:id="@+id/grade1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
@@ -187,6 +188,7 @@
                 android:textAlignment="center" />
 
             <Spinner
+                android:id="@+id/grade2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
@@ -214,6 +216,7 @@
                 android:textAlignment="center" />
 
             <Spinner
+                android:id="@+id/grade3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
@@ -241,6 +244,7 @@
                 android:textAlignment="center" />
 
             <Spinner
+                android:id="@+id/grade4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/gradeSpinnerItems" />
