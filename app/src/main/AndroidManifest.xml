@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PPlusPlus"
         tools:targetApi="31">
-        <activity android:name=".InfoEditActivity" />
+        <activity android:name=".InfoEditActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ExternalManagementActivity" />
         <activity
             android:name=".GPACalculatorActivity"
