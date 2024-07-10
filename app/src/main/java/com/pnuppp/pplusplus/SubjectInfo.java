@@ -12,4 +12,5 @@ public class SubjectInfo {
         this.grade = grade;
         this.isMajor = isMajor;
     }
+
 }
