@@ -4,14 +4,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,32 +36,36 @@ public class EverytimeTimetableParser {
 
                 InputStream inputStream = httpURLConnection.getInputStream();
 
-                BufferedReader bufferRead = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer response = new StringBuffer();
-                String nextline = null;
-                while ((nextline = bufferRead.readLine()) != null) {
-                    response.append(nextline);
-                    response.append('\r');
-                }
-                bufferRead.close();
-                String responseStr = response.toString();
-                Log.d("ETTP-parse", responseStr);
-                inputStream.close();
-                /*
-                XmlPullParserFactory xmlPullParserFactory = XmlPullParserFactory.newInstance();
-                XmlPullParser xmlPullParser = xmlPullParserFactory.newPullParser();
+                List<SubjectInfo> subjectInfoList = new ArrayList<>();
+                XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
                 xmlPullParser.setInput(new InputStreamReader(inputStream));
                 int eventType = xmlPullParser.getEventType();
+
+                boolean subjectStarted = false;
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if (eventType == XmlPullParser.START_TAG) {
-                        if (xmlPullParser.getName().equals("subject")) {
+                        if(xmlPullParser.getName().equals("subject")) {
+                            subjectInfoList.add(new SubjectInfo());
+                            subjectStarted = true;
+                        }else if(subjectStarted){
+                            if(xmlPullParser.getName().equals("name"))
+                                subjectInfoList.get(subjectInfoList.size() - 1).subjectName = xmlPullParser.getAttributeValue(null, "value");
+                            else if(xmlPullParser.getName().equals("credit"))
+                                subjectInfoList.get(subjectInfoList.size() - 1).credit = Integer.parseInt(xmlPullParser.getAttributeValue(null, "value"));
                         }
+                   }else if(eventType == XmlPullParser.END_TAG && xmlPullParser.getName().equals("subject")) {
+                        subjectStarted = false;
                     }
                     eventType = xmlPullParser.next();
-                }*/
-                }catch(IOException e){
-                    e.printStackTrace();
                 }
+                inputStream.close();
+
+                for (SubjectInfo subjectInfo : subjectInfoList) {
+                   Log.i("ETP", subjectInfo.subjectName + " " + subjectInfo.credit);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         });
     }
 
