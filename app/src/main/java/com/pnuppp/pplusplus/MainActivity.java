@@ -7,40 +7,46 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import android.os.Bundle;
+import android.util.Log;
+
+import com.kakao.vectormap.KakaoMap;
+import com.kakao.vectormap.KakaoMapReadyCallback;
+import com.kakao.vectormap.MapLifeCycleCallback;
+import com.kakao.vectormap.MapView;
 
 public class MainActivity extends AppCompatActivity {
+    MapView mapView;
+    KakaoMap kakaoMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        Button buttonInfoEdit = findViewById(R.id.button2);
-        buttonInfoEdit.setOnClickListener(v -> {
-            Intent newIntent = new Intent(MainActivity.this, InfoEditActivity.class);
-            startActivity(newIntent);
-        });
+        mapView = findViewById(R.id.map_view);
+        mapView.start(new MapLifeCycleCallback() {
+            @Override
+            public void onMapDestroy() {
+                // 지도 API가 정상적으로 종료될 때 호출
+                Log.d("KakaoMap", "onMapDestroy: ");
+            }
 
-        Button buttonMyGPA = findViewById(R.id.button3);
-        buttonMyGPA.setOnClickListener(v->{
-            Intent myIntent = new Intent(MainActivity.this, GPACalculatorActivity.class);
-            startActivity(myIntent);
-        });
-
-        Button buttonExternalManagement = findViewById(R.id.button4);
-        buttonExternalManagement.setOnClickListener(v -> {
-            Intent newIntent = new Intent(MainActivity.this, ExternalManagementActivity.class);
-            startActivity(newIntent);
+            @Override
+            public void onMapError(Exception error) {
+                // 인증 실패 및 지도 사용 중 에러가 발생할 때 호출
+                Log.e("KakaoMap", "onMapError: ", error);
+            }
+        }, new KakaoMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull KakaoMap map) {
+                // 정상적으로 인증이 완료되었을 때 호출
+                // KakaoMap 객체를 얻어 옵니다.
+                kakaoMap = map;
+            }
         });
 
         // 전달받은 값을 설정할 TextView
