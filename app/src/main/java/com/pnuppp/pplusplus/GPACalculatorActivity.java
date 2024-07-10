@@ -2,7 +2,10 @@ package com.pnuppp.pplusplus;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -57,6 +60,62 @@ public class GPACalculatorActivity extends AppCompatActivity {
         });
         ////////////////////////////////////////////////////
 
+        Spinner spinner1 = findViewById(R.id.grade1);
+        Spinner spinner2 = findViewById(R.id.grade2);
+        Spinner spinner3 = findViewById(R.id.grade3);
+        Spinner spinner4 = findViewById(R.id.grade4);
+
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                semesterGPA(tempSubjectInfo);
+                majorGPA(tempSubjectInfo);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                semesterGPA(tempSubjectInfo);
+                majorGPA(tempSubjectInfo);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                semesterGPA(tempSubjectInfo);
+                majorGPA(tempSubjectInfo);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+        spinner4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                semesterGPA(tempSubjectInfo);
+                majorGPA(tempSubjectInfo);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+
+        Spinner spinner5 = findViewById(R.id.semester);
+
         List<SubjectInfo> subjectInfoList = loadGPAData();
         if (subjectInfoList != null) {
             Toast.makeText(this, "Loaded GPA Data", Toast.LENGTH_LONG).show();
@@ -70,6 +129,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         super.onPause();
         saveGPAData(getEverytimeSubjectInfos());
     }
+
 
     private float semesterGPA(List<SubjectInfo> subjectInfo) {
         float res = 0.0f;
