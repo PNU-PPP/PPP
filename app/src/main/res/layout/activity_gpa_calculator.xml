@@ -11,15 +11,17 @@
         android:id="@+id/imageView3"
         android:layout_width="84dp"
         android:layout_height="45dp"
-        app:srcCompat="@drawable/ppp_logo"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="31dp" />
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ppp_logo_vector" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/tableLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -28,7 +30,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,37 +38,12 @@
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="총 평점"
                 android:textAlignment="center"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="학기 전공 평점"
-                android:textAlignment="center"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="학기 평점"
-                android:textAlignment="center"
-                android:textSize="14sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView6"
@@ -78,6 +55,25 @@
                 android:textColor="#3F51B5"
                 android:textSize="24sp" />
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="학기 전공 평점"
+                android:textAlignment="center"
+                android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
@@ -87,6 +83,20 @@
                 android:textAlignment="center"
                 android:textColor="#3F51B5"
                 android:textSize="24sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="학기 평점"
+                android:textAlignment="center"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -103,8 +113,11 @@
 
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="409dp"
-        android:layout_height="242dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:stretchColumns="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -112,66 +125,129 @@
 
         <TableRow>
 
-            <EditText
+            <TextView
                 android:text="과목명"
                 android:textSize="20dp" />
 
-            <EditText
+            <TextView
                 android:text="학점"
                 android:textSize="20dp" />
 
-            <EditText
+            <TextView
                 android:text="성적"
                 android:textSize="20dp" />
 
-            <EditText
+            <TextView
                 android:text="전공"
                 android:textSize="20dp" />
         </TableRow>
 
         <TableRow>
 
-            <EditText android:text="" />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:singleLine="true" />
 
-            <EditText android:text="" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center" />
 
-            <EditText android:text="" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/gradeSpinnerItems" />
 
-            <EditText android:text="" />
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
 
-            <EditText android:text="" />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:singleLine="true" />
 
-            <EditText android:text="" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center" />
 
-            <EditText android:text="" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/gradeSpinnerItems" />
 
-            <EditText android:text="" />
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
 
-            <EditText android:text="" />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:singleLine="true" />
 
-            <EditText android:text="" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center" />
 
-            <EditText android:text="" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/gradeSpinnerItems" />
 
-            <EditText android:text="" />
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
 
-            <EditText android:text="" />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:singleLine="true" />
 
-            <EditText android:text="" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center" />
 
-            <EditText android:text="" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/gradeSpinnerItems" />
 
-            <EditText android:text="" />
-        </TableRow>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" /></TableRow>
     </TableLayout>
 
     <Button
@@ -183,5 +259,3 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
