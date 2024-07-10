@@ -22,14 +22,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class GPACalculatorActivity extends AppCompatActivity {
-    private SharedPreferences preferences;
-    private static final String PREFS_NAME = "GPA_Preferences";
-    private static final String GPA_KEY = "GPA_List";
+    private SharedPreferences preferences; // 객체를 저장할 변수
+    private static final String PREFS_NAME = "GPA_Preferences"; // 파일 이름 저장할 변수
+    private static final String GPA_KEY = "GPA_List"; // 저장할 데이터의 키
     private List<SubjectInfo> tempSubjectInfo = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState); // super 클래스의 onCreate 매서드 호출 -> 기본 초기화 수행
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_gpa_calculator);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -38,10 +38,19 @@ public class GPACalculatorActivity extends AppCompatActivity {
             return insets;
         });
 
-        preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE); // sharedPreference 객체 초기화
+
+        // 원래 정보 save 하기
+        List<SubjectInfo> savedSubjectInfo = loadGPAData();
+        if (savedSubjectInfo != null) {
+            tempSubjectInfo.addAll(savedSubjectInfo);
+            Toast.makeText(this, "Loaded GPA Data", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, "No GPA Data Found", Toast.LENGTH_LONG).show();
+        }
 
         /////////////// 학점 계산 테스트 용 //////////////
-        //List<SubjectInfo> tempSubjectInfo = new ArrayList<>();
         tempSubjectInfo.add(new SubjectInfo("C++", 4, 4.0f, true));
         tempSubjectInfo.add(new SubjectInfo("데과입", 3, 3.5f, true));
         tempSubjectInfo.add(new SubjectInfo("시소", 3, 3.0f, true));
@@ -130,7 +139,6 @@ public class GPACalculatorActivity extends AppCompatActivity {
         saveGPAData(getEverytimeSubjectInfos());
     }
 
-
     private float semesterGPA(List<SubjectInfo> subjectInfo) {
         float res = 0.0f;
         int total_credit = 0;
@@ -163,6 +171,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         return tempSubjectInfo;
     }
 
+    // 주어진 리스트를 JSON으로 변환하여 SharedPreferences에 저장
     private void saveGPAData(List<SubjectInfo> subjectInfos) {
         SharedPreferences.Editor editor = preferences.edit();
         Gson gson = new Gson();
@@ -171,6 +180,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    // SharedPreferences에서 저장된 리스트를 로드하여 반환
     private List<SubjectInfo> loadGPAData() {
         Gson gson = new Gson();
         String json = preferences.getString(GPA_KEY, null);
