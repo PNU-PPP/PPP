@@ -19,7 +19,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class EverytimeTimetableParser {
-    public static void parse(String identifier){
+    public static void getSemesters(String identifier, OnSemestersParsedListener onSemestersParsedListener){
+        parse(identifier, true, null, onSemestersParsedListener);
+    }
+
+    public static void getSubjects(String identifier, OnSubjectsParsedListener onSubjectsParsedListener){
+        parse(identifier, false, onSubjectsParsedListener, null);
+    }
+
+    private static void parse(String identifier, boolean getSemesters,
+                       OnSubjectsParsedListener onSubjectsParsedListener, OnSemestersParsedListener onSemestersParsedListener){
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
@@ -36,7 +45,9 @@ public class EverytimeTimetableParser {
 
                 InputStream inputStream = httpURLConnection.getInputStream();
 
-                List<SubjectInfo> subjectInfoList = new ArrayList<>();
+                List<SubjectInfo> subjectInfos = new ArrayList<>();
+                List<EverytimeIdentifier> everytimeIdentifiers = new ArrayList<>();
+
                 XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
                 xmlPullParser.setInput(new InputStreamReader(inputStream));
                 int eventType = xmlPullParser.getEventType();
@@ -45,13 +56,19 @@ public class EverytimeTimetableParser {
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if (eventType == XmlPullParser.START_TAG) {
                         if(xmlPullParser.getName().equals("subject")) {
-                            subjectInfoList.add(new SubjectInfo());
+                            subjectInfos.add(new SubjectInfo());
                             subjectStarted = true;
                         }else if(subjectStarted){
                             if(xmlPullParser.getName().equals("name"))
-                                subjectInfoList.get(subjectInfoList.size() - 1).subjectName = xmlPullParser.getAttributeValue(null, "value");
+                                subjectInfos.get(subjectInfos.size() - 1).subjectName = xmlPullParser.getAttributeValue(null, "value");
                             else if(xmlPullParser.getName().equals("credit"))
-                                subjectInfoList.get(subjectInfoList.size() - 1).credit = Integer.parseInt(xmlPullParser.getAttributeValue(null, "value"));
+                                subjectInfos.get(subjectInfos.size() - 1).credit = Integer.parseInt(xmlPullParser.getAttributeValue(null, "value"));
+                        }else if(xmlPullParser.getName().equals("primaryTable")){
+                            everytimeIdentifiers.add(new EverytimeIdentifier(
+                                    xmlPullParser.getAttributeValue(null, "year"),
+                                    xmlPullParser.getAttributeValue(null, "semester"),
+                                    xmlPullParser.getAttributeValue(null, "identifier")
+                            ));
                         }
                    }else if(eventType == XmlPullParser.END_TAG && xmlPullParser.getName().equals("subject")) {
                         subjectStarted = false;
@@ -60,8 +77,16 @@ public class EverytimeTimetableParser {
                 }
                 inputStream.close();
 
-                for (SubjectInfo subjectInfo : subjectInfoList) {
+                if(getSemesters)
+                    handler.post(() -> onSemestersParsedListener.onSuccess(everytimeIdentifiers));
+                else
+                    handler.post(() -> onSubjectsParsedListener.onSuccess(subjectInfos));
+
+                for (SubjectInfo subjectInfo : subjectInfos) {
                    Log.i("ETP", subjectInfo.subjectName + " " + subjectInfo.credit);
+                }
+                for (EverytimeIdentifier everytimeIdentifier : everytimeIdentifiers) {
+                    Log.i("ETP", everytimeIdentifier.year + " " + everytimeIdentifier.semester + " " + everytimeIdentifier.identifier);
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -69,8 +94,13 @@ public class EverytimeTimetableParser {
         });
     }
 
-    public interface OnParsedListener {
-        void onSuccess(String timetable);
+    public interface OnSubjectsParsedListener {
+        void onSuccess(List<SubjectInfo> subjectInfos);
+        void onFailed(int errorCode, String errorMessage);
+    }
+
+    public interface OnSemestersParsedListener {
+        void onSuccess(List<EverytimeIdentifier> everytimeIdentifiers);
         void onFailed(int errorCode, String errorMessage);
     }
 }
