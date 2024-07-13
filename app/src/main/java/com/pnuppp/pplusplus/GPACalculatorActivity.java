@@ -2,13 +2,17 @@ package com.pnuppp.pplusplus;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -65,7 +69,36 @@ public class GPACalculatorActivity extends AppCompatActivity {
         //////////// Everytime 시간표 파싱 테스트 //////////////
         Button buttonEverytime = findViewById(R.id.buttonEverytime);
         buttonEverytime.setOnClickListener(v -> {
-            EverytimeTimetableParser.parse("b30NuC8130Bz1mLBaScr");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("에브리타임 시간표 가져오기");
+            builder.setMessage("URL 입력\n(https://everytime.kr/@b30NuC8130Bz1mLBaScr)");
+
+            EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+
+            builder.setPositiveButton(getString(android.R.string.ok), (dialog, which) -> {
+                String inputUrl = input.getText().toString();
+                String inputIdentifier = inputUrl.replace("https://everytime.kr/@", "");
+
+                EverytimeTimetableParser.getSemesters(inputIdentifier, new EverytimeTimetableParser.OnSemestersParsedListener() {
+                    @Override
+                    public void onSuccess(List<EverytimeIdentifier> everytimeIdentifiers) {
+                        //tempSubjectInfo.addAll(subjectInfos);
+                        for (EverytimeIdentifier everytimeIdentifier : everytimeIdentifiers) {
+                            Log.i("TAG", everytimeIdentifier.year + " " + everytimeIdentifier.semester + " " + everytimeIdentifier.identifier);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(int errorCode, String errorMessage) {
+
+                    }
+                });
+            });
+            builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
+
+            builder.show();
         });
         ////////////////////////////////////////////////////
 
