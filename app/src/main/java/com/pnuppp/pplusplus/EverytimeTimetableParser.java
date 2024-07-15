@@ -56,13 +56,15 @@ public class EverytimeTimetableParser {
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if (eventType == XmlPullParser.START_TAG) {
                         if(xmlPullParser.getName().equals("subject")) {
-                            subjectInfos.add(new SubjectInfo());
+                            SubjectInfo subjectInfo = new SubjectInfo();
+                            subjectInfo.isMajor = true;
+                            subjectInfos.add(subjectInfo);
                             subjectStarted = true;
                         }else if(subjectStarted){
                             if(xmlPullParser.getName().equals("name"))
                                 subjectInfos.get(subjectInfos.size() - 1).subjectName = xmlPullParser.getAttributeValue(null, "value");
                             else if(xmlPullParser.getName().equals("credit"))
-                                subjectInfos.get(subjectInfos.size() - 1).credit = Integer.parseInt(xmlPullParser.getAttributeValue(null, "value"));
+                                subjectInfos.get(subjectInfos.size() - 1).credit = Float.parseFloat(xmlPullParser.getAttributeValue(null, "value"));
                         }else if(xmlPullParser.getName().equals("primaryTable")){
                             everytimeIdentifiers.add(new EverytimeIdentifier(
                                     xmlPullParser.getAttributeValue(null, "year"),
@@ -77,10 +79,18 @@ public class EverytimeTimetableParser {
                 }
                 inputStream.close();
 
-                if(getSemesters)
-                    handler.post(() -> onSemestersParsedListener.onSuccess(everytimeIdentifiers));
-                else
-                    handler.post(() -> onSubjectsParsedListener.onSuccess(subjectInfos));
+                if(getSemesters) {
+                    if(everytimeIdentifiers.isEmpty())
+                        handler.post(() -> onSemestersParsedListener.onFailed(0, "No semesters found"));
+                    else
+                        handler.post(() -> onSemestersParsedListener.onSuccess(everytimeIdentifiers));
+                }
+                else {
+                    if(subjectInfos.isEmpty())
+                        handler.post(() -> onSubjectsParsedListener.onFailed(0, "No subjects found"));
+                    else
+                        handler.post(() -> onSubjectsParsedListener.onSuccess(subjectInfos));
+                }
 
                 for (SubjectInfo subjectInfo : subjectInfos) {
                    Log.i("ETP", subjectInfo.subjectName + " " + subjectInfo.credit);
