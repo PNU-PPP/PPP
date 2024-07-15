@@ -17,6 +17,36 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ppp_logo_vector" />
 
+    <!-- 추가한 것 -->
+    <Spinner
+        android:id="@+id/spinnerYear"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:entries="@array/year_array"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <Spinner
+        android:id="@+id/spinnerSemester"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:entries="@array/semester_array"
+        app:layout_constraintStart_toEndOf="@+id/spinnerYear"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/textViewGPA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="GPA will be displayed here"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerSemester"
+        app:layout_constraintStart_toStartOf="parent" />
+    <!-- 추가한 것 -->
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
@@ -127,7 +157,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TableRow>
-
             <TextView
                 android:text="과목명"
                 android:textSize="20dp" />
@@ -146,9 +175,7 @@
         </TableRow>
 
         <TableRow>
-
             <EditText
-                android:id="@+id/editTextSubject1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -156,12 +183,11 @@
                 android:singleLine="true" />
 
             <EditText
-                android:id="@+id/editTextCredit1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
-                android:inputType="number|numberDecimal"
-                android:maxLength="3"
+                android:inputType="number"
+                android:maxLength="1"
                 android:textAlignment="center" />
 
             <Spinner
@@ -171,15 +197,12 @@
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
-                android:id="@+id/checkBoxMajor1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
-
             <EditText
-                android:id="@+id/editTextSubject2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -187,12 +210,11 @@
                 android:singleLine="true" />
 
             <EditText
-                android:id="@+id/editTextCredit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
-                android:inputType="number|numberDecimal"
-                android:maxLength="3"
+                android:inputType="number"
+                android:maxLength="1"
                 android:textAlignment="center" />
 
             <Spinner
@@ -202,15 +224,12 @@
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
-                android:id="@+id/checkBoxMajor2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
-
             <EditText
-                android:id="@+id/editTextSubject3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -218,12 +237,11 @@
                 android:singleLine="true" />
 
             <EditText
-                android:id="@+id/editTextCredit3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
-                android:inputType="number|numberDecimal"
-                android:maxLength="3"
+                android:inputType="number"
+                android:maxLength="1"
                 android:textAlignment="center" />
 
             <Spinner
@@ -233,15 +251,12 @@
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
-                android:id="@+id/checkBoxMajor3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
-
             <EditText
-                android:id="@+id/editTextSubject4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -249,12 +264,11 @@
                 android:singleLine="true" />
 
             <EditText
-                android:id="@+id/editTextCredit4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
-                android:inputType="number|numberDecimal"
-                android:maxLength="3"
+                android:inputType="number"
+                android:maxLength="1"
                 android:textAlignment="center" />
 
             <Spinner
@@ -264,9 +278,9 @@
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
-                android:id="@+id/checkBoxMajor4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" /></TableRow>
+                android:layout_height="wrap_content" />
+        </TableRow>
     </TableLayout>
 
     <Button
@@ -277,14 +291,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/semester"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_marginTop="16dp"
-        android:entries="@array/semesterSelect"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+<!--    <Spinner-->
+<!--        android:id="@+id/semester"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="45dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:entries="@array/semesterSelect"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView3" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
