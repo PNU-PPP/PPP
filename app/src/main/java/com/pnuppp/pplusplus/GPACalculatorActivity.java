@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +57,19 @@ public class GPACalculatorActivity extends AppCompatActivity {
         spinnerYear = findViewById(R.id.spinnerYear);
         spinnerSemester = findViewById(R.id.spinnerSemester);
         textViewGPA = findViewById(R.id.textViewGPA);
+
+        //과목 추가
+
+        tableLayout = findViewById(R.id.tableLayout);
+        Button buttonAddRow = findViewById(R.id.buttonAddRow);
+
+        buttonAddRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewRow();
+            }
+        });
+
 
         // 공통 이벤트 리스너 설정
         AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
@@ -138,8 +154,50 @@ public class GPACalculatorActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No saved GPA Data", Toast.LENGTH_LONG).show();
         }
+
+
     }
 
+    //add Row//
+    TableLayout tableLayout;
+
+
+    private void addNewRow() {
+        TableRow tableRow = new TableRow(this);
+        tableRow.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+
+        EditText editText = new EditText(this);
+        editText.setHint("Enter value");
+        editText.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        tableRow.addView(editText);
+
+        EditText editText2 = new EditText(this);
+        editText2.setHint("Enter value");
+        editText2.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        tableRow.addView(editText2);
+
+        Spinner spinnerGrade = new Spinner(this);
+        spinnerGrade.setId(View.generateViewId());
+        spinnerGrade.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        tableRow.addView(spinnerGrade);
+
+        CheckBox checkBoxMajor = new CheckBox(this);
+        checkBoxMajor.setId(View.generateViewId());
+        checkBoxMajor.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        tableRow.addView(checkBoxMajor);
+
+        tableLayout.addView(tableRow);
+    }
     @Override
     protected void onPause() {
         super.onPause();

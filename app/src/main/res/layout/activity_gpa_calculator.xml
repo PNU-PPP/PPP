@@ -144,6 +144,14 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/buttonAddRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Row"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout2" />
+
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
@@ -156,7 +164,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TableRow>
+        <TableRow
+            android:id="@+id/tableRowSubject">
             <TextView
                 android:text="과목명"
                 android:textSize="20dp" />
