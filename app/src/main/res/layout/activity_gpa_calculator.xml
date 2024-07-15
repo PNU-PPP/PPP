@@ -169,22 +169,21 @@
             <TextView
                 android:text="과목명"
                 android:textSize="20dp" />
-
             <TextView
                 android:text="학점"
                 android:textSize="20dp" />
-
             <TextView
                 android:text="성적"
                 android:textSize="20dp" />
-
             <TextView
                 android:text="전공"
                 android:textSize="20dp" />
         </TableRow>
 
         <TableRow>
+
             <EditText
+                android:id="@+id/editTextSubject1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -192,11 +191,12 @@
                 android:singleLine="true" />
 
             <EditText
+                android:id="@+id/editTextCredit1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
-                android:inputType="number"
-                android:maxLength="1"
+                android:inputType="number|numberDecimal"
+                android:maxLength="3"
                 android:textAlignment="center" />
 
             <Spinner
@@ -206,12 +206,15 @@
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
+                android:id="@+id/checkBoxMajor1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
+
             <EditText
+                android:id="@+id/editTextSubject2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -219,11 +222,12 @@
                 android:singleLine="true" />
 
             <EditText
+                android:id="@+id/editTextCredit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
-                android:inputType="number"
-                android:maxLength="1"
+                android:inputType="number|numberDecimal"
+                android:maxLength="3"
                 android:textAlignment="center" />
 
             <Spinner
@@ -233,12 +237,15 @@
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
+                android:id="@+id/checkBoxMajor2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
+
             <EditText
+                android:id="@+id/editTextSubject3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -246,11 +253,12 @@
                 android:singleLine="true" />
 
             <EditText
+                android:id="@+id/editTextCredit3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
-                android:inputType="number"
-                android:maxLength="1"
+                android:inputType="number|numberDecimal"
+                android:maxLength="3"
                 android:textAlignment="center" />
 
             <Spinner
@@ -260,12 +268,15 @@
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
+                android:id="@+id/checkBoxMajor3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow>
+
             <EditText
+                android:id="@+id/editTextSubject4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -273,11 +284,12 @@
                 android:singleLine="true" />
 
             <EditText
+                android:id="@+id/editTextCredit4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
-                android:inputType="number"
-                android:maxLength="1"
+                android:inputType="number|numberDecimal"
+                android:maxLength="3"
                 android:textAlignment="center" />
 
             <Spinner
@@ -287,6 +299,7 @@
                 android:entries="@array/gradeSpinnerItems" />
 
             <CheckBox
+                android:id="@+id/checkBoxMajor4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </TableRow>

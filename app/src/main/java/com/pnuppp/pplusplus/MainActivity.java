@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(newIntent);
         });
 
+        Button buttonnewnew = findViewById(R.id.button5);
+        buttonnewnew.setOnClickListener(v -> {
+            Intent newIntent = new Intent(MainActivity.this, newnewActivity.class);
+            startActivity(newIntent);
+        });
+
         Button buttonMyGPA = findViewById(R.id.button3);
         buttonMyGPA.setOnClickListener(v->{
             Intent myIntent = new Intent(MainActivity.this, GPACalculatorActivity.class);
