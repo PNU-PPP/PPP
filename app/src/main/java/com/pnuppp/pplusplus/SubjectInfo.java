@@ -12,7 +12,7 @@ public class SubjectInfo {
         this.grade = 4.5f;
         this.isMajor = false;
     }
-    SubjectInfo(String subjectName, int credit, float grade, boolean isMajor){
+    SubjectInfo(String subjectName, float credit, float grade, boolean isMajor){
         this.subjectName = subjectName;
         this.credit = credit;
         this.grade = grade;
