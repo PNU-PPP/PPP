@@ -2,7 +2,7 @@ package com.pnuppp.pplusplus;
 
 public class SubjectInfo {
     String subjectName;
-    int credit;
+    float credit;
     float grade;
     boolean isMajor;
 
