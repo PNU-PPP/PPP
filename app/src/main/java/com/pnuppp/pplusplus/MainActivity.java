@@ -19,8 +19,6 @@ import com.kakao.vectormap.MapLifeCycleCallback;
 import com.kakao.vectormap.MapView;
 
 public class MainActivity extends AppCompatActivity {
-    MapView mapView;
-    KakaoMap kakaoMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
