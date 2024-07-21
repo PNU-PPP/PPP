@@ -50,33 +50,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(newIntent);
         });
 
-        mapView = findViewById(R.id.map_view);
-        mapView.start(new MapLifeCycleCallback() {
-            @Override
-            public void onMapDestroy() {
-                // 지도 API가 정상적으로 종료될 때 호출
-                Log.d("KakaoMap", "onMapDestroy: ");
-            }
-
-            @Override
-            public void onMapError(Exception error) {
-                // 인증 실패 및 지도 사용 중 에러가 발생할 때 호출
-                Log.e("KakaoMap", "onMapError: ", error);
-            }
-        }, new KakaoMapReadyCallback() {
-            @Override
-            public void onMapReady(@NonNull KakaoMap map) {
-                // 정상적으로 인증이 완료되었을 때 호출
-                // KakaoMap 객체를 얻어 옵니다.
-                kakaoMap = map;
-            }
-        });
 
         // 전달받은 값을 설정할 TextView
         TextView textView8 = findViewById(R.id.textView8);
         TextView textView9 = findViewById(R.id.textView9);
 
-        // Intent로 값 받기
+        // Intent로 값 받기ㄴ
         Intent intent = getIntent();
         String major = intent.getStringExtra("major");
         String studentID = intent.getStringExtra("student_id");
