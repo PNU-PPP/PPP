@@ -6,6 +6,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -34,12 +35,14 @@ public class GPACalculatorActivity extends AppCompatActivity {
     private SharedPreferences preferences; // 객체를 저장할 변수
     private static final String PREFS_NAME = "GPA_Preferences"; // 파일 이름 저장할 변수
     private static final String GPA_KEY = "GPA_List"; // 저장할 데이터의 키
-    private List<SubjectInfo> tempSubjectInfo = new ArrayList<>();
+    private List<SubjectInfo> currentSubjectInfos = new ArrayList<>();
 
     private List<EditText> editTextSubjects = new ArrayList<>();
     private List<EditText> editTextCredits = new ArrayList<>();
     private List<Spinner> spinnerGrades = new ArrayList<>();
     private List<CheckBox> checkBoxMajors = new ArrayList<>();
+
+    TableLayout mTableLayout;
 
     private Spinner spinnerYear;
     private Spinner spinnerSemester;
@@ -86,16 +89,10 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
         //과목 추가
 
-        tableLayout = findViewById(R.id.tableLayout);
+        mTableLayout = findViewById(R.id.tableLayout);
         Button buttonAddRow = findViewById(R.id.buttonAddRow);
 
-        buttonAddRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNewRow();
-            }
-        });
-
+        buttonAddRow.setOnClickListener(v -> addNewRow());
 
         // 공통 이벤트 리스너 설정
         AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
@@ -119,24 +116,25 @@ public class GPACalculatorActivity extends AppCompatActivity {
         // 원래 정보 save 하기
         List<SubjectInfo> savedSubjectInfo = loadGPAData();
         if (savedSubjectInfo != null) {
-            tempSubjectInfo.addAll(savedSubjectInfo);
+            currentSubjectInfos = savedSubjectInfo;
             Toast.makeText(this, "Loaded GPA Data", Toast.LENGTH_LONG).show();
+            updateTableUi(currentSubjectInfos);
         }
         else {
             Toast.makeText(this, "No GPA Data Found", Toast.LENGTH_LONG).show();
         }
 
         /////////////// 학점 계산 테스트 용 //////////////
-        tempSubjectInfo.add(new SubjectInfo(1, 1, "C++", 4, 4.0f, true));
+        /*tempSubjectInfo.add(new SubjectInfo(1, 1, "C++", 4, 4.0f, true));
         tempSubjectInfo.add(new SubjectInfo(1, 1, "데과입", 3, 3.5f, true));
         tempSubjectInfo.add(new SubjectInfo(1, 1, "시소", 3, 3.0f, true));
         tempSubjectInfo.add(new SubjectInfo(1, 1, "논회설", 3, 4.0f, true));
         tempSubjectInfo.add(new SubjectInfo(1, 2, "유닉스", 3, 4.0f, true));
-        tempSubjectInfo.add(new SubjectInfo(1, 2, "교양", 3, 2.0f, false));
+        tempSubjectInfo.add(new SubjectInfo(1, 2, "교양", 3, 2.0f, false));*/
 
-        Toast.makeText(this, "semester: " + semesterGPA(tempSubjectInfo, 1, 1), Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "major: " + majorGPA(tempSubjectInfo), Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "total GPA: " + calculateTotalGPA(tempSubjectInfo), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "semester: " + semesterGPA(currentSubjectInfos, 1, 1), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "major: " + majorGPA(currentSubjectInfos), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "total GPA: " + calculateTotalGPA(currentSubjectInfos), Toast.LENGTH_LONG).show();
         ////////////////////////////////////////////
 
         //////////// Everytime 시간표 파싱 테스트 //////////////
@@ -197,20 +195,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
             builder.show();
         });
-
-        List<SubjectInfo> subjectInfoList = loadGPAData();
-        if (subjectInfoList != null) {
-            Toast.makeText(this, "saved GPA Data", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "No saved GPA Data", Toast.LENGTH_LONG).show();
-        }
-
-
     }
-
-    //add Row//
-    TableLayout tableLayout;
-
 
     private void addNewRow() {
         TableRow tableRow = new TableRow(this);
@@ -219,39 +204,42 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 TableRow.LayoutParams.WRAP_CONTENT));
 
         EditText editText = new EditText(this);
-        editText.setHint("Enter value");
         editText.setLayoutParams(new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT));
         tableRow.addView(editText);
 
         EditText editText2 = new EditText(this);
-        editText2.setHint("Enter value");
         editText2.setLayoutParams(new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT));
         tableRow.addView(editText2);
 
+        ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(this, R.array.gradeSpinnerItems, android.R.layout.simple_spinner_item);
         Spinner spinnerGrade = new Spinner(this);
-        spinnerGrade.setId(View.generateViewId());
+        spinnerGrade.setAdapter(spinnerArrayAdapter);
         spinnerGrade.setLayoutParams(new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT));
         tableRow.addView(spinnerGrade);
 
         CheckBox checkBoxMajor = new CheckBox(this);
-        checkBoxMajor.setId(View.generateViewId());
         checkBoxMajor.setLayoutParams(new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT));
         tableRow.addView(checkBoxMajor);
 
-        tableLayout.addView(tableRow);
+        editTextSubjects.add(editText);
+        editTextCredits.add(editText2);
+        spinnerGrades.add(spinnerGrade);
+        checkBoxMajors.add(checkBoxMajor);
+
+        mTableLayout.addView(tableRow);
     }
     @Override
     protected void onPause() {
         super.onPause();
-        saveGPAData(getEverytimeSubjectInfos());
+        saveGPAData(currentSubjectInfos);
     }
 
     private float numberToGrade(int gradeNum){
@@ -283,8 +271,9 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
     private void updateTableUi(List<SubjectInfo> subjectInfos) {
         for (int i = 0; i < subjectInfos.size(); i++) {
-            if (i >= editTextCredits.size()) //TODO: 임시
-                return;
+            if (i >= editTextCredits.size()) { //TODO: 임시
+                addNewRow();
+            }
             editTextSubjects.get(i).setText(subjectInfos.get(i).subjectName);
             editTextCredits.get(i).setText(String.valueOf(subjectInfos.get(i).credit));
             spinnerGrades.get(i).setSelection(gradeToNumber(subjectInfos.get(i).grade));
@@ -297,8 +286,8 @@ public class GPACalculatorActivity extends AppCompatActivity {
             int year = spinnerYear.getSelectedItemPosition()+1;
             int semester = spinnerSemester.getSelectedItemPosition()+1;
             Log.d("GPACalculatorActivity", "Year: " + year + ", Semester: " + semester);
-            float gpa = semesterGPA(tempSubjectInfo, year, semester);
-            textViewGPA.setText("GPA for year " + year + " semester " + semester + " is: " + gpa);
+            float gpa = semesterGPA(currentSubjectInfos, year, semester);
+            textViewGPA.setText(String.format("%.2f", gpa));
             Log.d("GPACalculatorActivity", "GPA updated: " + gpa);
         }
         catch (NumberFormatException e) {
@@ -363,7 +352,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
     }
 
     private List<SubjectInfo> getEverytimeSubjectInfos(){
-        return tempSubjectInfo;
+        return currentSubjectInfos;
     }
 
     // 주어진 리스트를 JSON으로 변환하여 SharedPreferences에 저장
