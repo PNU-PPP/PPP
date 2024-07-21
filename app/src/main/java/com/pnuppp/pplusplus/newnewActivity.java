@@ -23,7 +23,7 @@ import com.kakao.vectormap.MapView;
 
 
 
-public class ㄴnewnewActivity extends AppCompatActivity {
+public class newnewActivity extends AppCompatActivity {
 
     MapView mapView;
     KakaoMap kakaoMap;
