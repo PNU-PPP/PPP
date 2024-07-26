@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GPACalculatorActivity">
 
@@ -186,105 +186,6 @@
                 android:textSize="18dp" />
         </TableRow>
 
-        <TableRow>
-
-            <ImageButton
-                android:id="@+id/buttonRemove1"
-                app:srcCompat="@drawable/baseline_remove_24" />
-
-            <EditText
-                android:id="@+id/editTextSubject1"
-                android:maxLength="30"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/editTextCredit1"
-                android:ems="2"
-                android:inputType="number|numberDecimal"
-                android:maxLength="3"
-                android:textAlignment="center" />
-
-            <Spinner
-                android:id="@+id/grade1"
-                android:entries="@array/gradeSpinnerItems" />
-
-            <CheckBox android:id="@+id/checkBoxMajor1" />
-        </TableRow>
-
-        <TableRow>
-
-            <ImageButton
-                android:id="@+id/buttonRemove2"
-                app:srcCompat="@drawable/baseline_remove_24" />
-
-            <EditText
-                android:id="@+id/editTextSubject2"
-                android:maxLength="30"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/editTextCredit2"
-                android:ems="2"
-                android:inputType="number|numberDecimal"
-                android:maxLength="3"
-                android:textAlignment="center" />
-
-            <Spinner
-                android:id="@+id/grade2"
-                android:entries="@array/gradeSpinnerItems" />
-
-            <CheckBox android:id="@+id/checkBoxMajor2" />
-        </TableRow>
-
-        <TableRow>
-
-            <ImageButton
-                android:id="@+id/buttonRemove3"
-                app:srcCompat="@drawable/baseline_remove_24" />
-
-            <EditText
-                android:id="@+id/editTextSubject3"
-                android:maxLength="30"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/editTextCredit3"
-                android:ems="2"
-                android:inputType="number|numberDecimal"
-                android:maxLength="3"
-                android:textAlignment="center" />
-
-            <Spinner
-                android:id="@+id/grade3"
-                android:entries="@array/gradeSpinnerItems" />
-
-            <CheckBox android:id="@+id/checkBoxMajor3" />
-        </TableRow>
-
-        <TableRow>
-
-            <ImageButton
-                android:id="@+id/buttonRemove4"
-                app:srcCompat="@drawable/baseline_remove_24" />
-
-            <EditText
-                android:id="@+id/editTextSubject4"
-                android:maxLength="30"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/editTextCredit4"
-                android:ems="2"
-                android:inputType="number|numberDecimal"
-                android:maxLength="3"
-                android:textAlignment="center" />
-
-            <Spinner
-                android:id="@+id/grade4"
-                android:entries="@array/gradeSpinnerItems" />
-
-            <CheckBox android:id="@+id/checkBoxMajor4" />
-        </TableRow>
     </TableLayout>
 
     <Button
@@ -295,14 +196,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <Spinner-->
-<!--        android:id="@+id/semester"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="45dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:entries="@array/semesterSelect"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/imageView3" />-->
+    <!--    <Spinner-->
+    <!--        android:id="@+id/semester"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="45dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:entries="@array/semesterSelect"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/imageView3" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
