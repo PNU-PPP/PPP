@@ -48,6 +48,7 @@ android {
 
 dependencies {
     implementation 'com.kakao.maps.open:android:2.6.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation libs.gson
     implementation libs.androidx.core.splashscreen
     implementation libs.androidx.core.ktx
