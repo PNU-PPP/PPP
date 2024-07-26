@@ -6,17 +6,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.util.Log;
-
-import com.kakao.vectormap.KakaoMap;
-import com.kakao.vectormap.KakaoMapReadyCallback;
-import com.kakao.vectormap.MapLifeCycleCallback;
-import com.kakao.vectormap.MapView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,10 +33,12 @@ public class MainActivity extends AppCompatActivity {
             Intent myIntent = new Intent(MainActivity.this, GPACalculatorActivity.class);
             startActivity(myIntent);
         });
-        Button buttonExternalManagement = findViewById(R.id.button4);
-        buttonExternalManagement.setOnClickListener(v -> {
-            Intent newIntent = new Intent(MainActivity.this, ExternalManagementActivity.class);
-            startActivity(newIntent);
+
+        Button noticeButton = findViewById(R.id.noticeButton);
+        noticeButton.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, DepartmentNoticeActivity.class);
+            startActivity(intent);
+
         });
 
 
