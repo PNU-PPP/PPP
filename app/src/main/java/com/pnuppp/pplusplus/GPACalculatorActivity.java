@@ -98,7 +98,6 @@ public class GPACalculatorActivity extends AppCompatActivity {
         List<SubjectInfo> savedSubjectInfo = loadGPAData();
         if (savedSubjectInfo != null) {
             currentSubjectInfos = savedSubjectInfo;
-            Toast.makeText(this, "Loaded GPA Data", Toast.LENGTH_LONG).show();
             updateTableUi(currentSubjectInfos);
         }
         else {
@@ -146,7 +145,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
                                                 subjectInfo.year = spinnerYear.getSelectedItemPosition()+1;
                                                 subjectInfo.semester = spinnerSemester.getSelectedItemPosition()+1;
                                             }
-                                            currentSubjectInfos = subjectInfos;
+                                            replaceSemesterSubjectInfos(subjectInfos);
                                             updateTableUi(subjectInfos);
                                             Toast.makeText(GPACalculatorActivity.this, "Loaded Subject Data", Toast.LENGTH_LONG).show();
                                         }
@@ -218,7 +217,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        replaceSemesterSubjectInfos();
+        replaceSemesterSubjectInfos(getCurrentSubjectInfos());
         saveGPAData(currentSubjectInfos);
     }
 
@@ -275,6 +274,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
             for (int i = count; i < 5; i++)
                 addNewRow();
         }
+
     }
 
     private void updateGPA() {
@@ -293,7 +293,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
     private float semesterGPA(List<SubjectInfo> subjectInfo, int year, int semester) {
         float res = 0.0f;
-        int total_credit = 0;
+        float total_credit = 0;
         for (SubjectInfo s : subjectInfo) {
             if (s.year == year && s.semester == semester) {
                 total_credit += s.credit;
@@ -310,7 +310,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
     private float majorGPA(List<SubjectInfo> subjectInfo) {
         float res = 0.0f;
-        int total_majorCredit = 0;
+        float total_majorCredit = 0;
         for (SubjectInfo s : subjectInfo) {
             if (s.isMajor) {
                 total_majorCredit += s.credit;
@@ -363,7 +363,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         }
         return newSubjectInfos;
     }
-    private void replaceSemesterSubjectInfos() {
+    private void replaceSemesterSubjectInfos(List<SubjectInfo> subjectInfos) {
         for (int i = 0; i < currentSubjectInfos.size(); i++) {
             if (currentSubjectInfos.get(i).year == spinnerYear.getSelectedItemPosition()+1 &&
                     currentSubjectInfos.get(i).semester == spinnerSemester.getSelectedItemPosition()+1) {
@@ -371,7 +371,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 i--;
             }
         }
-        currentSubjectInfos.addAll(getCurrentSubjectInfos());
+        currentSubjectInfos.addAll(subjectInfos);
     }
 
     private List<SubjectInfo> getEverytimeSubjectInfos(){
