@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,10 +39,12 @@ public class GPACalculatorActivity extends AppCompatActivity {
     private static final String GPA_KEY = "GPA_List"; // 저장할 데이터의 키
     private List<SubjectInfo> currentSubjectInfos = new ArrayList<>();
 
-    private List<EditText> editTextSubjects = new ArrayList<>();
-    private List<EditText> editTextCredits = new ArrayList<>();
-    private List<Spinner> spinnerGrades = new ArrayList<>();
-    private List<CheckBox> checkBoxMajors = new ArrayList<>();
+    private List<TableRow> tableRows = new ArrayList<>();
+
+    public static final int EDITTEXT_SUBJECT_ID = View.generateViewId();
+    public static final int EDITTEXT_CREDIT_ID = View.generateViewId();
+    public static final int SPINNER_GRADE_ID = View.generateViewId();
+    public static final int CHECKBOX_MAJOR_ID = View.generateViewId();
 
     TableLayout mTableLayout;
 
@@ -189,27 +192,24 @@ public class GPACalculatorActivity extends AppCompatActivity {
         imageButton.setImageResource(R.drawable.baseline_remove_24);
         tableRow.addView(imageButton);
 
-        final int rows = editTextSubjects.size();
-        imageButton.setOnClickListener(v -> {
-            mTableLayout.removeView(tableRow);
-            editTextSubjects.remove(rows);
-            editTextCredits.remove(rows);
-            spinnerGrades.remove(rows);
-            checkBoxMajors.remove(rows);
-        });
+        imageButton.setOnClickListener(v -> mTableLayout.removeView(tableRow));
 
         EditText editText = new EditText(this);
+        editText.setId(EDITTEXT_SUBJECT_ID);
         editText.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 1.0f));
         editText.setSingleLine(true);
         tableRow.addView(editText);
 
         EditText editText2 = new EditText(this);
+        editText2.setId(EDITTEXT_CREDIT_ID);
         editText2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         editText2.setEms(2);
+        editText2.setGravity(Gravity.CENTER_HORIZONTAL);
         tableRow.addView(editText2);
 
         ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(this, R.array.gradeSpinnerItems, android.R.layout.simple_spinner_dropdown_item);
         Spinner spinnerGrade = new Spinner(this);
+        spinnerGrade.setId(SPINNER_GRADE_ID);
         spinnerGrade.setAdapter(spinnerArrayAdapter);
         spinnerGrade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -228,6 +228,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         tableRow.addView(spinnerGrade);
 
         CheckBox checkBoxMajor = new CheckBox(this);
+        checkBoxMajor.setId(CHECKBOX_MAJOR_ID);
         checkBoxMajor.setChecked(true);
         checkBoxMajor.setOnCheckedChangeListener((buttonView, isChecked) -> {
             replaceSemesterSubjectInfos(getCurrentSubjectInfos());
@@ -237,10 +238,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         });
         tableRow.addView(checkBoxMajor);
 
-        editTextSubjects.add(editText);
-        editTextCredits.add(editText2);
-        spinnerGrades.add(spinnerGrade);
-        checkBoxMajors.add(checkBoxMajor);
+        tableRows.add(tableRow);
 
         mTableLayout.addView(tableRow);
     }
@@ -279,41 +277,41 @@ public class GPACalculatorActivity extends AppCompatActivity {
     }
 
     private void updateTableUi(List<SubjectInfo> subjectInfos) {
-        for (int i = 0; i < editTextSubjects.size(); i++) {
-            editTextSubjects.get(i).setText("");
-            editTextCredits.get(i).setText("");
-            spinnerGrades.get(i).setSelection(0);
-            checkBoxMajors.get(i).setChecked(true);
-        }
+        for(TableRow tableRow : tableRows)
+            mTableLayout.removeView(tableRow);
+        tableRows.clear();
 
         int count = 0;
         for (int i = 0; i < subjectInfos.size(); i++) {
             if(subjectInfos.get(i).year == spinnerYear.getSelectedItemPosition()+1 && subjectInfos.get(i).semester == spinnerSemester.getSelectedItemPosition()+1) {
-                if (count >= editTextCredits.size())
+                if (count >= tableRows.size())
                     addNewRow();
 
-                editTextSubjects.get(count).setText(subjectInfos.get(i).subjectName);
-                editTextCredits.get(count).setText(String.valueOf(subjectInfos.get(i).credit));
-                spinnerGrades.get(count).setSelection(gradeToNumber(subjectInfos.get(i).grade));
-                checkBoxMajors.get(count).setChecked(subjectInfos.get(i).isMajor);
+                EditText etSubject = tableRows.get(count).findViewById(EDITTEXT_SUBJECT_ID);
+                EditText etCredit = tableRows.get(count).findViewById(EDITTEXT_CREDIT_ID);
+                Spinner spinnerGrade = tableRows.get(count).findViewById(SPINNER_GRADE_ID);
+                CheckBox checkBoxMajor = tableRows.get(count).findViewById(CHECKBOX_MAJOR_ID);
+
+                etSubject.setText(subjectInfos.get(i).subjectName);
+                etCredit.setText(String.valueOf(subjectInfos.get(i).credit));
+                spinnerGrade.setSelection(gradeToNumber(subjectInfos.get(i).grade));
+                checkBoxMajor.setChecked(subjectInfos.get(i).isMajor);
                 count++;
             }
         }
 
-        if(editTextCredits.size() > count){
-            for(int i = editTextCredits.size()-1; i >= count; i--){
-                mTableLayout.removeViewAt(i+1);
-                editTextSubjects.remove(i);
-                editTextCredits.remove(i);
-                spinnerGrades.remove(i);
-                checkBoxMajors.remove(i);
+        if(tableRows.size() > count){
+            for(int i = tableRows.size()-1; i >= count; i--){
+                mTableLayout.removeView(tableRows.get(i));
             }
         }
-
-        if(editTextCredits.size() < 5){
-            for (int i = count; i < 5; i++)
+        if(tableRows.size() < 5){
+            for (int i = count; i < 5; i++) {
                 addNewRow();
+                Log.i("TAG", "updateTableUi: ADD!");
+            }
         }
+        Log.i("TAG", "updateTableUi: !");
         updateSemesterGPA();
     }
 
@@ -392,16 +390,21 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
     private List<SubjectInfo> getCurrentSubjectInfos() {
         List<SubjectInfo> newSubjectInfos = new ArrayList<>();
-        for (int i = 0; i < editTextSubjects.size(); i++) {
-            String subjectName = editTextSubjects.get(i).getText().toString();
+        for (int i = 0; i < tableRows.size(); i++) {
+            EditText editTextSubject = tableRows.get(i).findViewById(EDITTEXT_SUBJECT_ID);
+            String subjectName = editTextSubject.getText().toString();
             if(subjectName.isEmpty()) continue;
 
-            String strCredit = editTextCredits.get(i).getText().toString();
+            EditText editTextCredit = tableRows.get(i).findViewById(EDITTEXT_CREDIT_ID);
+            String strCredit = editTextCredit.getText().toString();
             if(strCredit.isEmpty()) continue;
             float credit = Float.parseFloat(strCredit);
 
-            float grade = numberToGrade(spinnerGrades.get(i).getSelectedItemPosition());
-            boolean isMajor = checkBoxMajors.get(i).isChecked();
+            Spinner spinnerGrade = tableRows.get(i).findViewById(SPINNER_GRADE_ID);
+            float grade = numberToGrade(spinnerGrade.getSelectedItemPosition());
+
+            CheckBox checkBoxMajor = tableRows.get(i).findViewById(CHECKBOX_MAJOR_ID);
+            boolean isMajor = checkBoxMajor.isChecked();
             newSubjectInfos.add(new SubjectInfo(spinnerYear.getSelectedItemPosition()+1, spinnerSemester.getSelectedItemPosition()+1, subjectName, credit, grade, isMajor));
         }
         return newSubjectInfos;
