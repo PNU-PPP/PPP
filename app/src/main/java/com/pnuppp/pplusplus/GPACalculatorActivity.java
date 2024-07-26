@@ -61,26 +61,6 @@ public class GPACalculatorActivity extends AppCompatActivity {
             return insets;
         });
 
-        editTextSubjects.add(findViewById(R.id.editTextSubject1));
-        editTextSubjects.add(findViewById(R.id.editTextSubject2));
-        editTextSubjects.add(findViewById(R.id.editTextSubject3));
-        editTextSubjects.add(findViewById(R.id.editTextSubject4));
-
-        editTextCredits.add(findViewById(R.id.editTextCredit1));
-        editTextCredits.add(findViewById(R.id.editTextCredit2));
-        editTextCredits.add(findViewById(R.id.editTextCredit3));
-        editTextCredits.add(findViewById(R.id.editTextCredit4));
-
-        spinnerGrades.add(findViewById(R.id.grade1));
-        spinnerGrades.add(findViewById(R.id.grade2));
-        spinnerGrades.add(findViewById(R.id.grade3));
-        spinnerGrades.add(findViewById(R.id.grade4));
-
-        checkBoxMajors.add(findViewById(R.id.checkBoxMajor1));
-        checkBoxMajors.add(findViewById(R.id.checkBoxMajor2));
-        checkBoxMajors.add(findViewById(R.id.checkBoxMajor3));
-        checkBoxMajors.add(findViewById(R.id.checkBoxMajor4));
-
         preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE); // sharedPreference 객체 초기화
 
         // Spinner 및 TextView 초기화
@@ -126,12 +106,6 @@ public class GPACalculatorActivity extends AppCompatActivity {
         }
 
         /////////////// 학점 계산 테스트 용 //////////////
-        /*tempSubjectInfo.add(new SubjectInfo(1, 1, "C++", 4, 4.0f, true));
-        tempSubjectInfo.add(new SubjectInfo(1, 1, "데과입", 3, 3.5f, true));
-        tempSubjectInfo.add(new SubjectInfo(1, 1, "시소", 3, 3.0f, true));
-        tempSubjectInfo.add(new SubjectInfo(1, 1, "논회설", 3, 4.0f, true));
-        tempSubjectInfo.add(new SubjectInfo(1, 2, "유닉스", 3, 4.0f, true));
-        tempSubjectInfo.add(new SubjectInfo(1, 2, "교양", 3, 2.0f, false));*/
 
         Toast.makeText(this, "semester: " + semesterGPA(currentSubjectInfos, 1, 1), Toast.LENGTH_LONG).show();
         Toast.makeText(this, "major: " + majorGPA(currentSubjectInfos), Toast.LENGTH_LONG).show();
@@ -168,6 +142,11 @@ public class GPACalculatorActivity extends AppCompatActivity {
                                     EverytimeTimetableParser.getSubjects(everytimeIdentifiers.get(selectedItem.get()).identifier, new EverytimeTimetableParser.OnSubjectsParsedListener() {
                                         @Override
                                         public void onSuccess(List<SubjectInfo> subjectInfos) {
+                                            for (SubjectInfo subjectInfo : subjectInfos) {
+                                                subjectInfo.year = spinnerYear.getSelectedItemPosition()+1;
+                                                subjectInfo.semester = spinnerSemester.getSelectedItemPosition()+1;
+                                            }
+                                            currentSubjectInfos = subjectInfos;
                                             updateTableUi(subjectInfos);
                                             Toast.makeText(GPACalculatorActivity.this, "Loaded Subject Data", Toast.LENGTH_LONG).show();
                                         }
@@ -203,12 +182,14 @@ public class GPACalculatorActivity extends AppCompatActivity {
         ImageButton imageButton = new ImageButton(this);
         imageButton.setImageResource(R.drawable.baseline_remove_24);
         tableRow.addView(imageButton);
+
+        final int rows = editTextSubjects.size();
         imageButton.setOnClickListener(v -> {
             mTableLayout.removeView(tableRow);
-            editTextSubjects.remove(editTextSubjects.size()-1);
-            editTextCredits.remove(editTextCredits.size()-1);
-            spinnerGrades.remove(spinnerGrades.size()-1);
-            checkBoxMajors.remove(checkBoxMajors.size()-1);
+            editTextSubjects.remove(rows);
+            editTextCredits.remove(rows);
+            spinnerGrades.remove(rows);
+            checkBoxMajors.remove(rows);
         });
 
         EditText editText = new EditText(this);
@@ -288,6 +269,11 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 checkBoxMajors.get(count).setChecked(subjectInfos.get(i).isMajor);
                 count++;
             }
+        }
+
+        if(editTextCredits.size() < 5){
+            for (int i = count; i < 5; i++)
+                addNewRow();
         }
     }
 
