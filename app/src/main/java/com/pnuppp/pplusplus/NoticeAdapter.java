@@ -1,6 +1,8 @@
 package com.pnuppp.pplusplus;
 
 import android.content.Context;
+import android.content.Intent; // 추가된 import 문
+import android.net.Uri; // 추가된 import 문
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,10 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         holder.authorTextView.setText(item.getAuthor());
         holder.itemView.setOnClickListener(v -> {
             // 상세 보기 동작 구현
+            String url = item.getLink();
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            context.startActivity(intent);
         });
     }
 
