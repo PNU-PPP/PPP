@@ -2,15 +2,19 @@ package com.pnuppp.pplusplus;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -25,6 +29,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -46,13 +54,15 @@ public class GPACalculatorActivity extends AppCompatActivity {
     public static final int SPINNER_GRADE_ID = View.generateViewId();
     public static final int CHECKBOX_MAJOR_ID = View.generateViewId();
 
-    TableLayout mTableLayout;
+    private TableLayout mTableLayout;
 
     private Spinner spinnerYear;
     private Spinner spinnerSemester;
     private TextView textViewTotalGPA;
     private TextView textViewMajorGPA;
     private TextView textViewSemesterGPA;
+
+    private LineChart mLineChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +87,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
         //과목 추가
         mTableLayout = findViewById(R.id.tableLayout);
+        mLineChart = findViewById(R.id.chart);
         ImageButton buttonAddRow = findViewById(R.id.buttonAddRow);
 
         buttonAddRow.setOnClickListener(v -> addNewRow());
@@ -87,7 +98,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("GPACalculatorActivity", "Spinner item selected: position=" + position + ", id=" + id);
                 updateSemesterGPA();
-                updateTableUi(currentSubjectInfos);
+                updateTableUi();
             }
 
             @Override
@@ -105,7 +116,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         List<SubjectInfo> savedSubjectInfo = loadGPAData();
         if (savedSubjectInfo != null) {
             currentSubjectInfos = savedSubjectInfo;
-            updateTableUi(currentSubjectInfos);
+            updateTableUi();
         }
         else {
             Toast.makeText(this, "No GPA Data Found", Toast.LENGTH_LONG).show();
@@ -123,11 +134,17 @@ public class GPACalculatorActivity extends AppCompatActivity {
         buttonEverytime.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("에브리타임 시간표 가져오기");
-            builder.setMessage("URL 입력\n(https://everytime.kr/@b30NuC8130Bz1mLBaScr)");
+            builder.setMessage("시간표 URL 입력\n(https://everytime.kr/@_)");
 
             EditText input = new EditText(this);
             input.setInputType(InputType.TYPE_CLASS_TEXT);
-            builder.setView(input);
+            FrameLayout container = new FrameLayout(GPACalculatorActivity.this);
+            FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+            params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+            input.setLayoutParams(params);
+            container.addView(input);
+            builder.setView(container);
 
             builder.setPositiveButton(getString(android.R.string.ok), (dialog, which) -> {
                 String inputUrl = input.getText().toString();
@@ -153,7 +170,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
                                                 subjectInfo.semester = spinnerSemester.getSelectedItemPosition()+1;
                                             }
                                             replaceSemesterSubjectInfos(subjectInfos);
-                                            updateTableUi(subjectInfos);
+                                            updateTableUi();
                                             Toast.makeText(GPACalculatorActivity.this, "Loaded Subject Data", Toast.LENGTH_LONG).show();
                                         }
 
@@ -183,6 +200,22 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
         updateTotalGPA();
         updateMajorGPA();
+        updateChart();
+    }
+
+    private void updateChart(){
+        LineData lineData = new LineData();
+        ArrayList<Entry> entry1 = new ArrayList<>();
+        entry1.add(new Entry(0,semesterGPA(currentSubjectInfos, 1, 1)));
+        entry1.add(new Entry(1,semesterGPA(currentSubjectInfos, 1, 2)));
+        entry1.add(new Entry(2,semesterGPA(currentSubjectInfos, 2, 1)));
+        entry1.add(new Entry(3,semesterGPA(currentSubjectInfos, 2, 2)));
+        entry1.add(new Entry(4,semesterGPA(currentSubjectInfos, 3, 1)));
+        entry1.add(new Entry(5,semesterGPA(currentSubjectInfos, 3, 2)));
+        entry1.add(new Entry(6,semesterGPA(currentSubjectInfos, 4, 1)));
+        entry1.add(new Entry(7,semesterGPA(currentSubjectInfos, 4, 2)));
+        lineData.addDataSet(new LineDataSet(entry1, "학기별 평균 학점"));
+        mLineChart.setData(lineData);
     }
 
     private void addNewRow() {
@@ -190,9 +223,17 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
         ImageButton imageButton = new ImageButton(this);
         imageButton.setImageResource(R.drawable.baseline_remove_24);
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
+        imageButton.setBackgroundResource(typedValue.resourceId);
+
         tableRow.addView(imageButton);
 
-        imageButton.setOnClickListener(v -> mTableLayout.removeView(tableRow));
+        imageButton.setOnClickListener(v -> {
+            if(tableRows.size() <= 1) return;
+            mTableLayout.removeView(tableRow);
+            tableRows.remove(tableRow);
+        });
 
         EditText editText = new EditText(this);
         editText.setId(EDITTEXT_SUBJECT_ID);
@@ -205,7 +246,18 @@ public class GPACalculatorActivity extends AppCompatActivity {
         editText2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         editText2.setEms(2);
         editText2.setGravity(Gravity.CENTER_HORIZONTAL);
+        editText2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editText2.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
+        editText2.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                replaceSemesterSubjectInfos(getCurrentSubjectInfos());
+                updateSemesterGPA();
+                updateMajorGPA();
+                updateTotalGPA();
+            }
+        });
         tableRow.addView(editText2);
+
 
         ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(this, R.array.gradeSpinnerItems, android.R.layout.simple_spinner_dropdown_item);
         Spinner spinnerGrade = new Spinner(this);
@@ -239,9 +291,9 @@ public class GPACalculatorActivity extends AppCompatActivity {
         tableRow.addView(checkBoxMajor);
 
         tableRows.add(tableRow);
-
         mTableLayout.addView(tableRow);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -276,14 +328,14 @@ public class GPACalculatorActivity extends AppCompatActivity {
         else return 9;
     }
 
-    private void updateTableUi(List<SubjectInfo> subjectInfos) {
+    private void updateTableUi() {
         for(TableRow tableRow : tableRows)
             mTableLayout.removeView(tableRow);
         tableRows.clear();
 
         int count = 0;
-        for (int i = 0; i < subjectInfos.size(); i++) {
-            if(subjectInfos.get(i).year == spinnerYear.getSelectedItemPosition()+1 && subjectInfos.get(i).semester == spinnerSemester.getSelectedItemPosition()+1) {
+        for (int i = 0; i < currentSubjectInfos.size(); i++) {
+            if(currentSubjectInfos.get(i).year == spinnerYear.getSelectedItemPosition()+1 && currentSubjectInfos.get(i).semester == spinnerSemester.getSelectedItemPosition()+1) {
                 if (count >= tableRows.size())
                     addNewRow();
 
@@ -292,11 +344,12 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 Spinner spinnerGrade = tableRows.get(count).findViewById(SPINNER_GRADE_ID);
                 CheckBox checkBoxMajor = tableRows.get(count).findViewById(CHECKBOX_MAJOR_ID);
 
-                etSubject.setText(subjectInfos.get(i).subjectName);
-                etCredit.setText(String.valueOf(subjectInfos.get(i).credit));
-                spinnerGrade.setSelection(gradeToNumber(subjectInfos.get(i).grade));
-                checkBoxMajor.setChecked(subjectInfos.get(i).isMajor);
+                etSubject.setText(currentSubjectInfos.get(i).subjectName);
+                etCredit.setText(String.valueOf(currentSubjectInfos.get(i).credit));
+                spinnerGrade.setSelection(gradeToNumber(currentSubjectInfos.get(i).grade));
+                checkBoxMajor.setChecked(currentSubjectInfos.get(i).isMajor);
                 count++;
+                Log.i("TAG", "updateTableUi: ADD!!");
             }
         }
 
