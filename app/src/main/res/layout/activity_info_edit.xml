@@ -43,10 +43,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="학과/전공"
+            android:text="학부/학과"
             android:textColor="@color/main_color" />
 
-        <EditText
+        <!-- 기존의 EditText를 AutoCompleteTextView로 변경 -->
+        <AutoCompleteTextView
             android:id="@+id/etMajor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,6 +55,7 @@
             android:inputType="text"
             android:maxLength="20"
             android:singleLine="true" />
+
 
         <TextView
             android:layout_width="match_parent"
