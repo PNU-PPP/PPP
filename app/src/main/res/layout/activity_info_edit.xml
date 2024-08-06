@@ -43,7 +43,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="학부/학과"
+            android:text="학부(+전공)/학과명"
             android:textColor="@color/main_color" />
 
         <!-- 기존의 EditText를 AutoCompleteTextView로 변경 -->

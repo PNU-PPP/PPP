@@ -29,7 +29,7 @@
         </activity>
 
         <activity
-            android:name=".DepartmentNoticeActivity"
+            android:name=".RSSDepartmentNoticeActivity"
             android:exported="true"
             android:label="Department Notice"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
