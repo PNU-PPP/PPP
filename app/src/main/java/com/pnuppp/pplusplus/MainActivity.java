@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button noticeButton = findViewById(R.id.noticeButton);
         noticeButton.setOnClickListener(v->{
-            Intent intent = new Intent(MainActivity.this, DepartmentNoticeActivity.class);
+            Intent intent = new Intent(MainActivity.this, RSSDepartmentNoticeActivity.class);
             startActivity(intent);
 
         });
