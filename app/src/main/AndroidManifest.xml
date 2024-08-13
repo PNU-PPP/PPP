@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
 
     <application
         android:allowBackup="true"
@@ -41,6 +44,12 @@
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
             android:value="6b4773c838198057581c63a5a12d9e72" />
+
+        <receiver
+            android:name=".AlarmReceiver" android:exported="true" />
+
     </application>
+
+
 
 </manifest>
