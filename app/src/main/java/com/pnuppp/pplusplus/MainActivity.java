@@ -1,5 +1,12 @@
 package com.pnuppp.pplusplus;
 
+import android.Manifest;
+import android.os.Build;
+import android.provider.Settings;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,15 +19,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Calendar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+// import com.kakao.vectormap.KakaoMap;
+// import com.kakao.vectormap.KakaoMapReadyCallback;
+// import com.kakao.vectormap.MapLifeCycleCallback;
+// import com.kakao.vectormap.MapView;
+
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_POST_NOTIFICATIONS = 1;
+    private static final int REQUEST_CODE_SCHEDULE_EXACT_ALARM = 2;
     private MaterialCalendarView calendarView;
     private DataBase db;
     private EventDao eventDao;
@@ -39,7 +57,23 @@ public class MainActivity extends AppCompatActivity {
         eventDao = db.eventDao();
 
         initializeDatabase();
-        loadEvents();
+
+        // POST_NOTIFICATIONS 권한 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_POST_NOTIFICATIONS);
+        }
+        else { // 권한이 이미 부여된 경우
+            loadEvents();
+        }
+        // 정확한 알람 권한 요청 (API 31 이상에서만 가능)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (!alarmManager.canScheduleExactAlarms()) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                startActivityForResult(intent, REQUEST_CODE_SCHEDULE_EXACT_ALARM);
+            }
+        }
 
         calendarView.setOnDateChangedListener((widget, date, selected) -> {
             String selectedDate = formatDateForMap(date);
@@ -85,6 +119,23 @@ public class MainActivity extends AppCompatActivity {
 
                 textView8.setText(savedMajor);
                 textView9.setText(savedStudentID + " " + savedName);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                loadEvents();
+            }
+            else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("권한 거부됨")
+                        .setMessage("이 앱이 정상적으로 작동하려면 알림 권한이 필요합니다.")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
             }
         }
     }
@@ -148,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 {"2024-08-27", "2학기 1차 폐강 강좌 공고"},
                 {"2024-08-30", "1학기 후기 학위 수여식"},
 
-                {"2024-09-02", "2학기 개강\n2학기 1치 수강 정정 시작\n(학부, 타대생, 대학원 08:00~)"},
+                {"2024-09-02", "2학기 개강\n2학기 1차 수강 정정 시작\n(학부, 타대생, 대학원 08:00~)"},
                 {"2024-09-06", "2학기 1차 수강 정정 마감\n(학부, 타대생 ~17:00)\n(대학원 ~23:50)"},
                 {"2024-09-13", "2학기 2차 폐강 강좌 공고"},
                 {"2024-09-19", "2학기 2차 수강 정정 시작\n(학부, 타대생, 대학원 10:00~)"},
@@ -213,10 +264,35 @@ public class MainActivity extends AppCompatActivity {
             CalendarDay day = parseDateToCalendarDay(date);
             eventDays.add(day);
             events.put(date, event.getDescription());
+
+            if (event.getDescription() != null && !event.getDescription().isEmpty() && isTodayDate(day)) {
+                scheduleDailyNotification(day, event.getDescription());
+            }
         }
 
         calendarView.addDecorator(new EventDecorator(Color.BLUE, eventDays));
         calendarView.addDecorator(new TodayDecorator());
+    }
+
+    private boolean isTodayDate(CalendarDay day) {
+        Calendar today = Calendar.getInstance();
+        Calendar eventDate = Calendar.getInstance();
+        eventDate.set(day.getYear(), day.getMonth()-1, day.getDay());
+        return !eventDate.before(today);
+    }
+
+    private void scheduleDailyNotification(CalendarDay day, String eventDescription) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(day.getYear(), day.getMonth() - 1, day.getDay(), 9, 0, 0); // 알림을 보낼 시간 설정 (예: 오전 9시)
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("eventDescription", eventDescription);
+        intent.putExtra("eventDate", day.getYear() + "-" + String.format("%02d", day.getMonth()) + "-" + String.format("%02d", day.getDay()));
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, day.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
     private CalendarDay parseDateToCalendarDay(String date) {
