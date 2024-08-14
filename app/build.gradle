@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -48,6 +49,9 @@ android {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging:24.0.0'
     implementation 'androidx.room:room-runtime:2.4.3' // room 라이브러리
     kapt 'androidx.room:room-compiler:2.4.3' // room 컴파일러
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1' // 캘린더뷰
