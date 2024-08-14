@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.Calendar;
 
 import androidx.appcompat.app.AlertDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import androidx.annotation.NonNull;
@@ -97,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
         buttonExternalManagement.setOnClickListener(v -> {
             Intent newIntent = new Intent(MainActivity.this, ExternalManagementActivity.class);
             startActivity(newIntent);
+        
+        Button noticeButton = findViewById(R.id.noticeButton);
+        noticeButton.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, RSSDepartmentNoticeActivity.class);
+            startActivity(intent);
         });
 
         TextView textView8 = findViewById(R.id.textView8);

@@ -48,7 +48,7 @@
             app:layout_constraintWidth_percent="0.8" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/noticeButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="학과 공지사항"
@@ -66,7 +66,7 @@
             android:text="비교과 프로그램"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button4"
+            app:layout_constraintTop_toBottomOf="@id/noticeButton"
             app:layout_constraintWidth_percent="0.8" />
 
         <Button
@@ -177,7 +177,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="124dp"
-            android:text="2023XXXXX 홍길동"
+            android:text="202XXXXXX 홍길동"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.568"
