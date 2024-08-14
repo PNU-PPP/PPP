@@ -111,6 +111,7 @@ public class InfoEditActivity extends AppCompatActivity {
         });
     }
 
+    //어레이 합쳐서 자동완성
     private String[] concatenateArrays(String[] array1, String[] array2) {
         String[] result = new String[array1.length + array2.length];
         System.arraycopy(array1, 0, result, 0, array1.length);
@@ -118,6 +119,8 @@ public class InfoEditActivity extends AppCompatActivity {
         return result;
     }
 
+
+    //RSS학과 유무 판별
     private boolean isValidMajor(String major) {
         // RSS 및 non-RSS 학과를 모두 포함하는 배열로 검증
         String[] allDepartments = concatenateArrays(RssDepartments, nonRssDepartments);
