@@ -1,10 +1,16 @@
 package com.pnuppp.pplusplus;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.kakao.vectormap.KakaoMap;
 import com.kakao.vectormap.KakaoMapReadyCallback;
 import com.kakao.vectormap.LatLng;
@@ -22,11 +28,25 @@ import com.kakao.vectormap.label.LabelOptions;
 import com.kakao.vectormap.label.LabelStyle;
 import com.kakao.vectormap.label.LabelStyles;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 public class newnewActivity extends AppCompatActivity {
+
+    // enum을 사용하는 클래스 내부에 정의
+    public enum RestaurantType {
+        PIZZA, SUSHI, KOREAN, CHINESE, VIETNAM
+    }
 
     MapView mapView;
     KakaoMap kakaoMap;
     LabelManager labelManager; // LabelManager를 클래스 변수로 선언
+    List<Label> labelList = new ArrayList<>(); // 레이블들을 저장할 리스트
+    Map<Label, RestaurantInfo> labelToRestaurantMap = new HashMap<>(); // 레이블과 식당 정보를 매핑할 Map
+    Button selectLabelButton; // 랜덤으로 레이블을 선택할 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,187 +55,164 @@ public class newnewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_newnew);
         mapView = findViewById(R.id.map_view);
 
+        // 버튼 초기화
+        selectLabelButton = findViewById(R.id.select_label_button);
+        selectLabelButton.setOnClickListener(v -> selectRandomLabel());
+
         mapView.start(new MapLifeCycleCallback() {
             @Override
             public void onMapDestroy() {
-                // 지도 API가 정상적으로 종료될 때 호출
                 Log.d("KakaoMap", "onMapDestroy: ");
             }
 
             @Override
             public void onMapError(Exception error) {
-                // 인증 실패 및 지도 사용 중 에러가 발생할 때 호출
                 Log.e("KakaoMap", "onMapError: ", error);
             }
         }, new KakaoMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull KakaoMap map) {
-                // 정상적으로 인증이 완료되었을 때 호출
                 kakaoMap = map;
-
-                // LabelManager 초기화
                 labelManager = kakaoMap.getLabelManager();
-
-                // 지도 초기 위치 설정
                 cameraupdate();
-
-                // 지도 타입 변경
                 changeMapViewInfo();
-
-                // 로드뷰 라인 오버레이 표시
                 showRoadViewLineOverlay();
-
-                // 레이블 표시
                 showLabel();
             }
         });
     }
 
     private void cameraupdate() {
-        // 카메라 업데이트 객체 생성
-        // 원하는 위치
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(35.2304389, 129.0842777));
-
-        // 카메라 이동
         kakaoMap.moveCamera(cameraUpdate);
 
-        CameraUpdate cameraUpdate2 = CameraUpdateFactory.zoomTo(17);;
-
-        // 카메라 이동
+        CameraUpdate cameraUpdate2 = CameraUpdateFactory.zoomTo(17);
         kakaoMap.moveCamera(cameraUpdate2);
     }
 
     private void changeMapViewInfo() {
-        // MapViewInfo 변경 리스너 설정
         kakaoMap.setOnMapViewInfoChangeListener(new KakaoMap.OnMapViewInfoChangeListener() {
             @Override
             public void onMapViewInfoChanged(MapViewInfo mapViewInfo) {
-                // MapViewInfo 변경 성공 시 호출
                 Log.d("KakaoMap", "MapViewInfo changed successfully");
             }
 
             @Override
             public void onMapViewInfoChangeFailed() {
-                // MapViewInfo 변경 실패 시 호출
                 Log.e("KakaoMap", "Failed to change MapViewInfo");
             }
         });
 
-        // MapViewInfo 객체 생성 및 지도 타입을 위성 지도(SKYVIEW)로 변경
         MapViewInfo mapViewInfo = MapViewInfo.from("openmap", MapType.NORMAL);
         kakaoMap.changeMapViewInfo(mapViewInfo);
     }
 
     private void showRoadViewLineOverlay() {
-        // MapOverlay 로 로드뷰 라인 오버레이 켜기
         kakaoMap.showOverlay(MapOverlay.ROADVIEW_LINE);
     }
 
     private void hideRoadViewLineOverlay() {
-        // MapOverlay 로 로드뷰 라인 오버레이 끄기
         kakaoMap.hideOverlay(MapOverlay.ROADVIEW_LINE);
     }
 
     private void showLabel() {
-        // 1. 첫 번째 레이블 스타일 생성 - Icon 이미지 하나만 있는 스타일
-        LabelStyles firstLabelStyles = LabelStyles.from(LabelStyle.from(R.drawable.location));
-
-        // 2. 첫 번째 레이블 옵션 생성
-        LabelOptions firstLabelOptions = LabelOptions.from(LatLng.from(35.2304389, 129.0842777))
-                .setStyles(firstLabelStyles);
-
-        // 3. 첫 번째 레이블 추가
         LabelLayer layer = labelManager.getLayer();
-        Label firstLabel = layer.addLabel(firstLabelOptions);
 
-        // 4. 두 번째 레이블 스타일 생성 - 다른 아이콘 이미지 스타일
-        LabelStyles secondLabelStyles = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
+        addLabel(layer, 35.2304389, 129.0842777, "톤쇼우", "부산대 근본 카츠", "https://g.co/kgs/F6ZsNBX", RestaurantType.SUSHI);
+        addLabel(layer, 35.2301701, 129.085188, "마마도마", "비싸지만 맛있는 스시", "https://g.co/kgs/eHQ3FQL", RestaurantType.SUSHI);
+        addLabel(layer, 35.230478, 129.0866165, "버거킹", "세계적인 패스트푸드 체인", "https://g.co/kgs/DUL2e2F", RestaurantType.PIZZA);
+        addLabel(layer, 35.230273, 129.0851434, "미분당", "조용한 쌀국수", "https://g.co/kgs/MyeJqTd", RestaurantType.VIETNAM);
+        addLabel(layer, 35.228884, 129.0880355, "웍헤이", "볶음밥 맛도리", "https://g.co/kgs/QcmgSLD", RestaurantType.CHINESE);
+        addLabel(layer, 35.231564, 129.085253, "포포포", "짜조가 맛있는 쌀국수집", "https://maps.app.goo.gl/K5hTE7e45zCKp3EeA", RestaurantType.VIETNAM);
+        addLabel(layer, 35.2301375, 129.0857935, "카츠안", "쫄순이 야무진 카츠", "https://maps.app.goo.gl/sUpHcxPUnNwxgZiz7", RestaurantType.SUSHI);
+        addLabel(layer, 35.2310302, 129.084811, "야마벤또", "맛있는 튀김과 벤또", "https://g.co/kgs/3KSzyj4", RestaurantType.SUSHI);
+        addLabel(layer, 35.23346110000001, 129.0803809, "금정회관", "학식", "https://lei.pusan.ac.kr/lei/55296/subview.do", RestaurantType.KOREAN);
+        addLabel(layer, 35.2320819, 129.0854509, "교토밥상", "규카츠 맛집", "https://maps.app.goo.gl/eo4iD5sQGeZtktD4A", RestaurantType.SUSHI);
+    }
 
-        // 5. 두 번째 레이블 옵션 생성
-        LabelOptions secondLabelOptions = LabelOptions.from(LatLng.from(35.2301701, 129.085188)) // 다른 위치
-                .setStyles(secondLabelStyles);
+    private void addLabel(LabelLayer layer, double latitude, double longitude, String restaurantName, String additionalInfo, String url, RestaurantType type) {
+        int drawableId;
+        switch (type) {
+            case PIZZA:
+                drawableId = R.drawable.pizza;
+                break;
+            case SUSHI:
+                drawableId = R.drawable.sushi;
+                break;
 
-        // 6. 두 번째 레이블 추가
-        Label secondLabel = layer.addLabel(secondLabelOptions);
-//버거킹
-        LabelStyles LabelStyles3 = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
+            case KOREAN:
+                drawableId = R.drawable.korean;
+                break;
+            case VIETNAM:
+                drawableId = R.drawable.vietnam;
+                break;
+            case CHINESE:
+                drawableId = R.drawable.chinese;
+                break;
+            default:
+                drawableId = R.drawable.location; // 기본 아이콘
+                break;
+        }
 
+        LabelStyles labelStyles = LabelStyles.from(LabelStyle.from(drawableId));
+        LabelOptions labelOptions = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(labelStyles);
+        Label label = layer.addLabel(labelOptions);
+        labelList.add(label); // 레이블 리스트에 추가
+        labelToRestaurantMap.put(label, new RestaurantInfo(restaurantName, additionalInfo, url)); // 레이블과 식당 정보를 매핑
+    }
 
-        LabelOptions LabelOptions3 = LabelOptions.from(LatLng.from(35.230478, 129.0866165)) // 다른 위치
-                .setStyles(secondLabelStyles);
+    private void selectRandomLabel() {
+        if (labelList.isEmpty()) {
+            Toast.makeText(this, "레이블이 없습니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // 랜덤으로 레이블 선택
+        Random random = new Random();
+        int index = random.nextInt(labelList.size());
+        Label selectedLabel = labelList.get(index);
 
-        Label Label3 = layer.addLabel(LabelOptions3);
-//미분당
-        LabelStyles LabelStyles4 = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
+        // 선택된 레이블에 대한 식당 정보 가져오기
+        RestaurantInfo restaurantInfo = labelToRestaurantMap.get(selectedLabel);
+        LatLng position = selectedLabel.getPosition();
 
+        // 선택된 레이블의 좌표로 카메라 이동 및 확대
+        CameraUpdate moveToLabel = CameraUpdateFactory.newCenterPosition(position);
+        kakaoMap.moveCamera(moveToLabel);
 
-        LabelOptions LabelOptions4 = LabelOptions.from(LatLng.from(35.230273, 129.0851434)) // 다른 위치
-                .setStyles(secondLabelStyles);
+        CameraUpdate zoomIn = CameraUpdateFactory.zoomTo(19); // 확대 레벨 설정
+        kakaoMap.moveCamera(zoomIn);
 
+        // URL로 이동
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurantInfo.getUrl()));
+        startActivity(browserIntent);
 
-        Label Label4 = layer.addLabel(LabelOptions4);
+        // 메시지 표시
+        String message = "오늘 메뉴는 " + restaurantInfo.getName() + " 어때요?\n" + restaurantInfo.getAdditionalInfo();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 
-//웍헤이
-        LabelStyles LabelStyles5 = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
+    private static class RestaurantInfo {
+        private final String name;
+        private final String additionalInfo;
+        private final String url;
 
+        public RestaurantInfo(String name, String additionalInfo, String url) {
+            this.name = name;
+            this.additionalInfo = additionalInfo;
+            this.url = url;
+        }
 
-        LabelOptions LabelOptions5 = LabelOptions.from(LatLng.from(35.228884, 129.0880355)) // 다른 위치
-                .setStyles(secondLabelStyles);
+        public String getName() {
+            return name;
+        }
 
+        public String getAdditionalInfo() {
+            return additionalInfo;
+        }
 
-        Label Label5 = layer.addLabel(LabelOptions5);
-
-//포포포
-        LabelStyles LabelStyles6 = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
-
-
-        LabelOptions LabelOptions6 = LabelOptions.from(LatLng.from(35.231564, 129.085253)) // 다른 위치
-                .setStyles(secondLabelStyles);
-
-
-        Label Label6 = layer.addLabel(LabelOptions6);
-
-//카츠안
-        LabelStyles LabelStyles7 = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
-
-
-        LabelOptions LabelOptions7 = LabelOptions.from(LatLng.from(35.2301375, 129.0857935)) // 다른 위치
-                .setStyles(secondLabelStyles);
-
-
-        Label Label7 = layer.addLabel(LabelOptions7);
-
-//야마벤또
-        LabelStyles LabelStyles8 = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
-
-
-        LabelOptions LabelOptions8 = LabelOptions.from(LatLng.from(35.2310302, 129.084811)) // 다른 위치
-                .setStyles(secondLabelStyles);
-
-
-        Label Label8 = layer.addLabel(LabelOptions8);
-
-//금정회관
-        LabelStyles LabelStyles9 = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
-
-
-        LabelOptions LabelOptions9 = LabelOptions.from(LatLng.from(35.23346110000001, 129.0803809)) // 다른 위치
-                .setStyles(secondLabelStyles);
-
-
-        Label Label9 = layer.addLabel(LabelOptions9);
-
-        //교토밥상
-
-
-        LabelStyles LabelStyles10 = LabelStyles.from(LabelStyle.from(R.drawable.location)); // 새로운 아이콘 이미지
-
-
-        LabelOptions LabelOptions10 = LabelOptions.from(LatLng.from(35.2320819, 129.0854509)) // 다른 위치
-                .setStyles(secondLabelStyles);
-
-
-        Label Label10 = layer.addLabel(LabelOptions10);
+        public String getUrl() {
+            return url;
+        }
     }
 }
