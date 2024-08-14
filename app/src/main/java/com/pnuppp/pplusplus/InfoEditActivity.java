@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class InfoEditActivity extends AppCompatActivity {
 
-    private String[] majors = new String[]{
-        //rss인 학과
+    private String[] RssDepartments = new String[]{
+            //rss인 학과
             //인문대학
             "국어국문학과", "일어일문학과", "불어불문학과", "노어노문학과",
             "중어중문학과", "영어영문학과", "독어독문학과", "언어정보학과", "사학과",
@@ -50,32 +50,28 @@ public class InfoEditActivity extends AppCompatActivity {
             "의예과", "의학과", "의과학과",
             //정보의생명공학대학
             "정보컴퓨터공학부 컴퓨터공학전공", "정보컴퓨터공학부 인공지능전공", "의생명융학공학부",
-
-
-            //rss 아닌 학과
-            "한문학과", "철학과", "고고학과", "사회복지학과", "물리학과", "기계공학부", "화공생명환경공학부 화공생명공학전공",
-            "화공생명환경공학부 환경공학전공", "전기전자공학부 반도체공학전공", "산업공학과", "국제학부", "실내환경디자인학과",
-            "스포츠과학과",
-
     };
 
-
-
+    private String[] nonRssDepartments = new String[]{
+            "한문학과", "철학과", "고고학과", "사회복지학과", "물리학과",
+            "기계공학부", "화공생명환경공학부 화공생명공학전공",
+            "화공생명환경공학부 환경공학전공", "전기전자공학부 반도체공학전공",
+            "산업공학과", "국제학부", "실내환경디자인학과", "스포츠과학과"
+            //기계공학부, 국제학부, 스포츠과학과
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_edit);
 
-        AutoCompleteTextView editTextMajor = findViewById(R.id.etMajor); // AutoCompleteTextView로 변경
+        AutoCompleteTextView editTextMajor = findViewById(R.id.etMajor);
         EditText editTextStudentID = findViewById(R.id.etStudentID);
         EditText editTextName = findViewById(R.id.etName);
 
-
-        // ArrayAdapter를 생성하고 AutoCompleteTextView에 설정
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, majors);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, RssDepartments);
         editTextMajor.setAdapter(adapter);
-        editTextMajor.setThreshold(1); // 1글자 입력 시부터 제안 시작
+        editTextMajor.setThreshold(1);
 
         SharedPreferences sharedPref = getSharedPreferences("com.pnuppp.pplusplus.user_info", MODE_PRIVATE);
         Button buttonSave = findViewById(R.id.button_save);
@@ -91,9 +87,8 @@ public class InfoEditActivity extends AppCompatActivity {
             String studentID = editTextStudentID.getText().toString();
             String name = editTextName.getText().toString();
 
-            // 입력 검증: major가 majors 배열에 포함되지 않으면 경고 메시지 표시
             if(!isValidMajor(major)) {
-                Toast.makeText(this, "정확한 학부(+전공)/학과명을 입력해주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "정확한 명칭을 입력해주세요", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -110,21 +105,23 @@ public class InfoEditActivity extends AppCompatActivity {
 
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
 
-            // MainActivity로 값 전달
-            Intent mainIntent = new Intent(InfoEditActivity.this, MainActivity.class);
-            mainIntent.putExtra("major", major);
-            mainIntent.putExtra("student_id", studentID);
-            mainIntent.putExtra("name", name);
-            startActivity(mainIntent);
-
-
+            // 학과에 따라 알맞은 액티비티 호출
+            if (isNonRssDepartment(major)) {
+                Intent htmlNoticeIntent = new Intent(InfoEditActivity.this, HtmlDepartmentNoticeActivity.class);
+                htmlNoticeIntent.putExtra("major", major);
+                startActivity(htmlNoticeIntent);
+            } else {
+                Intent rssNoticeIntent = new Intent(InfoEditActivity.this, RSSDepartmentNoticeActivity.class);
+                rssNoticeIntent.putExtra("major", major);
+                startActivity(rssNoticeIntent);
+            }
 
             finish();
         });
     }
-    // 학과명이 majors 배열에 존재하는지 확인하는 메서드
+
     private boolean isValidMajor(String major) {
-        for (String m : majors) {
+        for (String m : RssDepartments) {
             if (m.equals(major)) {
                 return true;
             }
@@ -132,4 +129,12 @@ public class InfoEditActivity extends AppCompatActivity {
         return false;
     }
 
+    private boolean isNonRssDepartment(String major) {
+        for (String dept : nonRssDepartments) {
+            if (dept.equals(major)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
