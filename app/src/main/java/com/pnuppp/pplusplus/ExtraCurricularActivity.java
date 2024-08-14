@@ -1,15 +1,20 @@
 package com.pnuppp.pplusplus;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -26,29 +31,69 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExtraCurricularActivity extends AppCompatActivity {
+    public static final int MAX_PAGE = 15;
 
     private RecyclerView recyclerView;
     private ExtraCurricularAdapter noticeAdapter;
     private List<RSSItem> rssItems = new ArrayList<>();
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private int currentPage = 1;
+    private boolean isOnDownloading = false;
+    private static String sortBy = "approach";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extra_curricular);
 
-        progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         noticeAdapter = new ExtraCurricularAdapter(rssItems, this);
         recyclerView.setAdapter(noticeAdapter);
 
-        fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1");
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
+        swipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.spinner_colors));
+        swipeRefreshLayout.setRefreshing(true);
+
+        fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort=approach", true);
+
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            swipeRefreshLayout.setRefreshing(true);
+
+            if (checkedId == R.id.radioButton1) sortBy = "approach";
+            else if (checkedId == R.id.radioButton2) sortBy = "applicant";
+            else if (checkedId == R.id.radioButton3) sortBy = "date";
+            fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort="+sortBy, true);
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort="+sortBy, true);
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(!recyclerView.canScrollVertically(1) && !isOnDownloading && currentPage < MAX_PAGE) {
+                    Log.i("NF", "onScrolled: END");
+
+                    fetchRSSFeed("http://ppp.jun0.dev:3333/?page="+(++currentPage)+"&sort="+sortBy, false);
+                }
+            }
+        });
     }
 
-    private void fetchRSSFeed(String rssUrl) {
+    private void fetchRSSFeed(String rssUrl, boolean reset) {
         if (rssUrl == null || rssUrl.isEmpty()) return;
-        rssItems.clear();
+        isOnDownloading = true;
+        if (reset)
+            currentPage = 1;
+        if(currentPage > 1)
+            rssItems.remove(rssItems.size()-1);
+
         new Thread(() -> {
             try {
                 URL url = new URL(rssUrl);
@@ -58,12 +103,13 @@ public class ExtraCurricularActivity extends AppCompatActivity {
                 String content = readStream(inputStream);
                 Log.d("RSSFeed", content);
 
-                parseRSS(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
+                parseRSS(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)), reset);
             } catch (Exception e) {
                 Log.e("RSSFetch", "Error fetching RSS feed", e);
             }
 
-            new Handler(Looper.getMainLooper()).post(() -> noticeAdapter.notifyDataSetChanged());
+            new Handler(Looper.getMainLooper()).post(() -> recyclerView.setVisibility(RecyclerView.VISIBLE));
+            isOnDownloading = false;
         }).start();
     }
 
@@ -77,7 +123,8 @@ public class ExtraCurricularActivity extends AppCompatActivity {
         return out.toString();
     }
 
-    private void parseRSS(InputStream inputStream) {
+    private void parseRSS(InputStream inputStream, boolean reset) {
+        ArrayList<RSSItem> newRssItems = new ArrayList<>();
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
@@ -114,7 +161,7 @@ public class ExtraCurricularActivity extends AppCompatActivity {
                     case XmlPullParser.END_TAG:
                         tagName = parser.getName();
                         if (tagName.equalsIgnoreCase("item") && currentItem != null) {
-                            rssItems.add(currentItem);
+                            newRssItems.add(currentItem);
                             currentItem = null;
                         }
                         break;
@@ -122,8 +169,15 @@ public class ExtraCurricularActivity extends AppCompatActivity {
                 eventType = parser.next();
             }
 
+            if(currentPage < MAX_PAGE)
+                newRssItems.add(null);
+
+            if(reset) rssItems.clear();
+            rssItems.addAll(newRssItems);
+
             new Handler(Looper.getMainLooper()).post(() -> {
-                progressBar.setVisibility(ProgressBar.GONE);
+                if(reset) recyclerView.scrollToPosition(0);
+                swipeRefreshLayout.setRefreshing(false);
                 noticeAdapter.notifyDataSetChanged();
             });
 

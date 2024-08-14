@@ -23,4 +23,7 @@
         <item>1학기</item>
         <item>2학기</item>
     </string-array>
+    <integer-array name="spinner_colors">
+        <item>@color/colorAccent</item>
+    </integer-array>
 </resources>
