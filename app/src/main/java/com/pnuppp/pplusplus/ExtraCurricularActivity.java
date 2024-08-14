@@ -108,7 +108,6 @@ public class ExtraCurricularActivity extends AppCompatActivity {
                 Log.e("RSSFetch", "Error fetching RSS feed", e);
             }
 
-            new Handler(Looper.getMainLooper()).post(() -> recyclerView.setVisibility(RecyclerView.VISIBLE));
             isOnDownloading = false;
         }).start();
     }
@@ -176,9 +175,11 @@ public class ExtraCurricularActivity extends AppCompatActivity {
             rssItems.addAll(newRssItems);
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                if(reset) recyclerView.scrollToPosition(0);
-                swipeRefreshLayout.setRefreshing(false);
                 noticeAdapter.notifyDataSetChanged();
+                if(reset){
+                    recyclerView.scrollToPosition(0);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             });
 
         } catch (Exception e) {
