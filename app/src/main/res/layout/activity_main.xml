@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -60,7 +59,7 @@
             android:layout_marginTop="22dp" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/button_extra"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
@@ -70,16 +69,6 @@
             app:layout_constraintTop_toBottomOf="@id/noticeButton"
             app:layout_constraintWidth_percent="0.8" />
 
-        <CalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button6" />
-
         <Button
             android:id="@+id/button5"
             android:layout_width="0dp"
@@ -88,8 +77,20 @@
             android:text="부산대 맛집 검색 / 랜덤 고르기"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendarView"
+            app:layout_constraintTop_toBottomOf="@+id/button_extra"
             app:layout_constraintWidth_percent="0.8" />
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            app:mcv_showOtherDates="all"
+            app:mcv_selectionColor="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button5" />
 
         <TextView
             android:layout_width="0dp"
@@ -97,7 +98,7 @@
             android:gravity="center"
             android:id="@+id/diaryTextView"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/button5"
+            app:layout_constraintTop_toBottomOf="@+id/calendarView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -231,6 +232,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ppp_logo_vector" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
