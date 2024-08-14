@@ -103,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(myIntent);
         });
 
+        Button extraCurricularButton = findViewById(R.id.button_extra);
+        extraCurricularButton.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, ExtraCurricularActivity.class);
+            startActivity(intent);
+        });
 
         // 공지사항 관련 버튼 설정
         Button noticeButton = findViewById(R.id.noticeButton);
