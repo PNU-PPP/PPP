@@ -69,7 +69,10 @@ public class InfoEditActivity extends AppCompatActivity {
         EditText editTextStudentID = findViewById(R.id.etStudentID);
         EditText editTextName = findViewById(R.id.etName);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, RssDepartments);
+        // RSS 및 non-RSS 학과를 합쳐서 자동완성에 사용
+        String[] allDepartments = concatenateArrays(RssDepartments, nonRssDepartments);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, allDepartments);
         editTextMajor.setAdapter(adapter);
         editTextMajor.setThreshold(1);
 
@@ -87,11 +90,6 @@ public class InfoEditActivity extends AppCompatActivity {
             String studentID = editTextStudentID.getText().toString();
             String name = editTextName.getText().toString();
 
-            if(!isValidMajor(major)) {
-                Toast.makeText(this, "정확한 명칭을 입력해주세요", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             if(major.isEmpty() || studentID.isEmpty() || name.isEmpty()) {
                 Toast.makeText(this, "모든 정보를 입력해주세요", Toast.LENGTH_SHORT).show();
                 return;
@@ -105,23 +103,25 @@ public class InfoEditActivity extends AppCompatActivity {
 
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
 
-            // 학과에 따라 알맞은 액티비티 호출
-            if (isNonRssDepartment(major)) {
-                Intent htmlNoticeIntent = new Intent(InfoEditActivity.this, HtmlDepartmentNoticeActivity.class);
-                htmlNoticeIntent.putExtra("major", major);
-                startActivity(htmlNoticeIntent);
-            } else {
-                Intent rssNoticeIntent = new Intent(InfoEditActivity.this, RSSDepartmentNoticeActivity.class);
-                rssNoticeIntent.putExtra("major", major);
-                startActivity(rssNoticeIntent);
-            }
-
+            // MainActivity를 다시 시작하여 업데이트된 데이터를 반영
+            Intent intent = new Intent(InfoEditActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish();
         });
     }
 
+    private String[] concatenateArrays(String[] array1, String[] array2) {
+        String[] result = new String[array1.length + array2.length];
+        System.arraycopy(array1, 0, result, 0, array1.length);
+        System.arraycopy(array2, 0, result, array1.length, array2.length);
+        return result;
+    }
+
     private boolean isValidMajor(String major) {
-        for (String m : RssDepartments) {
+        // RSS 및 non-RSS 학과를 모두 포함하는 배열로 검증
+        String[] allDepartments = concatenateArrays(RssDepartments, nonRssDepartments);
+        for (String m : allDepartments) {
             if (m.equals(major)) {
                 return true;
             }
@@ -138,3 +138,5 @@ public class InfoEditActivity extends AppCompatActivity {
         return false;
     }
 }
+
+
