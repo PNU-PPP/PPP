@@ -6,6 +6,7 @@ public class HtmlItem {
     private String date;
     private String attachmentCount;
     private String views;
+    private String url; // URL 필드 추가
 
     // Constructor
     public HtmlItem(String number, String title, String date, String attachmentCount, String views) {
@@ -14,6 +15,7 @@ public class HtmlItem {
         this.date = date;
         this.attachmentCount = attachmentCount;
         this.views = views;
+        this.url = url;
     }
 
     // Getters and setters
