@@ -20,7 +20,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -118,16 +117,6 @@ public class GPACalculatorActivity extends AppCompatActivity {
             currentSubjectInfos = savedSubjectInfo;
             updateTableUi();
         }
-        else {
-            Toast.makeText(this, "No GPA Data Found", Toast.LENGTH_LONG).show();
-        }
-
-        /////////////// 학점 계산 테스트 용 //////////////
-
-        Toast.makeText(this, "semester: " + semesterGPA(currentSubjectInfos, 1, 1), Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "major: " + majorGPA(currentSubjectInfos), Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "total GPA: " + totalGPA(currentSubjectInfos), Toast.LENGTH_LONG).show();
-        ////////////////////////////////////////////
 
         //////////// Everytime 시간표 파싱 테스트 //////////////
         Button buttonEverytime = findViewById(R.id.buttonEverytime);
@@ -171,18 +160,18 @@ public class GPACalculatorActivity extends AppCompatActivity {
                                             }
                                             replaceSemesterSubjectInfos(subjectInfos);
                                             updateTableUi();
-                                            Toast.makeText(GPACalculatorActivity.this, "Loaded Subject Data", Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(GPACalculatorActivity.this, "Loaded Subject Data", Toast.LENGTH_LONG).show();
                                         }
 
                                         @Override
                                         public void onFailed(int errorCode, String errorMessage) {
-                                            Toast.makeText(GPACalculatorActivity.this, "Failed: " + errorMessage, Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(GPACalculatorActivity.this, "Failed: " + errorMessage, Toast.LENGTH_LONG).show();
                                         }
                                     });
                                 }).setNegativeButton(android.R.string.cancel,null)
                                 .show();
                         //tempSubjectInfo.addAll(subjectInfos);
-                        Toast.makeText(GPACalculatorActivity.this, "Loaded Semester Data", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(GPACalculatorActivity.this, "Loaded Semester Data", Toast.LENGTH_LONG).show();
                         for (EverytimeIdentifier everytimeIdentifier : everytimeIdentifiers) {
                             Log.i("TAG", everytimeIdentifier.year + " " + everytimeIdentifier.semester + " " + everytimeIdentifier.identifier);
                         }
