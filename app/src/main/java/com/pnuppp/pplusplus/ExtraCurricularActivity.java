@@ -28,7 +28,7 @@ import java.util.List;
 public class ExtraCurricularActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private NoticeAdapter noticeAdapter;
+    private ExtraCurricularAdapter noticeAdapter;
     private List<RSSItem> rssItems = new ArrayList<>();
     private ProgressBar progressBar;
 
@@ -39,9 +39,8 @@ public class ExtraCurricularActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        noticeAdapter = new NoticeAdapter(rssItems, this);
+        noticeAdapter = new ExtraCurricularAdapter(rssItems, this);
         recyclerView.setAdapter(noticeAdapter);
 
         fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1");
@@ -103,10 +102,10 @@ public class ExtraCurricularActivity extends AppCompatActivity {
                                     currentItem.setLink(parser.nextText());
                                     break;
                                 case "category":
-                                    currentItem.setPubDate(parser.nextText());
+                                    currentItem.setAuthor(parser.nextText());
                                     break;
                                 case "description":
-                                    currentItem.setAuthor(parser.nextText());
+                                    currentItem.setCategory(parser.nextText());
                                     break;
                             }
                         }
