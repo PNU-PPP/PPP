@@ -44,6 +44,7 @@
             android:name=".InfoEditActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ExternalManagementActivity" />
+        <activity android:name=".ExtraCurricularActivity" />
         <activity
             android:name=".GPACalculatorActivity"
             android:exported="false" />

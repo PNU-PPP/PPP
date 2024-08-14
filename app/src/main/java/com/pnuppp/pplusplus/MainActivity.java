@@ -95,10 +95,21 @@ public class MainActivity extends AppCompatActivity {
             startActivity(myIntent);
         });
 
+        Button buttonInfoEdit = findViewById(R.id.button2);
+        buttonInfoEdit.setOnClickListener(v -> {
+            Intent newIntent = new Intent(MainActivity.this, InfoEditActivity.class);
+            startActivity(newIntent);
+        });
         
         Button noticeButton = findViewById(R.id.noticeButton);
         noticeButton.setOnClickListener(v->{
             Intent intent = new Intent(MainActivity.this, RSSDepartmentNoticeActivity.class);
+            startActivity(intent);
+        });
+
+        Button extraCurricularButton = findViewById(R.id.button_extra);
+        extraCurricularButton.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, ExtraCurricularActivity.class);
             startActivity(intent);
         });
 
