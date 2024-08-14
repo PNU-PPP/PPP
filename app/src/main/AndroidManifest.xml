@@ -37,6 +37,8 @@
             android:label="Department Notice"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <activity android:name=".HtmlDepartmentNoticeActivity" />
+
         <activity
             android:name=".newnewActivity"
             android:exported="false" />
