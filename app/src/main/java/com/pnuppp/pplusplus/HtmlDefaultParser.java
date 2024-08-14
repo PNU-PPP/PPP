@@ -13,7 +13,7 @@ public class HtmlDefaultParser implements HtmlParser {
         List<HtmlItem> items = new ArrayList<>();
 
         // 테이블의 각 행을 선택합니다.
-        Elements rows = document.select("tbody tr");
+        Elements rows = document.select("table.artclTable tbody tr");
 
         for (Element row : rows) {
             // 번호, 제목, 작성일, 첨부파일 개수, 조회수에 해당하는 데이터를 선택합니다.
@@ -23,6 +23,11 @@ public class HtmlDefaultParser implements HtmlParser {
             String attachmentCount = row.select("td._artclTdAtchFile").text();
             String views = row.select("td._artclTdAccess").text();
 
+            // 데이터가 비어있는지 확인하고, 비어있으면 건너뜁니다.
+            if (number.isEmpty() || title.isEmpty()) {
+                continue;
+            }
+
             // HtmlItem 객체를 생성하여 리스트에 추가합니다.
             HtmlItem item = new HtmlItem(number, title, date, attachmentCount, views);
             items.add(item);
@@ -31,3 +36,4 @@ public class HtmlDefaultParser implements HtmlParser {
         return items;
     }
 }
+

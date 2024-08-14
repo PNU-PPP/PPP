@@ -37,7 +37,7 @@ public class HtmlFetcher {
         parserMap.put("산업공학과", defaultParser);
         parserMap.put("실내환경디자인학과", defaultParser);
 
-        // 다른 학과별 파서도 추가 가능
+        // 디자인 다른 학과(기계공학부, 국제학부, 스포츠과학과)
 
     }
 

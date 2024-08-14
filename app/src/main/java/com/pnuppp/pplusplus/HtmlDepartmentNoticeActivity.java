@@ -28,7 +28,7 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
     }
 
     private void setupHtmlMapping() {
-        departmentHtmlMap.put("한문학과", new Pair<>(new String[]{""}, new String[]{""}));
+        departmentHtmlMap.put("한문학과", new Pair<>(new String[]{"https://hanmun.pusan.ac.kr/hanmun/20474/subview.do"}, new String[]{"https://hanmun.pusan.ac.kr/hanmun/20475/subview.do"}));
         departmentHtmlMap.put("철학과", new Pair<>(new String[]{""}, new String[]{""}));
         departmentHtmlMap.put("고고학과", new Pair<>(new String[]{""}, new String[]{""}));
         departmentHtmlMap.put("사회복지학과", new Pair<>(new String[]{""}, new String[]{""}));
@@ -59,7 +59,7 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
         new HtmlFetcher().fetch(departmentName, url, new HtmlFetcher.Callback() {
             @Override
             public void onSuccess(List<HtmlItem> items) {
-                displayNotices(items);
+                runOnUiThread(() -> displayNotices(items));
             }
 
             @Override
@@ -74,5 +74,9 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         HtmlNoticeAdapter noticeAdapter = new HtmlNoticeAdapter(items, this);
         recyclerView.setAdapter(noticeAdapter);
+
+        // 디버깅 메시지 추가
+        Log.d("HtmlDepartmentNoticeActivity", "Number of items: " + items.size());
+        recyclerView.getAdapter().notifyDataSetChanged(); // 데이터 갱신
     }
 }
