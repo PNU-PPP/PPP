@@ -24,20 +24,18 @@ public class HtmlFetcher {
         parserMap = new HashMap<>();
         executorService = Executors.newSingleThreadExecutor();
 
-        // HtmlDefaultParser를 사용할 학과들
-        HtmlDefaultParser defaultParser = new HtmlDefaultParser();
-        parserMap.put("한문학과", defaultParser);
-        parserMap.put("철학과", defaultParser);
-        parserMap.put("고고학과", defaultParser);
-        parserMap.put("사회복지학과", defaultParser);
-        parserMap.put("물리학과", defaultParser);
-        parserMap.put("화공생명환경공학부 화공생명공학전공", defaultParser);
-        parserMap.put("화공생명환경공학부 환경공학전공", defaultParser);
-        parserMap.put("전기전자공학부 반도체공학전공", defaultParser);
-        parserMap.put("산업공학과", defaultParser);
-        parserMap.put("실내환경디자인학과", defaultParser);
-
-        // 디자인 다른 학과(기계공학부, 국제학부, 스포츠과학과)
+        // 학과별로 기본 파서와 특수 파서를 설정
+        parserMap.put("한문학과", new HtmlDefaultParser("https://hanmun.pusan.ac.kr"));
+        parserMap.put("철학과", new HtmlDefaultParser("https://philosophy.pusan.ac.kr"));
+        parserMap.put("고고학과", new HtmlDefaultParser("https://archaeology.pusan.ac.kr"));
+        parserMap.put("사회복지학과", new HtmlDefaultParser("https://swf.pusan.ac.kr"));
+        parserMap.put("물리학과", new HtmlDefaultParser("https://phys.pusan.ac.kr"));
+        parserMap.put("화공생명환경공학부 화공생명공학전공", new HtmlDefaultParser("https://chemeng.pusan.ac.kr"));
+        parserMap.put("화공생명환경공학부 환경공학전공", new HtmlDefaultParser("https://pnuenv.pusan.ac.kr"));
+        parserMap.put("전기전자공학부 반도체공학전공", new HtmlDefaultParser("https://semi.pusan.ac.kr"));
+        parserMap.put("산업공학과", new HtmlDefaultParser("https://ie.pusan.ac.kr"));
+        parserMap.put("실내환경디자인학과", new HtmlDefaultParser("https://hid.pusan.ac.kr"));
+        // 다른 학과도 추가 가능
 
     }
 
@@ -52,19 +50,16 @@ public class HtmlFetcher {
         executorService.submit(() -> {
             try {
                 Document doc = Jsoup.connect(url).get();
-                List<HtmlItem> items = null;
-                try {
-                    items = parser.parse(doc); // Exception을 처리하기 위해 try-catch 추가
-                } catch (Exception e) {
-                    callback.onError(e);
-                    return;
-                }
+                List<HtmlItem> items = parser.parse(doc);
                 callback.onSuccess(items);
             } catch (IOException e) {
+                callback.onError(e);
+            } catch (Exception e) {  // 일반적인 Exception 처리 추가
                 callback.onError(e);
             }
         });
     }
+
 
     public void shutdown() {
         executorService.shutdown();
