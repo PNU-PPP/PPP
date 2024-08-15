@@ -25,4 +25,17 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:layout_marginTop="2dp" />
+
+    <TextView
+        android:id="@+id/attachmentCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Attachment Count" />
+
+    <TextView
+        android:id="@+id/viewsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Views" />
+
 </LinearLayout>
