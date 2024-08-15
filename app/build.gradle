@@ -50,10 +50,11 @@ android {
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging:24.0.0'
     implementation 'androidx.room:room-runtime:2.4.3' // room 라이브러리
-    kapt 'androidx.room:room-compiler:2.4.3' // room 컴파일러
+    kapt 'androidx.room:room-compiler:2.6.1' // room 컴파일러
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1' // 캘린더뷰
     implementation 'com.kakao.maps.open:android:2.6.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
