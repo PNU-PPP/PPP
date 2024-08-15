@@ -9,7 +9,7 @@ public class HtmlItem {
     private String url; // URL 필드 추가
 
     // Constructor
-    public HtmlItem(String number, String title, String date, String attachmentCount, String views) {
+    public HtmlItem(String number, String title, String date, String attachmentCount, String views, String url) {
         this.number = number;
         this.title = title;
         this.date = date;
@@ -33,4 +33,7 @@ public class HtmlItem {
 
     public String getViews() { return views; }
     public void setViews(String views) { this.views = views; }
+
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
 }
