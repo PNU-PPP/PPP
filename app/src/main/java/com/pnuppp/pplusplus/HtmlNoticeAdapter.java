@@ -1,6 +1,8 @@
 package com.pnuppp.pplusplus;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +29,21 @@ public class HtmlNoticeAdapter extends RecyclerView.Adapter<HtmlNoticeAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HtmlNoticeAdapter.ViewHolder holder, int position) {
         HtmlItem item = htmlItems.get(position);
+
         holder.titleTextView.setText(item.getTitle());
         holder.dateTextView.setText(item.getDate());
-        // 필요시 다른 필드들도 설정 가능
-        // 예: holder.numberTextView.setText(item.getNumber());
+        holder.attachmentCountTextView.setText(item.getAttachmentCount());
+        holder.viewsTextView.setText(item.getViews());
+
+        holder.itemView.setOnClickListener(view -> {
+            String url = item.getUrl();
+            if (url != null && !url.isEmpty()) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                context.startActivity(browserIntent);
+            }
+        });
     }
 
     @Override
@@ -43,11 +54,15 @@ public class HtmlNoticeAdapter extends RecyclerView.Adapter<HtmlNoticeAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView titleTextView;
         public TextView dateTextView;
+        public TextView attachmentCountTextView; // 추가
+        public TextView viewsTextView; // 추가
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
+            attachmentCountTextView = itemView.findViewById(R.id.attachmentCountTextView); // 추가
+            viewsTextView = itemView.findViewById(R.id.viewsTextView); // 추가
         }
     }
 }
