@@ -34,11 +34,6 @@ import androidx.core.content.ContextCompat;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
-// import com.kakao.vectormap.KakaoMap;
-// import com.kakao.vectormap.KakaoMapReadyCallback;
-// import com.kakao.vectormap.MapLifeCycleCallback;
-// import com.kakao.vectormap.MapView;
-
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_POST_NOTIFICATIONS = 1;
     private static final int REQUEST_CODE_SCHEDULE_EXACT_ALARM = 2;

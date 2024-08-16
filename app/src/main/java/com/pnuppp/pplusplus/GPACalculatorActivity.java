@@ -1,10 +1,12 @@
 package com.pnuppp.pplusplus;
 
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -29,9 +31,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.renderer.XAxisRenderer;
+import com.github.mikephil.charting.utils.MPPointF;
+import com.github.mikephil.charting.utils.Transformer;
+import com.github.mikephil.charting.utils.Utils;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -54,14 +65,13 @@ public class GPACalculatorActivity extends AppCompatActivity {
     public static final int CHECKBOX_MAJOR_ID = View.generateViewId();
 
     private TableLayout mTableLayout;
+    private LineChart mLineChart;
 
     private Spinner spinnerYear;
     private Spinner spinnerSemester;
     private TextView textViewTotalGPA;
     private TextView textViewMajorGPA;
     private TextView textViewSemesterGPA;
-
-    private LineChart mLineChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +96,22 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
         //과목 추가
         mTableLayout = findViewById(R.id.tableLayout);
-        mLineChart = findViewById(R.id.chart);
-        ImageButton buttonAddRow = findViewById(R.id.buttonAddRow);
 
+        mLineChart = findViewById(R.id.chart);
+        mLineChart.setPinchZoom(false);
+        mLineChart.setScaleEnabled(false);
+        mLineChart.setExtraBottomOffset(20f);
+
+        mLineChart.setDoubleTapToZoomEnabled(false);
+        mLineChart.getAxisRight().setEnabled(false);
+        mLineChart.getLegend().setEnabled(false);
+        mLineChart.getDescription().setEnabled(false);
+        mLineChart.getXAxis().setDrawGridLines(false);
+        mLineChart.getXAxis().setGranularity(1f);
+        mLineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        mLineChart.setXAxisRenderer(new CustomXAxisRenderer(mLineChart.getViewPortHandler(), mLineChart.getXAxis(), mLineChart.getTransformer(YAxis.AxisDependency.LEFT)));
+
+        ImageButton buttonAddRow = findViewById(R.id.buttonAddRow);
         buttonAddRow.setOnClickListener(v -> addNewRow());
 
         // 공통 이벤트 리스너 설정
@@ -193,18 +216,54 @@ public class GPACalculatorActivity extends AppCompatActivity {
     }
 
     private void updateChart(){
+        ArrayList<Pair<String,Entry>> list = new ArrayList<>();
+        list.add(new Pair<>("1학년\n1학기",new Entry(0,semesterGPA(currentSubjectInfos, 1, 1))));
+        list.add(new Pair<>("1학년\n2학기",new Entry(1,semesterGPA(currentSubjectInfos, 1, 2))));
+        list.add(new Pair<>("2학년\n1학기",new Entry(2,semesterGPA(currentSubjectInfos, 2, 1))));
+        list.add(new Pair<>("2학년\n2학기",new Entry(3,semesterGPA(currentSubjectInfos, 2, 2))));
+        list.add(new Pair<>("3학년\n1학기",new Entry(4,semesterGPA(currentSubjectInfos, 3, 1))));
+        list.add(new Pair<>("3학년\n2학기",new Entry(5,semesterGPA(currentSubjectInfos, 3, 2))));
+        list.add(new Pair<>("4학년\n1학기",new Entry(6,semesterGPA(currentSubjectInfos, 4, 1))));
+        list.add(new Pair<>("4학년\n2학기",new Entry(7,semesterGPA(currentSubjectInfos, 4, 2))));
+        list.removeIf(pair -> pair.second.getY() == 0);
+        for (int i = 0; i < list.size(); i++)
+            list.get(i).second.setX(i);
+
+        List<String> xVals = new ArrayList<>();
+        for (Pair<String, Entry> pair : list)
+            xVals.add(pair.first);
+
+        List<Entry> entries = new ArrayList<>();
+        for (Pair<String, Entry> pair : list)
+            entries.add(pair.second);
+
+        float max = 0;
+        float min = 4.5f;
+        for (Entry entry : entries) {
+            if (entry.getY() > max) max = entry.getY();
+            if (entry.getY() < min) min = entry.getY();
+        }
+        mLineChart.getAxisLeft().setAxisMinimum(min < 2f ? 0f : 2f);
+        mLineChart.getAxisLeft().setAxisMaximum(max > 4f ? 4.5f : 4f);
+
+        LineDataSet lineDataSet = new LineDataSet(entries, "학기별 평균 학점");
+        lineDataSet.setColor(getColor(R.color.colorAccent));
+        lineDataSet.setCircleColor(getColor(R.color.colorAccent));
+        lineDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("%.2f", value);
+            }
+        });
+        lineDataSet.setLineWidth(2f);
+        lineDataSet.setCircleRadius(5f);
+
         LineData lineData = new LineData();
-        ArrayList<Entry> entry1 = new ArrayList<>();
-        entry1.add(new Entry(0,semesterGPA(currentSubjectInfos, 1, 1)));
-        entry1.add(new Entry(1,semesterGPA(currentSubjectInfos, 1, 2)));
-        entry1.add(new Entry(2,semesterGPA(currentSubjectInfos, 2, 1)));
-        entry1.add(new Entry(3,semesterGPA(currentSubjectInfos, 2, 2)));
-        entry1.add(new Entry(4,semesterGPA(currentSubjectInfos, 3, 1)));
-        entry1.add(new Entry(5,semesterGPA(currentSubjectInfos, 3, 2)));
-        entry1.add(new Entry(6,semesterGPA(currentSubjectInfos, 4, 1)));
-        entry1.add(new Entry(7,semesterGPA(currentSubjectInfos, 4, 2)));
-        lineData.addDataSet(new LineDataSet(entry1, "학기별 평균 학점"));
+        lineData.addDataSet(lineDataSet);
         mLineChart.setData(lineData);
+
+        mLineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
+        mLineChart.invalidate();
     }
 
     private void addNewRow() {
@@ -243,6 +302,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 updateSemesterGPA();
                 updateMajorGPA();
                 updateTotalGPA();
+                updateChart();
             }
         });
         tableRow.addView(editText2);
@@ -259,6 +319,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 updateSemesterGPA();
                 updateMajorGPA();
                 updateTotalGPA();
+                updateChart();
             }
 
             @Override
@@ -276,6 +337,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
             updateSemesterGPA();
             updateMajorGPA();
             updateTotalGPA();
+            updateChart();
         });
         tableRow.addView(checkBoxMajor);
 
@@ -478,5 +540,19 @@ public class GPACalculatorActivity extends AppCompatActivity {
         String json = preferences.getString(GPA_KEY, null);
         Type type = new TypeToken<List<SubjectInfo>>() {}.getType();
         return gson.fromJson(json, type);
+    }
+}
+
+class CustomXAxisRenderer extends XAxisRenderer {
+    public CustomXAxisRenderer(ViewPortHandler viewPortHandler, XAxis xAxis, Transformer trans) {
+        super(viewPortHandler, xAxis, trans);
+    }
+
+    @Override
+    protected void drawLabel(Canvas c, String formattedLabel, float x, float y, MPPointF anchor, float angleDegrees) {
+        String line[] = formattedLabel.split("\n");
+        Utils.drawXAxisValue(c, line[0], x, y, mAxisLabelPaint, anchor, angleDegrees);
+        if(line.length > 1)
+            Utils.drawXAxisValue(c, line[1], x, y + mAxisLabelPaint.getTextSize(), mAxisLabelPaint, anchor, angleDegrees);
     }
 }
