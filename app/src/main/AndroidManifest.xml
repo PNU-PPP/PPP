@@ -49,7 +49,7 @@
         <activity android:name=".ExtraCurricularActivity" />
         <activity
             android:name=".GPACalculatorActivity"
-            android:exported="false" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
