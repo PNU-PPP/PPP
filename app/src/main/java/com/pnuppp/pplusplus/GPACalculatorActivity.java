@@ -331,7 +331,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         CheckBox checkBoxMajor = new CheckBox(this);
         checkBoxMajor.setId(CHECKBOX_MAJOR_ID);
         checkBoxMajor.setChecked(true);
-        checkBoxMajor.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        checkBoxMajor.setOnClickListener((buttonView) -> {
             replaceSemesterSubjectInfos(getCurrentSubjectInfos());
             updateSemesterGPA();
             updateMajorGPA();
