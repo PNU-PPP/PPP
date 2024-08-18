@@ -1,17 +1,15 @@
 package com.pnuppp.pplusplus;
 
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.util.TypedValue;
-import android.widget.ProgressBar;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -34,9 +32,10 @@ public class ExtraCurricularActivity extends AppCompatActivity {
     public static final int MAX_PAGE = 15;
 
     private RecyclerView recyclerView;
+    private LinearLayout networkErrorLayout;
     private ExtraCurricularAdapter noticeAdapter;
     private List<RSSItem> rssItems = new ArrayList<>();
-    private ProgressBar progressBar;
+
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPage = 1;
     private boolean isOnDownloading = false;
@@ -52,12 +51,18 @@ public class ExtraCurricularActivity extends AppCompatActivity {
         noticeAdapter = new ExtraCurricularAdapter(rssItems, this);
         recyclerView.setAdapter(noticeAdapter);
 
+        networkErrorLayout = findViewById(R.id.networkErrorLayout);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
         swipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.spinner_colors));
         swipeRefreshLayout.setRefreshing(true);
 
         fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort=approach", true);
+
+        findViewById(R.id.retryButton).setOnClickListener(v -> {
+            swipeRefreshLayout.setRefreshing(true);
+            fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort=" + sortBy, true);
+        });
 
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -66,33 +71,43 @@ public class ExtraCurricularActivity extends AppCompatActivity {
             if (checkedId == R.id.radioButton1) sortBy = "approach";
             else if (checkedId == R.id.radioButton2) sortBy = "applicant";
             else if (checkedId == R.id.radioButton3) sortBy = "date";
-            fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort="+sortBy, true);
+            fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort=" + sortBy, true);
         });
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort="+sortBy, true);
+            fetchRSSFeed("http://ppp.jun0.dev:3333/?page=1&sort=" + sortBy, true);
         });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(!recyclerView.canScrollVertically(1) && !isOnDownloading && currentPage < MAX_PAGE) {
+                if (!recyclerView.canScrollVertically(1) && !isOnDownloading && currentPage < MAX_PAGE) {
                     Log.i("NF", "onScrolled: END");
 
-                    fetchRSSFeed("http://ppp.jun0.dev:3333/?page="+(++currentPage)+"&sort="+sortBy, false);
+                    fetchRSSFeed("http://ppp.jun0.dev:3333/?page=" + (++currentPage) + "&sort=" + sortBy, false);
                 }
             }
         });
     }
 
+    private void hideNetworkError() {
+        networkErrorLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showNetworkError() {
+        recyclerView.scrollToPosition(0);
+        networkErrorLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
+
     private void fetchRSSFeed(String rssUrl, boolean reset) {
+        hideNetworkError();
         if (rssUrl == null || rssUrl.isEmpty()) return;
         isOnDownloading = true;
         if (reset)
             currentPage = 1;
-        if(currentPage > 1)
-            rssItems.remove(rssItems.size()-1);
 
         new Thread(() -> {
             try {
@@ -106,6 +121,10 @@ public class ExtraCurricularActivity extends AppCompatActivity {
                 parseRSS(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)), reset);
             } catch (Exception e) {
                 Log.e("RSSFetch", "Error fetching RSS feed", e);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    showNetworkError();
+                });
             }
 
             isOnDownloading = false;
@@ -122,68 +141,66 @@ public class ExtraCurricularActivity extends AppCompatActivity {
         return out.toString();
     }
 
-    private void parseRSS(InputStream inputStream, boolean reset) {
+    private void parseRSS(InputStream inputStream, boolean reset) throws Exception {
         ArrayList<RSSItem> newRssItems = new ArrayList<>();
-        try {
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(inputStream, null);
 
-            int eventType = parser.getEventType();
-            RSSItem currentItem = null;
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = factory.newPullParser();
+        parser.setInput(inputStream, null);
 
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                String tagName;
-                switch (eventType) {
-                    case XmlPullParser.START_TAG:
-                        tagName = parser.getName();
-                        if (tagName.equals("item")) {
-                            currentItem = new RSSItem();
-                        } else if (currentItem != null) {
-                            switch (tagName) {
-                                case "title":
-                                    currentItem.setTitle(parser.nextText());
-                                    break;
-                                case "link":
-                                    currentItem.setLink(parser.nextText());
-                                    break;
-                                case "category":
-                                    currentItem.setAuthor(parser.nextText());
-                                    break;
-                                case "description":
-                                    currentItem.setCategory(parser.nextText());
-                                    break;
-                            }
+        int eventType = parser.getEventType();
+        RSSItem currentItem = null;
+
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            String tagName;
+            switch (eventType) {
+                case XmlPullParser.START_TAG:
+                    tagName = parser.getName();
+                    if (tagName.equals("item")) {
+                        currentItem = new RSSItem();
+                    } else if (currentItem != null) {
+                        switch (tagName) {
+                            case "title":
+                                currentItem.setTitle(parser.nextText());
+                                break;
+                            case "link":
+                                currentItem.setLink(parser.nextText());
+                                break;
+                            case "category":
+                                currentItem.setAuthor(parser.nextText());
+                                break;
+                            case "description":
+                                currentItem.setCategory(parser.nextText());
+                                break;
                         }
-                        break;
+                    }
+                    break;
 
-                    case XmlPullParser.END_TAG:
-                        tagName = parser.getName();
-                        if (tagName.equalsIgnoreCase("item") && currentItem != null) {
-                            newRssItems.add(currentItem);
-                            currentItem = null;
-                        }
-                        break;
-                }
-                eventType = parser.next();
+                case XmlPullParser.END_TAG:
+                    tagName = parser.getName();
+                    if (tagName.equalsIgnoreCase("item") && currentItem != null) {
+                        newRssItems.add(currentItem);
+                        currentItem = null;
+                    }
+                    break;
             }
-
-            if(currentPage < MAX_PAGE)
-                newRssItems.add(null);
-
-            if(reset) rssItems.clear();
-            rssItems.addAll(newRssItems);
-
-            new Handler(Looper.getMainLooper()).post(() -> {
-                noticeAdapter.notifyDataSetChanged();
-                if(reset){
-                    recyclerView.scrollToPosition(0);
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
-
-        } catch (Exception e) {
-            Log.e("RSSParsing", "Error parsing RSS feed", e);
+            eventType = parser.next();
         }
+
+        if (currentPage < MAX_PAGE)
+            newRssItems.add(null);
+
+        if (reset) rssItems.clear();
+        if (currentPage > 1) rssItems.remove(rssItems.size() - 1);
+
+        rssItems.addAll(newRssItems);
+
+        new Handler(Looper.getMainLooper()).post(() -> {
+            noticeAdapter.notifyDataSetChanged();
+            if (reset) {
+                recyclerView.scrollToPosition(0);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 }
