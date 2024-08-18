@@ -162,7 +162,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
             builder.setPositiveButton(getString(android.R.string.ok), (dialog, which) -> {
                 String inputUrl = input.getText().toString();
-                if(!inputUrl.matches("https://everytime.kr/@[a-zA-Z0-9]+")){
+                if (!inputUrl.matches("https://everytime.kr/@[a-zA-Z0-9]+")) {
                     Toast.makeText(GPACalculatorActivity.this, "URL이 바르지 않습니다.", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -178,25 +178,24 @@ public class GPACalculatorActivity extends AppCompatActivity {
                         AtomicInteger selectedItem = new AtomicInteger();
                         new AlertDialog.Builder(GPACalculatorActivity.this)
                                 .setTitle("가져올 시간표 선택")
-                                .setSingleChoiceItems(items, 0, (dialog, which)-> selectedItem.set(which))
-                                .setPositiveButton(android.R.string.ok,(dialog, which)->{
-                                    EverytimeTimetableParser.getSubjects(everytimeIdentifiers.get(selectedItem.get()).identifier, new EverytimeTimetableParser.OnSubjectsParsedListener() {
-                                        @Override
-                                        public void onSuccess(List<SubjectInfo> subjectInfos) {
-                                            for (SubjectInfo subjectInfo : subjectInfos) {
-                                                subjectInfo.year = spinnerYear.getSelectedItemPosition()+1;
-                                                subjectInfo.semester = spinnerSemester.getSelectedItemPosition()+1;
+                                .setSingleChoiceItems(items, 0, (dialog, which) -> selectedItem.set(which))
+                                .setPositiveButton(android.R.string.ok, (dialog, which) ->
+                                        EverytimeTimetableParser.getSubjects(everytimeIdentifiers.get(selectedItem.get()).identifier, new EverytimeTimetableParser.OnSubjectsParsedListener() {
+                                            @Override
+                                            public void onSuccess(List<SubjectInfo> subjectInfos) {
+                                                for (SubjectInfo subjectInfo : subjectInfos) {
+                                                    subjectInfo.year = spinnerYear.getSelectedItemPosition() + 1;
+                                                    subjectInfo.semester = spinnerSemester.getSelectedItemPosition() + 1;
+                                                }
+                                                replaceSemesterSubjectInfos(subjectInfos);
+                                                updateTableUi();
                                             }
-                                            replaceSemesterSubjectInfos(subjectInfos);
-                                            updateTableUi();
-                                        }
 
-                                        @Override
-                                        public void onFailed(int errorCode, String errorMessage) {
-                                            Toast.makeText(GPACalculatorActivity.this, "네트워크 오류가 발생하였습니다.", Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                }).setNegativeButton(android.R.string.cancel,null)
+                                            @Override
+                                            public void onFailed(int errorCode, String errorMessage) {
+                                                Toast.makeText(GPACalculatorActivity.this, "네트워크 오류가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                                            }
+                                        })).setNegativeButton(android.R.string.cancel, null)
                                 .show();
                     }
 
@@ -215,16 +214,16 @@ public class GPACalculatorActivity extends AppCompatActivity {
         updateChart();
     }
 
-    private void updateChart(){
-        ArrayList<Pair<String,Entry>> list = new ArrayList<>();
-        list.add(new Pair<>("1학년\n1학기",new Entry(0,semesterGPA(currentSubjectInfos, 1, 1))));
-        list.add(new Pair<>("1학년\n2학기",new Entry(1,semesterGPA(currentSubjectInfos, 1, 2))));
-        list.add(new Pair<>("2학년\n1학기",new Entry(2,semesterGPA(currentSubjectInfos, 2, 1))));
-        list.add(new Pair<>("2학년\n2학기",new Entry(3,semesterGPA(currentSubjectInfos, 2, 2))));
-        list.add(new Pair<>("3학년\n1학기",new Entry(4,semesterGPA(currentSubjectInfos, 3, 1))));
-        list.add(new Pair<>("3학년\n2학기",new Entry(5,semesterGPA(currentSubjectInfos, 3, 2))));
-        list.add(new Pair<>("4학년\n1학기",new Entry(6,semesterGPA(currentSubjectInfos, 4, 1))));
-        list.add(new Pair<>("4학년\n2학기",new Entry(7,semesterGPA(currentSubjectInfos, 4, 2))));
+    private void updateChart() {
+        ArrayList<Pair<String, Entry>> list = new ArrayList<>();
+        list.add(new Pair<>("1학년\n1학기", new Entry(0, semesterGPA(currentSubjectInfos, 1, 1))));
+        list.add(new Pair<>("1학년\n2학기", new Entry(1, semesterGPA(currentSubjectInfos, 1, 2))));
+        list.add(new Pair<>("2학년\n1학기", new Entry(2, semesterGPA(currentSubjectInfos, 2, 1))));
+        list.add(new Pair<>("2학년\n2학기", new Entry(3, semesterGPA(currentSubjectInfos, 2, 2))));
+        list.add(new Pair<>("3학년\n1학기", new Entry(4, semesterGPA(currentSubjectInfos, 3, 1))));
+        list.add(new Pair<>("3학년\n2학기", new Entry(5, semesterGPA(currentSubjectInfos, 3, 2))));
+        list.add(new Pair<>("4학년\n1학기", new Entry(6, semesterGPA(currentSubjectInfos, 4, 1))));
+        list.add(new Pair<>("4학년\n2학기", new Entry(7, semesterGPA(currentSubjectInfos, 4, 2))));
         list.removeIf(pair -> pair.second.getY() == 0);
         for (int i = 0; i < list.size(); i++)
             list.get(i).second.setX(i);
@@ -278,7 +277,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         tableRow.addView(imageButton);
 
         imageButton.setOnClickListener(v -> {
-            if(tableRows.size() <= 1) return;
+            if (tableRows.size() <= 1) return;
             mTableLayout.removeView(tableRow);
             tableRows.remove(tableRow);
         });
@@ -295,7 +294,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         editText2.setEms(2);
         editText2.setGravity(Gravity.CENTER_HORIZONTAL);
         editText2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        editText2.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
+        editText2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
         editText2.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 replaceSemesterSubjectInfos(getCurrentSubjectInfos());
@@ -352,7 +351,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         saveGPAData(currentSubjectInfos);
     }
 
-    private float numberToGrade(int gradeNum){
+    private float numberToGrade(int gradeNum) {
         if (gradeNum == 0) return 4.5f;
         else if (gradeNum == 1) return 4.0f;
         else if (gradeNum == 2) return 3.5f;
@@ -366,27 +365,27 @@ public class GPACalculatorActivity extends AppCompatActivity {
         return 0.0f;
     }
 
-    private int gradeToNumber(float grade){
-        if(grade == 4.5f) return 0;
-        else if(grade == 4.0f) return 1;
-        else if(grade == 3.5f) return 2;
-        else if(grade == 3.0f) return 3;
-        else if(grade == 2.5f) return 4;
-        else if(grade == 2.0f) return 5;
-        else if(grade == 1.5f) return 6;
-        else if(grade == 1.0f) return 7;
-        else if(grade == 0.5f) return 8;
+    private int gradeToNumber(float grade) {
+        if (grade == 4.5f) return 0;
+        else if (grade == 4.0f) return 1;
+        else if (grade == 3.5f) return 2;
+        else if (grade == 3.0f) return 3;
+        else if (grade == 2.5f) return 4;
+        else if (grade == 2.0f) return 5;
+        else if (grade == 1.5f) return 6;
+        else if (grade == 1.0f) return 7;
+        else if (grade == 0.5f) return 8;
         else return 9;
     }
 
     private void updateTableUi() {
-        for(TableRow tableRow : tableRows)
+        for (TableRow tableRow : tableRows)
             mTableLayout.removeView(tableRow);
         tableRows.clear();
 
         int count = 0;
         for (int i = 0; i < currentSubjectInfos.size(); i++) {
-            if(currentSubjectInfos.get(i).year == spinnerYear.getSelectedItemPosition()+1 && currentSubjectInfos.get(i).semester == spinnerSemester.getSelectedItemPosition()+1) {
+            if (currentSubjectInfos.get(i).year == spinnerYear.getSelectedItemPosition() + 1 && currentSubjectInfos.get(i).semester == spinnerSemester.getSelectedItemPosition() + 1) {
                 if (count >= tableRows.size())
                     addNewRow();
 
@@ -404,12 +403,12 @@ public class GPACalculatorActivity extends AppCompatActivity {
             }
         }
 
-        if(tableRows.size() > count){
-            for(int i = tableRows.size()-1; i >= count; i--){
+        if (tableRows.size() > count) {
+            for (int i = tableRows.size() - 1; i >= count; i--) {
                 mTableLayout.removeView(tableRows.get(i));
             }
         }
-        if(tableRows.size() < 5){
+        if (tableRows.size() < 5) {
             for (int i = count; i < 5; i++) {
                 addNewRow();
                 Log.i("TAG", "updateTableUi: ADD!");
@@ -430,8 +429,8 @@ public class GPACalculatorActivity extends AppCompatActivity {
     }
 
     private void updateSemesterGPA() {
-        int year = spinnerYear.getSelectedItemPosition()+1;
-        int semester = spinnerSemester.getSelectedItemPosition()+1;
+        int year = spinnerYear.getSelectedItemPosition() + 1;
+        int semester = spinnerSemester.getSelectedItemPosition() + 1;
         float gpa = semesterGPA(currentSubjectInfos, year, semester);
         textViewSemesterGPA.setText(String.format("%.2f", gpa));
     }
@@ -478,7 +477,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         for (int y = 1; y <= 4; y++) {
             for (int sem = 1; sem <= 2; sem++) {
                 float GPA = semesterGPA(subjectInfo, y, sem);
-                int credits = 0;
+                float credits = 0;
 
                 for (SubjectInfo s : subjectInfo) {
                     if (s.year == y && s.semester == sem) {
@@ -497,11 +496,11 @@ public class GPACalculatorActivity extends AppCompatActivity {
         for (int i = 0; i < tableRows.size(); i++) {
             EditText editTextSubject = tableRows.get(i).findViewById(EDITTEXT_SUBJECT_ID);
             String subjectName = editTextSubject.getText().toString();
-            if(subjectName.isEmpty()) continue;
+            if (subjectName.isEmpty()) continue;
 
             EditText editTextCredit = tableRows.get(i).findViewById(EDITTEXT_CREDIT_ID);
             String strCredit = editTextCredit.getText().toString();
-            if(strCredit.isEmpty()) continue;
+            if (strCredit.isEmpty()) continue;
             float credit = Float.parseFloat(strCredit);
 
             Spinner spinnerGrade = tableRows.get(i).findViewById(SPINNER_GRADE_ID);
@@ -509,14 +508,15 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
             CheckBox checkBoxMajor = tableRows.get(i).findViewById(CHECKBOX_MAJOR_ID);
             boolean isMajor = checkBoxMajor.isChecked();
-            newSubjectInfos.add(new SubjectInfo(spinnerYear.getSelectedItemPosition()+1, spinnerSemester.getSelectedItemPosition()+1, subjectName, credit, grade, isMajor));
+            newSubjectInfos.add(new SubjectInfo(spinnerYear.getSelectedItemPosition() + 1, spinnerSemester.getSelectedItemPosition() + 1, subjectName, credit, grade, isMajor));
         }
         return newSubjectInfos;
     }
+
     private void replaceSemesterSubjectInfos(List<SubjectInfo> subjectInfos) {
         for (int i = 0; i < currentSubjectInfos.size(); i++) {
-            if (currentSubjectInfos.get(i).year == spinnerYear.getSelectedItemPosition()+1 &&
-                    currentSubjectInfos.get(i).semester == spinnerSemester.getSelectedItemPosition()+1) {
+            if (currentSubjectInfos.get(i).year == spinnerYear.getSelectedItemPosition() + 1 &&
+                    currentSubjectInfos.get(i).semester == spinnerSemester.getSelectedItemPosition() + 1) {
                 currentSubjectInfos.remove(i);
                 i--;
             }
@@ -538,7 +538,8 @@ public class GPACalculatorActivity extends AppCompatActivity {
     private List<SubjectInfo> loadGPAData() {
         Gson gson = new Gson();
         String json = preferences.getString(GPA_KEY, null);
-        Type type = new TypeToken<List<SubjectInfo>>() {}.getType();
+        Type type = new TypeToken<List<SubjectInfo>>() {
+        }.getType();
         return gson.fromJson(json, type);
     }
 }
@@ -552,7 +553,7 @@ class CustomXAxisRenderer extends XAxisRenderer {
     protected void drawLabel(Canvas c, String formattedLabel, float x, float y, MPPointF anchor, float angleDegrees) {
         String line[] = formattedLabel.split("\n");
         Utils.drawXAxisValue(c, line[0], x, y, mAxisLabelPaint, anchor, angleDegrees);
-        if(line.length > 1)
+        if (line.length > 1)
             Utils.drawXAxisValue(c, line[1], x, y + mAxisLabelPaint.getTextSize(), mAxisLabelPaint, anchor, angleDegrees);
     }
 }
