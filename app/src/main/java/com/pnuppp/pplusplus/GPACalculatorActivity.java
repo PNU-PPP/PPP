@@ -360,9 +360,10 @@ public class GPACalculatorActivity extends AppCompatActivity {
         else if (gradeNum == 5) return 2.0f;
         else if (gradeNum == 6) return 1.5f;
         else if (gradeNum == 7) return 1.0f;
-        else if (gradeNum == 8) return 0.5f;
-        else if (gradeNum == 9) return 0.0f;
-        return 0.0f;
+        else if (gradeNum == 8) return 0.0f;
+        else if (gradeNum == 9) return -1.0f;
+        else if (gradeNum == 10) return -2.0f;
+        return 4.5f;
     }
 
     private int gradeToNumber(float grade) {
@@ -374,8 +375,10 @@ public class GPACalculatorActivity extends AppCompatActivity {
         else if (grade == 2.0f) return 5;
         else if (grade == 1.5f) return 6;
         else if (grade == 1.0f) return 7;
-        else if (grade == 0.5f) return 8;
-        else return 9;
+        else if (grade == 0.0f) return 8;
+        else if (grade == -1.0f) return 9;
+        else if (grade == -2.0f) return 10;
+        else return 0;
     }
 
     private void updateTableUi() {
@@ -399,7 +402,6 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 spinnerGrade.setSelection(gradeToNumber(currentSubjectInfos.get(i).grade));
                 checkBoxMajor.setChecked(currentSubjectInfos.get(i).isMajor);
                 count++;
-                Log.i("TAG", "updateTableUi: ADD!!");
             }
         }
 
@@ -439,13 +441,13 @@ public class GPACalculatorActivity extends AppCompatActivity {
         float res = 0.0f;
         float total_credit = 0;
         for (SubjectInfo s : subjectInfo) {
-            if (s.year == year && s.semester == semester) {
+            if (s.year == year && s.semester == semester && s.grade != -1.0f && s.grade != -2.0f) {
                 total_credit += s.credit;
             }
         }
         if (total_credit == 0) return 0.0f; // 학점이 없으면 0 반환
         for (SubjectInfo s : subjectInfo) {
-            if (s.year == year && s.semester == semester) {
+            if (s.year == year && s.semester == semester && s.grade != -1.0f && s.grade != -2.0f) {
                 res += (s.credit * s.grade);
             }
         }
@@ -456,13 +458,13 @@ public class GPACalculatorActivity extends AppCompatActivity {
         float res = 0.0f;
         float total_majorCredit = 0;
         for (SubjectInfo s : subjectInfo) {
-            if (s.isMajor) {
+            if (s.isMajor && s.grade != -1.0f && s.grade != -2.0f) {
                 total_majorCredit += s.credit;
             }
         }
         if (total_majorCredit == 0) return 0.0f; // 학점이 없으면 0 반환
         for (SubjectInfo s : subjectInfo) {
-            if (s.isMajor) {
+            if (s.isMajor && s.grade != -1.0f && s.grade != -2.0f) {
                 res += (s.credit * s.grade);
             }
         }
@@ -480,7 +482,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 float credits = 0;
 
                 for (SubjectInfo s : subjectInfo) {
-                    if (s.year == y && s.semester == sem) {
+                    if (s.year == y && s.semester == sem && s.grade != -1.0f && s.grade != -2.0f) {
                         credits += s.credit;
                     }
                 }
