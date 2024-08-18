@@ -100,6 +100,10 @@ public class EverytimeTimetableParser {
                 }
             }catch (Exception e){
                 e.printStackTrace();
+                if(getSemesters)
+                    handler.post(() -> onSemestersParsedListener.onFailed(-1, e.getMessage()));
+                else
+                    handler.post(() -> onSubjectsParsedListener.onFailed(-1, e.getMessage()));
             }
         });
     }

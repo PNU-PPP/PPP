@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -146,20 +147,25 @@ public class GPACalculatorActivity extends AppCompatActivity {
         buttonEverytime.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("에브리타임 시간표 가져오기");
-            builder.setMessage("시간표 URL 입력\n(https://everytime.kr/@_)");
+            builder.setMessage("시간표 URL 입력\n[에브라타임->시간표->URL 공유]\n(https://everytime.kr/@_)");
+
+            FrameLayout container = new FrameLayout(GPACalculatorActivity.this);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+            params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
 
             EditText input = new EditText(this);
             input.setInputType(InputType.TYPE_CLASS_TEXT);
-            FrameLayout container = new FrameLayout(GPACalculatorActivity.this);
-            FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-            params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
             input.setLayoutParams(params);
             container.addView(input);
             builder.setView(container);
 
             builder.setPositiveButton(getString(android.R.string.ok), (dialog, which) -> {
                 String inputUrl = input.getText().toString();
+                if(!inputUrl.matches("https://everytime.kr/@[a-zA-Z0-9]+")){
+                    Toast.makeText(GPACalculatorActivity.this, "URL이 바르지 않습니다.", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 String inputIdentifier = inputUrl.replace("https://everytime.kr/@", "");
 
                 EverytimeTimetableParser.getSemesters(inputIdentifier, new EverytimeTimetableParser.OnSemestersParsedListener() {
@@ -183,26 +189,20 @@ public class GPACalculatorActivity extends AppCompatActivity {
                                             }
                                             replaceSemesterSubjectInfos(subjectInfos);
                                             updateTableUi();
-                                            //Toast.makeText(GPACalculatorActivity.this, "Loaded Subject Data", Toast.LENGTH_LONG).show();
                                         }
 
                                         @Override
                                         public void onFailed(int errorCode, String errorMessage) {
-                                            //Toast.makeText(GPACalculatorActivity.this, "Failed: " + errorMessage, Toast.LENGTH_LONG).show();
+                                            Toast.makeText(GPACalculatorActivity.this, "네트워크 오류가 발생하였습니다.", Toast.LENGTH_LONG).show();
                                         }
                                     });
                                 }).setNegativeButton(android.R.string.cancel,null)
                                 .show();
-                        //tempSubjectInfo.addAll(subjectInfos);
-                        //Toast.makeText(GPACalculatorActivity.this, "Loaded Semester Data", Toast.LENGTH_LONG).show();
-                        for (EverytimeIdentifier everytimeIdentifier : everytimeIdentifiers) {
-                            Log.i("TAG", everytimeIdentifier.year + " " + everytimeIdentifier.semester + " " + everytimeIdentifier.identifier);
-                        }
                     }
 
                     @Override
                     public void onFailed(int errorCode, String errorMessage) {
-                        //TODO: 네트워크 오류 발생 시 처리
+                        Toast.makeText(GPACalculatorActivity.this, "네트워크 오류가 발생하였습니다.", Toast.LENGTH_LONG).show();
                     }
                 });
             });
