@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 public class InfoEditActivity extends AppCompatActivity {
 
     private String[] RssDepartments = new String[]{
@@ -101,6 +103,8 @@ public class InfoEditActivity extends AppCompatActivity {
             editor.putString("major", major);
             editor.apply();
 
+            //TODO: 변경
+            FirebaseMessaging.getInstance().subscribeToTopic("major");
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
 
             // MainActivity를 다시 시작하여 업데이트된 데이터를 반영
