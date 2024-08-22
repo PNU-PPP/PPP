@@ -7,18 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".newnewActivity">
 
-
-
     <Button
         android:id="@+id/select_label_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="랜덤맛집찾기"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.kakao.vectormap.MapView
         android:id="@+id/map_view"
@@ -30,6 +27,21 @@
         app:layout_constraintTop_toBottomOf="@+id/select_label_button"
         tools:ignore="MissingConstraints">
 
-
     </com.kakao.vectormap.MapView>
+
+    <TextView
+        android:id="@+id/restaurant_info_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="#000"
+        android:text="식당 정보가 여기에 표시됩니다."
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_label_button"
+        app:layout_constraintVertical_bias="0.85" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
