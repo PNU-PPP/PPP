@@ -42,6 +42,10 @@
         <activity
             android:name=".newnewActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".newnew2Activity"
+            android:exported="false" />
         <activity
             android:name=".InfoEditActivity"
             android:windowSoftInputMode="adjustResize" />
