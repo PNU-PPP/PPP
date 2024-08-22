@@ -119,9 +119,9 @@ public class newnewActivity extends AppCompatActivity {
         LabelLayer layer = labelManager.getLayer();
 
         addLabel(layer, 35.2304389, 129.0842777, "톤쇼우", "부산대 근본 카츠", "https://g.co/kgs/F6ZsNBX", RestaurantType.SUSHI);
-        addLabel(layer, 35.2301701, 129.085188, "마마도마", "비싸지만 맛있는 스시", "https://g.co/kgs/eHQ3FQL", RestaurantType.SUSHI);
+        addLabel(layer, 35.2301701, 129.085188, "마마도마", "비싸지만 맛있는 스시", "https://g.co/kgs/eHQ3FQL", RestaurantType.VIETNAM);
         addLabel(layer, 35.230478, 129.0866165, "버거킹", "세계적인 패스트푸드 체인", "https://g.co/kgs/DUL2e2F", RestaurantType.PIZZA);
-        addLabel(layer, 35.230273, 129.0851434, "미분당", "조용한 쌀국수", "https://g.co/kgs/MyeJqTd", RestaurantType.VIETNAM);
+        addLabel(layer, 35.230273, 129.0851434, "미분당", "조용한 쌀국수", "https://g.co/kgs/MyeJqTd", RestaurantType.SUSHI);
         addLabel(layer, 35.228884, 129.0880355, "웍헤이", "볶음밥 맛도리", "https://g.co/kgs/QcmgSLD", RestaurantType.CHINESE);
         addLabel(layer, 35.231564, 129.085253, "포포포", "짜조가 맛있는 쌀국수집", "https://maps.app.goo.gl/K5hTE7e45zCKp3EeA", RestaurantType.VIETNAM);
         addLabel(layer, 35.2301375, 129.0857935, "카츠안", "쫄순이 야무진 카츠", "https://maps.app.goo.gl/sUpHcxPUnNwxgZiz7", RestaurantType.SUSHI);
