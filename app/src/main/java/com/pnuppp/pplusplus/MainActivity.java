@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.util.Log;
-
+import android.view.View;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private DataBase db;
     private EventDao eventDao;
     private Map<String, String> events = new HashMap<>();
+    private Button recentSetNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //버튼
-        Button buttonInfoEdit = findViewById(R.id.button2);
+        Button buttonInfoEdit = findViewById(R.id.button_info_edit);
         buttonInfoEdit.setOnClickListener(v -> {
             Intent newIntent = new Intent(MainActivity.this, InfoEditActivity.class);
             startActivity(newIntent);
@@ -98,11 +99,6 @@ public class MainActivity extends AppCompatActivity {
             Intent newIntent = new Intent(MainActivity.this, newnew2Activity.class);
             startActivity(newIntent);
         });
-
-
-
-
-
 
         Button buttonMyGPA = findViewById(R.id.button3);
         buttonMyGPA.setOnClickListener(v -> {
@@ -144,8 +140,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void openDepartmentNotice() {
         String userDepartment = getUserDepartment();
 
@@ -185,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
 
     private String[] rssDepartments = new String[]{
             // RSS인 학과 리스트
@@ -234,10 +227,6 @@ public class MainActivity extends AppCompatActivity {
             "화공생명환경공학부 환경공학전공", "전기전자공학부 반도체공학전공",
             "산업공학과", "국제학부", "실내환경디자인학과", "스포츠과학과", "첨단융합학부 공학자율전공"
     };
-
-
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -375,6 +364,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadEvents() {
         List<Event> eventList = eventDao.getAllEvents();
         Set<CalendarDay> eventDays = new HashSet<>();
+
         for (Event event : eventList) {
             String date = event.getDate();
             CalendarDay day = parseDateToCalendarDay(date);
@@ -398,17 +388,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scheduleDailyNotification(CalendarDay day, String eventDescription) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(day.getYear(), day.getMonth() - 1, day.getDay(), 9, 0, 0); // 알림을 보낼 시간 설정 (예: 오전 9시)
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(day.getYear(), day.getMonth() - 1, day.getDay(), 9, 0, 0);
+//
+//        Intent intent = new Intent(this, AlarmReceiver.class);
+//        intent.putExtra("eventDescription", eventDescription);
+//        intent.putExtra("eventDate", day.getYear() + "-" + String.format("%02d", day.getMonth()) + "-" + String.format("%02d", day.getDay()));
+//
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, day.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+//
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        if (alarmManager != null) {
+//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+//        }
 
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putExtra("eventDescription", eventDescription);
-        intent.putExtra("eventDate", day.getYear() + "-" + String.format("%02d", day.getMonth()) + "-" + String.format("%02d", day.getDay()));
+        SharedPreferences prefs = getSharedPreferences("my_prefs", MODE_PRIVATE);
+        boolean isNotificationScheduled = prefs.getBoolean("isNotificationScheduled", false);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, day.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+        if (!isNotificationScheduled) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(day.getYear(), day.getMonth() - 1, day.getDay(), 9, 0, 0);
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            intent.putExtra("eventDescription", eventDescription);
+            intent.putExtra("eventDate", day.getYear() + "-" + String.format("%02d", day.getMonth()) + "-" + String.format("%02d", day.getDay()));
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, day.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager != null) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+
+            // 알림이 예약되었음을 기록
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("isNotificationScheduled", true);
+            editor.apply();
+        }
     }
 
     private CalendarDay parseDateToCalendarDay(String date) {
