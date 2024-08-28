@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,6 +18,10 @@
         android:theme="@style/Theme.PPlusPlus"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_event_note" />
 
         <activity
             android:name=".MainActivity"
@@ -60,7 +63,15 @@
             android:value="6b4773c838198057581c63a5a12d9e72" />
 
         <receiver
-            android:name=".AlarmReceiver" android:exported="true" />
+            android:name=".AlarmReceiver" android:exported="false" />
 
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>
