@@ -5,12 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- RadioGroup for toggling between undergraduate and graduate notices -->
+    <!-- 상단에 로고 이미지 버튼 -->
+
+    <!-- 학부/대학원 공지사항 선택을 위한 RadioGroup -->
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="84dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ppp_logo_vector" />
+
     <RadioGroup
         android:id="@+id/noticeTypeGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="70dp"
         android:orientation="horizontal"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -21,7 +34,7 @@
             android:id="@+id/undergraduateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="학부 공지"
+            android:text="학과 공지"
             android:checked="true" />
 
         <RadioButton
@@ -29,20 +42,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="대학원 공지" />
-
-
     </RadioGroup>
 
+    <!-- RecyclerView for displaying notices inside cards -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/noticeTypeGroup"
         app:layout_constraintVertical_bias="0.0" />
