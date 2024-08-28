@@ -33,9 +33,8 @@ public class HtmlNoticeAdapter extends RecyclerView.Adapter<HtmlNoticeAdapter.Vi
         HtmlItem item = htmlItems.get(position);
 
         holder.titleTextView.setText(item.getTitle());
+        holder.authorTextView.setText(item.getAuthor());
         holder.dateTextView.setText(item.getDate());
-        holder.attachmentCountTextView.setText(item.getAttachmentCount());
-        holder.viewsTextView.setText(item.getViews());
 
         holder.itemView.setOnClickListener(view -> {
             String url = item.getUrl();
@@ -53,16 +52,14 @@ public class HtmlNoticeAdapter extends RecyclerView.Adapter<HtmlNoticeAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView titleTextView;
+        public TextView authorTextView; // 작성자명 추가
         public TextView dateTextView;
-        public TextView attachmentCountTextView; // 추가
-        public TextView viewsTextView; // 추가
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
+            authorTextView = itemView.findViewById(R.id.authorTextView); // 작성자명 연결
             dateTextView = itemView.findViewById(R.id.dateTextView);
-            attachmentCountTextView = itemView.findViewById(R.id.attachmentCountTextView); // 추가
-            viewsTextView = itemView.findViewById(R.id.viewsTextView); // 추가
         }
     }
 }

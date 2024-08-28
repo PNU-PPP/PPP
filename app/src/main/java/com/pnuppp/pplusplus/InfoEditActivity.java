@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class InfoEditActivity extends AppCompatActivity {
 
@@ -36,7 +35,7 @@ public class InfoEditActivity extends AppCompatActivity {
             //경영대학
             "경영학과",
             //약학대학
-            "약학전공", "제약학전공",
+            "약학대학 약학전공", "약학대학 제약학전공",
             //생활과학대학
             "아동가족학과", "의류학과", "식품영양학과",
             //예술대학
@@ -52,14 +51,16 @@ public class InfoEditActivity extends AppCompatActivity {
             "의예과", "의학과", "의과학과",
             //정보의생명공학대학
             "정보컴퓨터공학부 컴퓨터공학전공", "정보컴퓨터공학부 인공지능전공", "의생명융학공학부",
+            //첨단융합학부
+            "첨단융합학부 나노자율전공", "첨단융합학부 정보의생명공학자율전공"
     };
 
     private String[] nonRssDepartments = new String[]{
             "한문학과", "철학과", "고고학과", "사회복지학과", "물리학과",
             "기계공학부", "화공생명환경공학부 화공생명공학전공",
             "화공생명환경공학부 환경공학전공", "전기전자공학부 반도체공학전공",
-            "산업공학과", "국제학부", "실내환경디자인학과", "스포츠과학과"
-            //기계공학부, 국제학부, 스포츠과학과
+            "산업공학과", "국제학부", "실내환경디자인학과", "첨단융합학부 공학자율전공"
+            //기계공학부, 국제학부, 스포츠과학과는 디자인 다름
     };
 
     @Override
@@ -102,10 +103,6 @@ public class InfoEditActivity extends AppCompatActivity {
             editor.putString("student_id", studentID);
             editor.putString("major", major);
             editor.apply();
-
-            //TODO: 변경
-            FirebaseMessaging.getInstance().subscribeToTopic("major");
-            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
 
             // MainActivity를 다시 시작하여 업데이트된 데이터를 반영
             Intent intent = new Intent(InfoEditActivity.this, MainActivity.class);
