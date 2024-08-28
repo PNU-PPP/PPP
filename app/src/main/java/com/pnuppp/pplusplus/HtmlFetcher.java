@@ -35,8 +35,10 @@ public class HtmlFetcher {
         parserMap.put("전기전자공학부 반도체공학전공", new HtmlDefaultParser("https://semi.pusan.ac.kr"));
         parserMap.put("산업공학과", new HtmlDefaultParser("https://ie.pusan.ac.kr"));
         parserMap.put("실내환경디자인학과", new HtmlDefaultParser("https://hid.pusan.ac.kr"));
-        // 다른 학과도 추가 가능
+        parserMap.put("첨단융합학부 공학자율전공", new HtmlDefaultParser("https://u-eng.pusan.ac.kr"));
 
+        // 다른 학과도 추가 가능
+        parserMap.put("국제학부", new HtmlInternationalParser());
     }
 
     public void fetch(String departmentName, String url, Callback callback) {
@@ -53,13 +55,12 @@ public class HtmlFetcher {
                 List<HtmlItem> items = parser.parse(doc);
                 callback.onSuccess(items);
             } catch (IOException e) {
-                callback.onError(e);
+                callback.onError(new RuntimeException("네트워크 오류 발생: " + e.getMessage(), e));
             } catch (Exception e) {  // 일반적인 Exception 처리 추가
-                callback.onError(e);
+                callback.onError(new RuntimeException("파싱 오류 발생: " + e.getMessage(), e));
             }
         });
     }
-
 
     public void shutdown() {
         executorService.shutdown();

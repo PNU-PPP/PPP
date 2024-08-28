@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -36,17 +36,17 @@ import java.util.Random;
 
 public class newnewActivity extends AppCompatActivity {
 
-    // enum을 사용하는 클래스 내부에 정의
     public enum RestaurantType {
         PIZZA, SUSHI, KOREAN, CHINESE, VIETNAM
     }
 
     MapView mapView;
     KakaoMap kakaoMap;
-    LabelManager labelManager; // LabelManager를 클래스 변수로 선언
-    List<Label> labelList = new ArrayList<>(); // 레이블들을 저장할 리스트
-    Map<Label, RestaurantInfo> labelToRestaurantMap = new HashMap<>(); // 레이블과 식당 정보를 매핑할 Map
-    Button selectLabelButton; // 랜덤으로 레이블을 선택할 버튼
+    LabelManager labelManager;
+    List<Label> labelList = new ArrayList<>();
+    Map<Label, RestaurantInfo> labelToRestaurantMap = new HashMap<>();
+    Button selectLabelButton;
+    TextView restaurantInfoTextView; // TextView 추가
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,10 @@ public class newnewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_newnew);
         mapView = findViewById(R.id.map_view);
 
-        // 버튼 초기화
+        // 버튼 및 TextView 초기화
         selectLabelButton = findViewById(R.id.select_label_button);
+        restaurantInfoTextView = findViewById(R.id.restaurant_info_text_view); // TextView 참조
+
         selectLabelButton.setOnClickListener(v -> selectRandomLabel());
 
         mapView.start(new MapLifeCycleCallback() {
@@ -118,16 +120,26 @@ public class newnewActivity extends AppCompatActivity {
     private void showLabel() {
         LabelLayer layer = labelManager.getLayer();
 
-        addLabel(layer, 35.2304389, 129.0842777, "톤쇼우", "부산대 근본 카츠", "https://g.co/kgs/F6ZsNBX", RestaurantType.SUSHI);
-        addLabel(layer, 35.2301701, 129.085188, "마마도마", "비싸지만 맛있는 스시", "https://g.co/kgs/eHQ3FQL", RestaurantType.VIETNAM);
-        addLabel(layer, 35.230478, 129.0866165, "버거킹", "세계적인 패스트푸드 체인", "https://g.co/kgs/DUL2e2F", RestaurantType.PIZZA);
+        addLabel(layer, 35.2304389, 129.0842777, "톤쇼우", "부산대 근본 카츠임", "https://g.co/kgs/F6ZsNBX", RestaurantType.SUSHI);
+        addLabel(layer, 35.2301701, 129.085188, "마마도마", "밥약 국룰 스시", "https://g.co/kgs/eHQ3FQL", RestaurantType.VIETNAM);
+        addLabel(layer, 35.230478, 129.0866165, "버거킹", "쿠폰 생기면 버거킹 앱 들고 뛰어가셈", "https://g.co/kgs/DUL2e2F", RestaurantType.PIZZA);
         addLabel(layer, 35.230273, 129.0851434, "미분당", "조용한 쌀국수", "https://g.co/kgs/MyeJqTd", RestaurantType.SUSHI);
-        addLabel(layer, 35.228884, 129.0880355, "웍헤이", "볶음밥 맛도리", "https://g.co/kgs/QcmgSLD", RestaurantType.CHINESE);
+        addLabel(layer, 35.228884, 129.0880355, "웍헤이", "보기엔 평범하지만 맛있음", "https://g.co/kgs/QcmgSLD", RestaurantType.CHINESE);
         addLabel(layer, 35.231564, 129.085253, "포포포", "짜조가 맛있는 쌀국수집", "https://maps.app.goo.gl/K5hTE7e45zCKp3EeA", RestaurantType.VIETNAM);
-        addLabel(layer, 35.2301375, 129.0857935, "카츠안", "쫄순이 야무진 카츠", "https://maps.app.goo.gl/sUpHcxPUnNwxgZiz7", RestaurantType.SUSHI);
+        addLabel(layer, 35.2301375, 129.0857935, "카츠안", "쫄순이 야무진 카츠, 무려 천원짜리임", "https://maps.app.goo.gl/sUpHcxPUnNwxgZiz7", RestaurantType.SUSHI);
         addLabel(layer, 35.2310302, 129.084811, "야마벤또", "맛있는 튀김과 벤또", "https://g.co/kgs/3KSzyj4", RestaurantType.SUSHI);
         addLabel(layer, 35.23346110000001, 129.0803809, "금정회관", "학식", "https://lei.pusan.ac.kr/lei/55296/subview.do", RestaurantType.KOREAN);
         addLabel(layer, 35.2320819, 129.0854509, "교토밥상", "규카츠 맛집", "https://maps.app.goo.gl/eo4iD5sQGeZtktD4A", RestaurantType.SUSHI);
+        addLabel(layer, 35.2326694, 129.0850967, "나오리쇼쿠", "오차즈케와 연어덮밥", "https://g.co/kgs/tpWGKxK", RestaurantType.SUSHI);
+        addLabel(layer, 35.231994, 129.0874216, "코하루", "라면 맛있음 야무짐", "https://g.co/kgs/DSduFmt", RestaurantType.SUSHI);
+        addLabel(layer, 35.2319444, 129.0872222, "장호가양꼬치", "마파두부도 맛있음 근데 양꼬치도 ㄹㅈㄷ임", "https://m.blog.naver.com/00010714/222841135435", RestaurantType.CHINESE);
+        addLabel(layer, 35.2295171, 129.0891292, "프랭크버거", "미국식 버거, 느끼한데 맛있음 양파기름 맛있음", "https://blog.naver.com/ann5578/222705611370?viewType=pc", RestaurantType.PIZZA);
+        addLabel(layer, 35.2282393, 129.0888936, "도야지면옥", "수육이 ㄹㅈㄷ임 같이시키셈", "https://g.co/kgs/8u2QW7B", RestaurantType.KOREAN);
+        addLabel(layer, 35.22963807159382, 129.08381144581645, "펠로피자", "치즈하면 이재모, 빵하면 펠로피자", "https://g.co/kgs/vmwxFbu", RestaurantType.PIZZA);
+        addLabel(layer, 35.2306434, 129.085078, "곁집", "육회비빔밥+된장 조합 추천", "https://g.co/kgs/8dhmv1W", RestaurantType.KOREAN);
+        addLabel(layer, 35.23112202121665, 129.08564060926437, "고메밀면", "육전물밀면 맛있음 시원함", "https://g.co/kgs/vqS2FeG", RestaurantType.KOREAN);
+        addLabel(layer, 35.2303216, 129.0858729, "우쭈쭈", "쌈무+깻잎에 쭈꾸미 싸먹으면 맛있음", "https://g.co/kgs/bx4J9J4", RestaurantType.KOREAN);
+        addLabel(layer, 35.2299123, 129.0859038, "유가네닭갈비", "뭐 먹을지 고민될때? ㄱㄱ", "https://g.co/kgs/PdQbqbc", RestaurantType.KOREAN);
     }
 
     private void addLabel(LabelLayer layer, double latitude, double longitude, String restaurantName, String additionalInfo, String url, RestaurantType type) {
@@ -150,46 +162,41 @@ public class newnewActivity extends AppCompatActivity {
                 drawableId = R.drawable.chinese;
                 break;
             default:
-                drawableId = R.drawable.location; // 기본 아이콘
+                drawableId = R.drawable.location;
                 break;
         }
 
         LabelStyles labelStyles = LabelStyles.from(LabelStyle.from(drawableId));
         LabelOptions labelOptions = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(labelStyles);
         Label label = layer.addLabel(labelOptions);
-        labelList.add(label); // 레이블 리스트에 추가
-        labelToRestaurantMap.put(label, new RestaurantInfo(restaurantName, additionalInfo, url)); // 레이블과 식당 정보를 매핑
+        labelList.add(label);
+        labelToRestaurantMap.put(label, new RestaurantInfo(restaurantName, additionalInfo, url));
     }
 
     private void selectRandomLabel() {
         if (labelList.isEmpty()) {
-            Toast.makeText(this, "레이블이 없습니다.", Toast.LENGTH_SHORT).show();
+            restaurantInfoTextView.setText("레이블이 없습니다.");
             return;
         }
 
-        // 랜덤으로 레이블 선택
         Random random = new Random();
         int index = random.nextInt(labelList.size());
         Label selectedLabel = labelList.get(index);
 
-        // 선택된 레이블에 대한 식당 정보 가져오기
         RestaurantInfo restaurantInfo = labelToRestaurantMap.get(selectedLabel);
         LatLng position = selectedLabel.getPosition();
 
-        // 선택된 레이블의 좌표로 카메라 이동 및 확대
         CameraUpdate moveToLabel = CameraUpdateFactory.newCenterPosition(position);
         kakaoMap.moveCamera(moveToLabel);
 
-        CameraUpdate zoomIn = CameraUpdateFactory.zoomTo(19); // 확대 레벨 설정
+        CameraUpdate zoomIn = CameraUpdateFactory.zoomTo(19);
         kakaoMap.moveCamera(zoomIn);
 
-        // URL로 이동
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurantInfo.getUrl()));
         startActivity(browserIntent);
 
-        // 메시지 표시
         String message = "오늘 메뉴는 " + restaurantInfo.getName() + " 어때요?\n" + restaurantInfo.getAdditionalInfo();
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        restaurantInfoTextView.setText(message); // TextView에 정보 설정
     }
 
     private static class RestaurantInfo {
