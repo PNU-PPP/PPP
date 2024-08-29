@@ -44,4 +44,24 @@
         app:layout_constraintTop_toBottomOf="@+id/select_label_button"
         app:layout_constraintVertical_bias="0.85" />
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="84dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ppp_logo_vector" />
+
+    <CheckBox
+        android:id="@+id/open_link_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="링크 열기 여부 결정"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/restaurant_info_text_view" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
