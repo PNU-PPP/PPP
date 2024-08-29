@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -46,18 +47,19 @@ public class newnewActivity extends AppCompatActivity {
     List<Label> labelList = new ArrayList<>();
     Map<Label, RestaurantInfo> labelToRestaurantMap = new HashMap<>();
     Button selectLabelButton;
-    TextView restaurantInfoTextView; // TextView 추가
+    TextView restaurantInfoTextView;
+    CheckBox openLinkCheckbox; // CheckBox 추가
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_newnew);
-        mapView = findViewById(R.id.map_view);
 
-        // 버튼 및 TextView 초기화
+        mapView = findViewById(R.id.map_view);
         selectLabelButton = findViewById(R.id.select_label_button);
-        restaurantInfoTextView = findViewById(R.id.restaurant_info_text_view); // TextView 참조
+        restaurantInfoTextView = findViewById(R.id.restaurant_info_text_view);
+        openLinkCheckbox = findViewById(R.id.open_link_checkbox); // CheckBox 초기화
 
         selectLabelButton.setOnClickListener(v -> selectRandomLabel());
 
@@ -142,6 +144,7 @@ public class newnewActivity extends AppCompatActivity {
         addLabel(layer, 35.2299123, 129.0859038, "유가네닭갈비", "뭐 먹을지 고민될때? ㄱㄱ", "https://g.co/kgs/PdQbqbc", RestaurantType.KOREAN);
     }
 
+
     private void addLabel(LabelLayer layer, double latitude, double longitude, String restaurantName, String additionalInfo, String url, RestaurantType type) {
         int drawableId;
         switch (type) {
@@ -151,7 +154,6 @@ public class newnewActivity extends AppCompatActivity {
             case SUSHI:
                 drawableId = R.drawable.sushi;
                 break;
-
             case KOREAN:
                 drawableId = R.drawable.korean;
                 break;
@@ -166,11 +168,14 @@ public class newnewActivity extends AppCompatActivity {
                 break;
         }
 
+        // LabelOptions 객체를 생성하기 위해 LabelOptions.from() 메서드를 사용
         LabelStyles labelStyles = LabelStyles.from(LabelStyle.from(drawableId));
-        LabelOptions labelOptions = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(labelStyles);
-        Label label = layer.addLabel(labelOptions);
+        LabelOptions options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(labelStyles);
+
+        // 레이블 추가
+        Label label = layer.addLabel(options);
         labelList.add(label);
-        labelToRestaurantMap.put(label, new RestaurantInfo(restaurantName, additionalInfo, url));
+        labelToRestaurantMap.put(label, new RestaurantInfo(restaurantName, additionalInfo, url, type)); // 수정된 부분
     }
 
     private void selectRandomLabel() {
@@ -192,22 +197,27 @@ public class newnewActivity extends AppCompatActivity {
         CameraUpdate zoomIn = CameraUpdateFactory.zoomTo(19);
         kakaoMap.moveCamera(zoomIn);
 
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurantInfo.getUrl()));
-        startActivity(browserIntent);
+        // CheckBox 상태에 따라 링크 열기
+        if (openLinkCheckbox.isChecked()) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurantInfo.getUrl()));
+            startActivity(browserIntent);
+        }
 
         String message = "오늘 메뉴는 " + restaurantInfo.getName() + " 어때요?\n" + restaurantInfo.getAdditionalInfo();
-        restaurantInfoTextView.setText(message); // TextView에 정보 설정
+        restaurantInfoTextView.setText(message);
     }
 
-    private static class RestaurantInfo {
+    private class RestaurantInfo {
         private final String name;
         private final String additionalInfo;
         private final String url;
+        private final RestaurantType type;
 
-        public RestaurantInfo(String name, String additionalInfo, String url) {
+        public RestaurantInfo(String name, String additionalInfo, String url, RestaurantType type) {
             this.name = name;
             this.additionalInfo = additionalInfo;
             this.url = url;
+            this.type = type;
         }
 
         public String getName() {
@@ -220,6 +230,10 @@ public class newnewActivity extends AppCompatActivity {
 
         public String getUrl() {
             return url;
+        }
+
+        public RestaurantType getType() {
+            return type;
         }
     }
 }
