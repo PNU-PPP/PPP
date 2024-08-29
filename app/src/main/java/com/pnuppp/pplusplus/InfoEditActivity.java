@@ -11,6 +11,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class InfoEditActivity extends AppCompatActivity {
 
@@ -86,6 +91,10 @@ public class InfoEditActivity extends AppCompatActivity {
             editTextName.setText(sharedPref.getString("name", ""));
             editTextStudentID.setText(sharedPref.getString("student_id", ""));
             editTextMajor.setText(sharedPref.getString("major", ""));
+
+            findViewById(R.id.cbAlarmUG).setEnabled(sharedPref.getBoolean("cbAlarmUG", true));
+            findViewById(R.id.cbAlarmGS).setEnabled(sharedPref.getBoolean("cbAlarmGS", true));
+            findViewById(R.id.cbAlarmEC).setEnabled(sharedPref.getBoolean("cbAlarmEC", true));
         }
 
         buttonSave.setOnClickListener(v -> {
@@ -98,10 +107,36 @@ public class InfoEditActivity extends AppCompatActivity {
                 return;
             }
 
+            FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
+            Set<String> subscribedTopics = sharedPref.getStringSet("fcm_subscribed_topics", new HashSet<>());
+
+            boolean alarmUG = findViewById(R.id.cbAlarmUG).isEnabled();
+            boolean alarmGS = findViewById(R.id.cbAlarmGS).isEnabled();
+            boolean alarmEC = findViewById(R.id.cbAlarmEC).isEnabled();
+
+            Set<String> newSubscribedTopics = new HashSet<>();
+            if(alarmUG) newSubscribedTopics.add(DepartmentIdMapper.getDepartmentId(major)+"UG");
+            if(alarmGS) newSubscribedTopics.add(DepartmentIdMapper.getDepartmentId(major)+"GS");
+            if(alarmEC) newSubscribedTopics.add("EC");
+
+            for(String topic : newSubscribedTopics)
+                if(!subscribedTopics.contains(topic))
+                    firebaseMessaging.subscribeToTopic(topic);
+
+            for(String topic : subscribedTopics)
+                if(!newSubscribedTopics.contains(topic))
+                    firebaseMessaging.unsubscribeFromTopic(topic);
+
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("name", name);
             editor.putString("student_id", studentID);
             editor.putString("major", major);
+
+            editor.putBoolean("cbAlarmUG", alarmUG);
+            editor.putBoolean("cbAlarmGS", alarmGS);
+            editor.putBoolean("cbAlarmEC", alarmEC);
+
+            editor.putStringSet("fcm_subscribed_topics", newSubscribedTopics);
             editor.apply();
 
             // MainActivity를 다시 시작하여 업데이트된 데이터를 반영
