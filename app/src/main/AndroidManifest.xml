@@ -27,7 +27,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.PPlusPlus">
+            android:theme="@style/Theme.PPlusPlus.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,9 +36,7 @@
 
         <activity
             android:name=".RSSDepartmentNoticeActivity"
-            android:exported="true"
-            android:label="Department Notice"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:exported="true" />
 
         <activity android:name=".HtmlDepartmentNoticeActivity" />
 

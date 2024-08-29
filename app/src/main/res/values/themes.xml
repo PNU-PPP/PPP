@@ -3,5 +3,14 @@
 
     <style name="Theme.PPlusPlus" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/material_grey_50</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.PPlusPlus.Main" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 </resources>
