@@ -57,7 +57,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/cbAlarm"
+                android:id="@+id/cbAlarmUG"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -65,7 +65,7 @@
                 android:text="학부 공지사항" />
 
             <CheckBox
-                android:id="@+id/checkBox2"
+                android:id="@+id/cbAlarmGS"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -80,7 +80,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/checkBox3"
+                android:id="@+id/cbAlarmEC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
