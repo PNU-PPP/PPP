@@ -9,8 +9,8 @@
         android:id="@+id/imageView3"
         android:layout_width="84dp"
         android:layout_height="45dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ppp_logo_vector" />
@@ -19,7 +19,7 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="내 정보 입력"
         android:textColor="@color/main_color"
@@ -31,8 +31,8 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:text="알림 설정"
         android:textColor="@color/main_color"
         android:textStyle="bold"
@@ -43,9 +43,9 @@
         android:id="@+id/linearLayout4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="24dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
 
             <CheckBox
                 android:id="@+id/cbAlarmUG"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
@@ -66,7 +66,7 @@
 
             <CheckBox
                 android:id="@+id/cbAlarmGS"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
@@ -81,31 +81,26 @@
 
             <CheckBox
                 android:id="@+id/cbAlarmEC"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
                 android:text="새 비교과 활동" />
 
             <Space
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
         </LinearLayout>
-
-
-        <!-- 기존의 EditText를 AutoCompleteTextView로 변경 -->
-
-
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="24dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,10 +109,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="학부(+전공)/학과명"
             android:textColor="@color/main_color" />
 
-        <!-- 기존의 EditText를 AutoCompleteTextView로 변경 -->
         <AutoCompleteTextView
             android:id="@+id/etMajor"
             android:layout_width="match_parent"
@@ -127,10 +122,10 @@
             android:maxLength="20"
             android:singleLine="true" />
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="학번"
             android:textColor="@color/main_color" />
 
@@ -146,6 +141,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="이름"
             android:textAllCaps="false"
             android:textColor="@color/main_color" />
@@ -165,8 +161,8 @@
         android:id="@+id/button_save"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/main_color"
         android:text="저장하기"
