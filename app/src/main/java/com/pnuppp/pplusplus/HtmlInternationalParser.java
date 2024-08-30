@@ -13,8 +13,8 @@ public class HtmlInternationalParser implements HtmlParser {
     public List<HtmlItem> parse(Document doc) {
         List<HtmlItem> items = new ArrayList<>();
 
-        // "tr" 태그 중 공지사항 항목을 포함하는 요소를 선택
-        Elements noticeElements = doc.select("tr.line");
+        // "tr" 태그 중 고정 공지를 제외하고 공지사항 항목을 선택
+        Elements noticeElements = doc.select("tr.line:not(:has(td.num:contains(Notice)))");
 
         for (Element element : noticeElements) {
             // 제목과 URL 추출
@@ -27,7 +27,7 @@ public class HtmlInternationalParser implements HtmlParser {
             String author = element.select("td.name").text(); // 작성자명
 
             // URL이 상대 경로일 경우 절대 경로로 변환
-            String url = relativeUrl.startsWith("http") ? relativeUrl : "https://pnudgs.com:44954" + relativeUrl;
+            String url = relativeUrl.startsWith("http") ? relativeUrl : "https://pnudgs.com/board/bbs/" + relativeUrl;
 
             // HtmlItem 객체 생성
             HtmlItem item = new HtmlItem(title, date, author, url);

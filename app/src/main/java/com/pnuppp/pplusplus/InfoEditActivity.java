@@ -107,6 +107,12 @@ public class InfoEditActivity extends AppCompatActivity {
                 return;
             }
 
+            if (!isValidMajor(major)) {
+                Toast.makeText(this, "정확한 명칭을 입력해주세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
             FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
             Set<String> subscribedTopics = sharedPref.getStringSet("fcm_subscribed_topics", new HashSet<>());
 
