@@ -68,9 +68,9 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
         departmentHtmlMap.put("첨단융합학부 공학자율전공", new Pair<>(new String[]{"https://u-eng.pusan.ac.kr/u-eng/73849/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGdS1lbmclMkYxODM5NiUyRmFydGNsTGlzdC5kbyUzRg%3D%3D"}, new String[]{null}));
 
         //디자인 다른 학과
-        departmentHtmlMap.put("기계공학부", new Pair<>(new String[]{""}, new String[]{""}));
         departmentHtmlMap.put("국제학부", new Pair<>(new String[]{"https://pnudgs.com:44954/board/bbs/board.php?bo_table=Notice"}, new String[]{null}));
-        departmentHtmlMap.put("스포츠과학과", new Pair<>(new String[]{""}, new String[]{""}));
+        departmentHtmlMap.put("스포츠과학과", new Pair<>(new String[]{"https://sportscience.pusan.ac.kr/sportscience/14558/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGc3BvcnRzY2llbmNlJTJGMjU5MSUyRmFydGNsTGlzdC5kbyUzRmJic09wZW5XcmRTZXElM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZzcmNoQ29sdW1uJTNEJTI2cGFnZSUzRDElMjZzcmNoV3JkJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZiYnNDbFNlcSUzRCUyNnBhc3N3b3JkJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjY%3D"}, null));
+        departmentHtmlMap.put("기계공학부", new Pair<>(new String[]{"https://me.pusan.ac.kr/new/sub05/sub01_01.asp"}, new String[]{"https://me.pusan.ac.kr/new/sub05/sub01_02.asp"}));
     }
 
 

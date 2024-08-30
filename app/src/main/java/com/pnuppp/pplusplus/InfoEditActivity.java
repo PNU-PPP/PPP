@@ -63,7 +63,7 @@ public class InfoEditActivity extends AppCompatActivity {
     private String[] nonRssDepartments = new String[]{
             "한문학과", "철학과", "고고학과", "사회복지학과", "물리학과",
             "기계공학부", "화공생명환경공학부 화공생명공학전공",
-            "화공생명환경공학부 환경공학전공", "전기전자공학부 반도체공학전공",
+            "화공생명환경공학부 환경공학전공", "전기전자공학부 반도체공학전공", "스포츠과학과",
             "산업공학과", "국제학부", "실내환경디자인학과", "첨단융합학부 공학자율전공"
             //기계공학부, 국제학부, 스포츠과학과는 디자인 다름
     };
@@ -106,6 +106,12 @@ public class InfoEditActivity extends AppCompatActivity {
                 Toast.makeText(this, "모든 정보를 입력해주세요", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            if (!isValidMajor(major)) {
+                Toast.makeText(this, "정확한 명칭을 입력해주세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
 
             FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
             Set<String> subscribedTopics = sharedPref.getStringSet("fcm_subscribed_topics", new HashSet<>());
