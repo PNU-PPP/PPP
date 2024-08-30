@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">피플플</string>
+    <string name="random_restaurant_info"><![CDATA[오늘 메뉴는 <b>%s</b> 어때요?]]></string>
 </resources>
