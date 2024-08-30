@@ -3,6 +3,7 @@ package com.pnuppp.pplusplus;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,15 +17,17 @@ public class HtmlInternationalParser implements HtmlParser {
         Elements noticeElements = doc.select("tr.line");
 
         for (Element element : noticeElements) {
-            String title = element.select("td.subject a").text(); // 제목
+            // 제목과 URL 추출
+            Element titleElement = element.selectFirst("td.subject a");
+            String title = titleElement.text(); // 제목
+            String relativeUrl = titleElement.attr("href"); // 상대 경로 URL
+
+            // 작성 날짜 및 작성자 추출
             String date = element.select("td.datetime").text(); // 작성 날짜
             String author = element.select("td.name").text(); // 작성자명
 
             // URL이 상대 경로일 경우 절대 경로로 변환
-            String url = element.select("td.subject a").attr("href");
-            if (!url.startsWith("http")) {
-                url = "https://pnudgs.com:44954" + url;
-            }
+            String url = relativeUrl.startsWith("http") ? relativeUrl : "https://pnudgs.com:44954" + relativeUrl;
 
             // HtmlItem 객체 생성
             HtmlItem item = new HtmlItem(title, date, author, url);

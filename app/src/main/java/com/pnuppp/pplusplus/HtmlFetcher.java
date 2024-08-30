@@ -39,6 +39,8 @@ public class HtmlFetcher {
 
         // 다른 학과도 추가 가능
         parserMap.put("국제학부", new HtmlInternationalParser());
+        parserMap.put("스포츠과학과", new HtmlSportScienceParser());
+        parserMap.put("기계공학부", new HtmlMechanicalEngineeringParser());
     }
 
     public void fetch(String departmentName, String url, Callback callback) {
