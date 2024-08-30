@@ -8,9 +8,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 
 import com.kakao.vectormap.KakaoMap;
 import com.kakao.vectormap.KakaoMapReadyCallback;
@@ -48,17 +48,18 @@ public class newnewActivity extends AppCompatActivity {
     Map<Label, RestaurantInfo> labelToRestaurantMap = new HashMap<>();
     Button selectLabelButton;
     TextView restaurantInfoTextView;
+    TextView restaurantInfo2TextView;
     CheckBox openLinkCheckbox; // CheckBox 추가
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_newnew);
 
         mapView = findViewById(R.id.map_view);
         selectLabelButton = findViewById(R.id.select_label_button);
         restaurantInfoTextView = findViewById(R.id.restaurant_info_text_view);
+        restaurantInfo2TextView = findViewById(R.id.restaurant_info2_text_view);
         openLinkCheckbox = findViewById(R.id.open_link_checkbox); // CheckBox 초기화
 
         selectLabelButton.setOnClickListener(v -> selectRandomLabel());
@@ -203,8 +204,8 @@ public class newnewActivity extends AppCompatActivity {
             startActivity(browserIntent);
         }
 
-        String message = "오늘 메뉴는 " + restaurantInfo.getName() + " 어때요?\n" + restaurantInfo.getAdditionalInfo();
-        restaurantInfoTextView.setText(message);
+        restaurantInfoTextView.setText(HtmlCompat.fromHtml(String.format(getString(R.string.random_restaurant_info), restaurantInfo.getName()), HtmlCompat.FROM_HTML_MODE_LEGACY));
+        restaurantInfo2TextView.setText(restaurantInfo.getAdditionalInfo());
     }
 
     private class RestaurantInfo {
