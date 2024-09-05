@@ -57,7 +57,7 @@
 
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
-            android:value="@string/kakao_maps_key" />
+            android:value="@string/kakao_maps_api_key" />
 
         <receiver
             android:name=".AlarmReceiver" android:exported="false" />
