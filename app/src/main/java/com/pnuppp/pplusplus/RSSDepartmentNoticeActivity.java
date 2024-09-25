@@ -684,9 +684,9 @@ public class RSSDepartmentNoticeActivity extends AppCompatActivity {
         cseDept.put("학부 공지", "https://cse.pusan.ac.kr/bbs/cse/2605/rssList.do?row=50");
         cseDept.put("대학원 공지", "https://cse.pusan.ac.kr/bbs/cse/2611/rssList.do?row=50");
         cseDept.put("졸업과제 공지사항", "https://cse.pusan.ac.kr/bbs/cse/2606/rssList.do?row=50");
-        cseDept.put("채용게시판", "https://cse.pusan.ac.kr/cse/14667/subview.do");
-        cseDept.put("경진대회안내", "https://cse.pusan.ac.kr/cse/50876/subview.do");
-        cseDept.put("기타행사안내", "https://cse.pusan.ac.kr/cse/54538/subview.do");
+        cseDept.put("채용게시판", "https://cse.pusan.ac.kr/bbs/cse/2616/rssList.do?row=50");
+        cseDept.put("경진대회안내", "https://cse.pusan.ac.kr/bbs/cse/12278/rssList.do?row=50");
+        cseDept.put("기타행사안내", "https://cse.pusan.ac.kr/bbs/cse/2617/rssList.do?row=50");
         departmentRSSMap.put("정보컴퓨터공학부 컴퓨터공학전공", cseDept);
 
         // 정보컴퓨터공학부 인공지능전공
@@ -694,9 +694,9 @@ public class RSSDepartmentNoticeActivity extends AppCompatActivity {
         aiDept.put("학부 공지", "https://cse.pusan.ac.kr/bbs/cse/2605/rssList.do?row=50");
         aiDept.put("대학원 공지", "https://cse.pusan.ac.kr/bbs/cse/2611/rssList.do?row=50");
         aiDept.put("졸업과제 공지사항", "https://cse.pusan.ac.kr/bbs/cse/2606/rssList.do?row=50");
-        aiDept.put("채용게시판", "https://cse.pusan.ac.kr/cse/14667/subview.do");
-        aiDept.put("경진대회안내", "https://cse.pusan.ac.kr/cse/50876/subview.do");
-        aiDept.put("기타행사안내", "https://cse.pusan.ac.kr/cse/54538/subview.do");
+        aiDept.put("채용게시판", "https://cse.pusan.ac.kr/bbs/cse/2616/rssList.do?row=50");
+        aiDept.put("경진대회안내", "https://cse.pusan.ac.kr/bbs/cse/12278/rssList.do?row=50");
+        aiDept.put("기타행사안내", "https://cse.pusan.ac.kr/bbs/cse/2617/rssList.do?row=50");
         departmentRSSMap.put("정보컴퓨터공학부 인공지능전공", aiDept);
 
         // 의생명융합공학부
