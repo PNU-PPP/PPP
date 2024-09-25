@@ -103,8 +103,8 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
 
         // 사회복지학과
         Map<String, String> socialWelfareCategories = new HashMap<>();
-        socialWelfareCategories.put("학부 공지", "https://swf.pusan.ac.kr/swf/16699/subview.do");
-        socialWelfareCategories.put("대학원 공지", "");  // 대학원 공지 없음
+        socialWelfareCategories.put("학과공지", "https://swf.pusan.ac.kr/swf/16699/subview.do");
+        socialWelfareCategories.put("홍보게시판", "https://swf.pusan.ac.kr/swf/16703/subview.do");  // 대학원 공지 없음
         departmentHtmlMap.put("사회복지학과", socialWelfareCategories);
 
         // 물리학과
