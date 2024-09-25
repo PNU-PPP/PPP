@@ -103,6 +103,7 @@ public class RSSDepartmentNoticeActivity extends AppCompatActivity {
         Map<String, String> koreanLangCategories = new HashMap<>();
         koreanLangCategories.put("학부 공지", "https://bkorea.pusan.ac.kr/bbs/bkorea/3375/rssList.do?row=50");
         koreanLangCategories.put("대학원 공지", "https://bkorea.pusan.ac.kr/bbs/bkorea/3376/rssList.do?row=50");
+        koreanLangCategories.put("취업게시판", "https://bkorea.pusan.ac.kr/bbs/bkorea/3379/rssList.do?row=50");
         departmentRSSMap.put("국어국문학과", koreanLangCategories);
 
         // 일어일문학과
@@ -129,12 +130,15 @@ public class RSSDepartmentNoticeActivity extends AppCompatActivity {
         Map<String, String> chineseLangCategories = new HashMap<>();
         chineseLangCategories.put("학부 공지", "https://china.pusan.ac.kr/bbs/china/5363/rssList.do?row=50");
         chineseLangCategories.put("대학원 공지", "https://china.pusan.ac.kr/bbs/china/5364/rssList.do?row=50");
+        chineseLangCategories.put("장학", "https://china.pusan.ac.kr/bbs/china/5366/rssList.do?row=50");
         departmentRSSMap.put("중어중문학과", chineseLangCategories);
 
         // 영어영문학과
         Map<String, String> englishLangCategories = new HashMap<>();
         englishLangCategories.put("학부 공지", "https://pnuenglish.pusan.ac.kr/bbs/pnuenglish/3108/rssList.do?row=50");
         englishLangCategories.put("대학원 공지", "https://pnuenglish.pusan.ac.kr/bbs/pnuenglish/3107/rssList.do?row=50");
+        englishLangCategories.put("취업정보, 대외활동", "https://pnuenglish.pusan.ac.kr/bbs/pnuenglish/3102/rssList.do?row=50");
+        englishLangCategories.put("아르바이트", "https://pnuenglish.pusan.ac.kr/bbs/pnuenglish/3106/rssList.do?row=50");
         departmentRSSMap.put("영어영문학과", englishLangCategories);
 
         // 독어독문학과
@@ -446,6 +450,8 @@ public class RSSDepartmentNoticeActivity extends AppCompatActivity {
         Map<String, String> bizDept = new HashMap<>();
         bizDept.put("학부 공지", "https://biz.pusan.ac.kr/bbs/biz/2557/rssList.do?row=50");
         bizDept.put("대학원 공지", "https://biz.pusan.ac.kr/bbs/biz/2556/rssList.do?row=50");
+        bizDept.put("취업", "https://biz.pusan.ac.kr/bbs/biz/11448/rssList.do?row=50");
+        bizDept.put("장학", "https://biz.pusan.ac.kr/bbs/biz/2558/rssList.do?row=50");
         departmentRSSMap.put("경영학과", bizDept);
 
 
@@ -523,17 +529,23 @@ public class RSSDepartmentNoticeActivity extends AppCompatActivity {
         Map<String, String> nanomechaDept = new HashMap<>();
         nanomechaDept.put("학부 공지", "https://nanomecha.pusan.ac.kr/bbs/nanomecha/3264/rssList.do?row=50");
         nanomechaDept.put("대학원 공지", "https://nanomecha.pusan.ac.kr/bbs/nanomecha/14888/rssList.do?row=50");
+        nanomechaDept.put("장학정보", "https://nanomecha.pusan.ac.kr/bbs/nanomecha/3274/rssList.do?row=50");
+        nanomechaDept.put("취업정보", "https://nanomecha.pusan.ac.kr/bbs/nanomecha/3275/rssList.do?row=50");
         departmentRSSMap.put("나노메카트로닉스공학과", nanomechaDept);
 
         // 나노에너지공학과
         Map<String, String> nanoEnergyDept = new HashMap<>();
         nanoEnergyDept.put("학부 공지", "https://energy.pusan.ac.kr/bbs/energy/2829/rssList.do?row=50");
+        nanoEnergyDept.put("장학정보", "https://energy.pusan.ac.kr/bbs/energy/2831/rssList.do?row=50");
+        nanoEnergyDept.put("취업정보", "https://energy.pusan.ac.kr/bbs/energy/2832/rssList.do?row=50");
         nanoEnergyDept.put("대학원 공지", "https://energy.pusan.ac.kr/bbs/energy/7496/rssList.do?row=50");
         departmentRSSMap.put("나노에너지공학과", nanoEnergyDept);
 
         // 광메카트로닉스공학과
         Map<String, String> optomechaDept = new HashMap<>();
         optomechaDept.put("학부 공지", "https://ome.pusan.ac.kr/bbs/ome/3307/rssList.do?row=50");
+        optomechaDept.put("장학정보", "https://ome.pusan.ac.kr/bbs/ome/3308/rssList.do?row=50");
+        optomechaDept.put("취업정보", "https://ome.pusan.ac.kr/bbs/ome/3309/rssList.do?row=50");
         departmentRSSMap.put("광메카트로닉스공학과", optomechaDept);
 
 
@@ -600,6 +612,8 @@ public class RSSDepartmentNoticeActivity extends AppCompatActivity {
         // 간호학과
         Map<String, String> nursingDept = new HashMap<>();
         nursingDept.put("학부 공지", "https://nursing.pusan.ac.kr/bbs/nursing/2584/rssList.do?row=50");
+        nursingDept.put("대학원 공지", "https://nursing.pusan.ac.kr/bbs/nursing/2585/rssList.do?row=50");
+        nursingDept.put("채용공고", "https://nursing.pusan.ac.kr/bbs/nursing/11712/rssList.do?row=50");
         departmentRSSMap.put("간호학과", nursingDept);
 
 
@@ -631,17 +645,26 @@ public class RSSDepartmentNoticeActivity extends AppCompatActivity {
         Map<String, String> cseDept = new HashMap<>();
         cseDept.put("학부 공지", "https://cse.pusan.ac.kr/bbs/cse/2605/rssList.do?row=50");
         cseDept.put("대학원 공지", "https://cse.pusan.ac.kr/bbs/cse/2611/rssList.do?row=50");
+        cseDept.put("졸업과제 공지사항", "https://cse.pusan.ac.kr/bbs/cse/2606/rssList.do?row=50");
+        cseDept.put("채용게시판", "https://cse.pusan.ac.kr/cse/14667/subview.do");
+        cseDept.put("경진대회안내", "https://cse.pusan.ac.kr/cse/50876/subview.do");
+        cseDept.put("기타행사안내", "https://cse.pusan.ac.kr/cse/54538/subview.do");
         departmentRSSMap.put("정보컴퓨터공학부 컴퓨터공학전공", cseDept);
 
         // 정보컴퓨터공학부 인공지능전공
         Map<String, String> aiDept = new HashMap<>();
         aiDept.put("학부 공지", "https://cse.pusan.ac.kr/bbs/cse/2605/rssList.do?row=50");
         aiDept.put("대학원 공지", "https://cse.pusan.ac.kr/bbs/cse/2611/rssList.do?row=50");
+        aiDept.put("졸업과제 공지사항", "https://cse.pusan.ac.kr/bbs/cse/2606/rssList.do?row=50");
+        aiDept.put("채용게시판", "https://cse.pusan.ac.kr/cse/14667/subview.do");
+        aiDept.put("경진대회안내", "https://cse.pusan.ac.kr/cse/50876/subview.do");
+        aiDept.put("기타행사안내", "https://cse.pusan.ac.kr/cse/54538/subview.do");
         departmentRSSMap.put("정보컴퓨터공학부 인공지능전공", aiDept);
 
         // 의생명융합공학부
         Map<String, String> bioconvergenceDept = new HashMap<>();
         bioconvergenceDept.put("학부 공지", "https://bce.pusan.ac.kr/bbs/bce/12005/rssList.do?row=50");
+        bioconvergenceDept.put("채용게시판", "https://bce.pusan.ac.kr/bbs/bce/18019/rssList.do?row=50");
         departmentRSSMap.put("의생명융합공학부", bioconvergenceDept); // 대학원 공지 RSS가 없기 때문에 학부 공지만 추가
 
 
