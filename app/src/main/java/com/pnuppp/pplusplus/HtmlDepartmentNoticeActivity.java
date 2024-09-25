@@ -3,96 +3,169 @@ package com.pnuppp.pplusplus;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
 
-    private Map<String, Pair<String[], String[]>> departmentHtmlMap;
+    // 학과별로 여러 카테고리의 공지사항 URL을 관리하는 Map
+    private Map<String, Map<String, String>> departmentHtmlMap;
+    private Spinner noticeTypeSpinner;  // Spinner 선언
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_department_notice);
 
+        // Map과 RecyclerView 초기화
         departmentHtmlMap = new HashMap<>();
         setupHtmlMapping();
 
+        // Spinner와 RecyclerView 연결
+        noticeTypeSpinner = findViewById(R.id.categorySpinner);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         String selectedDepartment = getIntent().getStringExtra("major");
 
-        RadioButton undergraduateButton = findViewById(R.id.undergraduateButton);
-        RadioButton graduateButton = findViewById(R.id.graduateButton);
-
-        // 학부 공지 또는 대학원 공지가 없는 경우 해당 라디오 버튼 숨기기
+        // 학과 존재 여부 확인 및 카테고리 설정
         if (departmentHtmlMap.containsKey(selectedDepartment)) {
-            Pair<String[], String[]> urls = departmentHtmlMap.get(selectedDepartment);
-            if (urls.first[0] == null || urls.first[0].isEmpty()) {
-                undergraduateButton.setVisibility(View.GONE);
+            Map<String, String> noticeCategories = departmentHtmlMap.get(selectedDepartment);
+            List<String> categories = new ArrayList<>(noticeCategories.keySet());
+
+            // 카테고리를 알파벳 또는 한글 순서로 정렬
+            Collections.sort(categories); // 이 줄이 정확히 어댑터 설정 전에 있어야 함
+
+            // 정렬된 카테고리 목록을 로그로 출력하여 확인
+            Log.d("CategorySort", "Sorted Categories: " + categories.toString());
+
+            // 어댑터에 정렬된 카테고리 목록 설정
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            noticeTypeSpinner.setAdapter(adapter);
+
+            // Spinner 선택 이벤트 처리
+            noticeTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedCategory = categories.get(position);
+                    fetchNoticesForDepartment(selectedDepartment, selectedCategory);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // 아무것도 선택되지 않았을 때의 처리
+                }
+            });
+
+            // 기본적으로 첫 번째 공지사항을 로드
+            if (!categories.isEmpty()) {
+                String firstCategory = categories.get(0);
+                fetchNoticesForDepartment(selectedDepartment, firstCategory);
             }
-            if (urls.second[0] == null || urls.second[0].isEmpty()) {
-                graduateButton.setVisibility(View.GONE);
-            }
+        } else {
+            Log.e("HtmlDepartmentNoticeActivity", "해당 학과에 대한 공지사항을 찾을 수 없습니다.");
         }
-
-        // 기본적으로 학부 공지를 로드
-        fetchNoticesForDepartment(selectedDepartment, true);
-
-        RadioGroup noticeTypeGroup = findViewById(R.id.noticeTypeGroup);
-        noticeTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            boolean isUndergraduate = (checkedId == R.id.undergraduateButton);
-            fetchNoticesForDepartment(selectedDepartment, isUndergraduate);
-        });
     }
 
 
     private void setupHtmlMapping() {
-        departmentHtmlMap.put("한문학과", new Pair<>(new String[]{"https://hanmun.pusan.ac.kr/hanmun/20474/subview.do"}, new String[]{"https://hanmun.pusan.ac.kr/hanmun/20475/subview.do"}));
-        departmentHtmlMap.put("철학과", new Pair<>(new String[]{"https://philosophy.pusan.ac.kr/philosophy/17294/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGcGhpbG9zb3BoeSUyRjM0NTMlMkZhcnRjbExpc3QuZG8lM0Y%3D"}, new String[]{"https://philosophy.pusan.ac.kr/philosophy/17297/subview.do"}));
-        departmentHtmlMap.put("고고학과", new Pair<>(new String[]{"https://archaeology.pusan.ac.kr/archaeology/21071/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGYXJjaGFlb2xvZ3klMkY0MTY3JTJGYXJ0Y2xMaXN0LmRvJTNG"}, new String[]{"https://archaeology.pusan.ac.kr/archaeology/65644/subview.do"}));
-        departmentHtmlMap.put("사회복지학과", new Pair<>(new String[]{"https://swf.pusan.ac.kr/swf/16699/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGc3dmJTJGMzMxNCUyRmFydGNsTGlzdC5kbyUzRg%3D%3D"}, new String[]{null}));
-        departmentHtmlMap.put("물리학과", new Pair<>(new String[]{"https://phys.pusan.ac.kr/phys/14948/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGcGh5cyUyRjI2NTglMkZhcnRjbExpc3QuZG8lM0Y%3D"}, new String[]{"https://phys.pusan.ac.kr/phys/14949/subview.do"}));
-        departmentHtmlMap.put("화공생명환경공학부 화공생명공학전공", new Pair<>(new String[]{"https://chemeng.pusan.ac.kr/chemeng/15735/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGY2hlbWVuZyUyRjI4NzAlMkZhcnRjbExpc3QuZG8lM0ZzcmNoV3JkJTNEJTI2c3JjaENvbHVtbiUzRHNqJTI2YmJzT3BlbldyZFNlcSUzRCUyNmlzVmlld01pbmUlM0RmYWxzZSUyNmJic0NsU2VxJTNEJTI2"}, null));
-        departmentHtmlMap.put("화공생명환경공학부 환경공학전공", new Pair<>(new String[]{"https://pnuenv.pusan.ac.kr/pnuenv/15177/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGcG51ZW52JTJGMjcxNyUyRmFydGNsTGlzdC5kbyUzRg%3D%3D"}, new String[]{"https://pnuenv.pusan.ac.kr/pnuenv/15181/subview.do"}));
-        departmentHtmlMap.put("전기전자공학부 반도체공학전공", new Pair<>(new String[]{"https://semi.pusan.ac.kr/semi/71943/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGc2VtaSUyRjE3OTQ4JTJGYXJ0Y2xMaXN0LmRvJTNG"}, new String[]{null}));
-        departmentHtmlMap.put("산업공학과", new Pair<>(new String[]{"https://ie.pusan.ac.kr/ie/19424/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaWUlMkYzODEwJTJGYXJ0Y2xMaXN0LmRvJTNG"}, new String[]{null}));
-        departmentHtmlMap.put("실내환경디자인학과", new Pair<>(new String[]{"https://hid.pusan.ac.kr/hid/17458/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaGlkJTJGMzQ4OSUyRmFydGNsTGlzdC5kbyUzRg%3D%3D"}, new String[]{null}));
-        departmentHtmlMap.put("첨단융합학부 공학자율전공", new Pair<>(new String[]{"https://u-eng.pusan.ac.kr/u-eng/73849/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGdS1lbmclMkYxODM5NiUyRmFydGNsTGlzdC5kbyUzRg%3D%3D"}, new String[]{null}));
+        departmentHtmlMap = new HashMap<>();
 
-        //디자인 다른 학과
-        departmentHtmlMap.put("국제학부", new Pair<>(new String[]{"https://pnudgs.com:44954/board/bbs/board.php?bo_table=Notice"}, new String[]{null}));
-        departmentHtmlMap.put("스포츠과학과", new Pair<>(new String[]{"https://sportscience.pusan.ac.kr/sportscience/14558/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGc3BvcnRzY2llbmNlJTJGMjU5MSUyRmFydGNsTGlzdC5kbyUzRmJic09wZW5XcmRTZXElM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZzcmNoQ29sdW1uJTNEJTI2cGFnZSUzRDElMjZzcmNoV3JkJTNEJTI2cmdzQmduZGVTdHIlM0QlMjZiYnNDbFNlcSUzRCUyNnBhc3N3b3JkJTNEJTI2cmdzRW5kZGVTdHIlM0QlMjY%3D"}, null));
-        departmentHtmlMap.put("기계공학부", new Pair<>(new String[]{"https://me.pusan.ac.kr/new/sub05/sub01_01.asp"}, new String[]{"https://me.pusan.ac.kr/new/sub05/sub01_02.asp"}));
+        // 한문학과
+        Map<String, String> hanmunCategories = new HashMap<>();
+        hanmunCategories.put("학부 공지", "https://hanmun.pusan.ac.kr/hanmun/20474/subview.do");
+        hanmunCategories.put("대학원 공지", "https://hanmun.pusan.ac.kr/hanmun/20475/subview.do");
+        departmentHtmlMap.put("한문학과", hanmunCategories);
+
+        // 철학과
+        Map<String, String> philosophyCategories = new HashMap<>();
+        philosophyCategories.put("학부 공지", "https://philosophy.pusan.ac.kr/philosophy/17294/subview.do");
+        philosophyCategories.put("대학원 공지", "https://philosophy.pusan.ac.kr/philosophy/17297/subview.do");
+        departmentHtmlMap.put("철학과", philosophyCategories);
+
+        // 고고학과
+        Map<String, String> archaeologyCategories = new HashMap<>();
+        archaeologyCategories.put("학부 공지", "https://archaeology.pusan.ac.kr/archaeology/21071/subview.do");
+        archaeologyCategories.put("대학원 공지", "https://archaeology.pusan.ac.kr/archaeology/65644/subview.do");
+        departmentHtmlMap.put("고고학과", archaeologyCategories);
+
+        // 사회복지학과
+        Map<String, String> socialWelfareCategories = new HashMap<>();
+        socialWelfareCategories.put("학부 공지", "https://swf.pusan.ac.kr/swf/16699/subview.do");
+        socialWelfareCategories.put("대학원 공지", "");  // 대학원 공지 없음
+        departmentHtmlMap.put("사회복지학과", socialWelfareCategories);
+
+        // 물리학과
+        Map<String, String> physicsCategories = new HashMap<>();
+        physicsCategories.put("학부 공지", "https://phys.pusan.ac.kr/phys/14948/subview.do");
+        physicsCategories.put("대학원 공지", "https://phys.pusan.ac.kr/phys/14949/subview.do");
+        departmentHtmlMap.put("물리학과", physicsCategories);
+
+        // 화공생명환경공학부 화공생명공학전공
+        Map<String, String> chemicalEngCategories = new HashMap<>();
+        chemicalEngCategories.put("학부 공지", "https://chemeng.pusan.ac.kr/chemeng/15735/subview.do");
+        departmentHtmlMap.put("화공생명환경공학부 화공생명공학전공", chemicalEngCategories);
+
+        // 화공생명환경공학부 환경공학전공
+        Map<String, String> environmentalEngCategories = new HashMap<>();
+        environmentalEngCategories.put("학부 공지", "https://pnuenv.pusan.ac.kr/pnuenv/15177/subview.do");
+        environmentalEngCategories.put("대학원 공지", "https://pnuenv.pusan.ac.kr/pnuenv/15181/subview.do");
+        departmentHtmlMap.put("화공생명환경공학부 환경공학전공", environmentalEngCategories);
+
+        // 전기전자공학부 반도체공학전공
+        Map<String, String> semiconductorEngCategories = new HashMap<>();
+        semiconductorEngCategories.put("학부 공지", "https://semi.pusan.ac.kr/semi/71943/subview.do");
+        departmentHtmlMap.put("전기전자공학부 반도체공학전공", semiconductorEngCategories);
+
+        // 산업공학과
+        Map<String, String> industrialEngCategories = new HashMap<>();
+        industrialEngCategories.put("학부 공지", "https://ie.pusan.ac.kr/ie/19424/subview.do");
+        departmentHtmlMap.put("산업공학과", industrialEngCategories);
+
+        // 실내환경디자인학과
+        Map<String, String> interiorDesignCategories = new HashMap<>();
+        interiorDesignCategories.put("학부 공지", "https://hid.pusan.ac.kr/hid/17458/subview.do");
+
+        // 첨단융합학부 공학자율전공
+        Map<String, String> advancedEngCategories = new HashMap<>();
+        advancedEngCategories.put("학부 공지", "https://u-eng.pusan.ac.kr/u-eng/73849/subview.do");
+        departmentHtmlMap.put("첨단융합학부 공학자율전공", advancedEngCategories);
+
+        // 아래는 페이지 디자인 다른 학과들
+        // 국제학부
+        Map<String, String> internationalStudiesCategories = new HashMap<>();
+        internationalStudiesCategories.put("학부 공지", "https://pnudgs.com:44954/board/bbs/board.php?bo_table=Notice");
+        departmentHtmlMap.put("국제학부", internationalStudiesCategories);
+
+        // 스포츠과학과
+        Map<String, String> sportsScienceCategories = new HashMap<>();
+        sportsScienceCategories.put("학부 공지", "https://sportscience.pusan.ac.kr/sportscience/14558/subview.do");
+        departmentHtmlMap.put("스포츠과학과", sportsScienceCategories);
+
+        // 기계공학부
+        Map<String, String> mechanicalEngCategories = new HashMap<>();
+        mechanicalEngCategories.put("학부 공지", "https://me.pusan.ac.kr/new/sub05/sub01_01.asp");
+        mechanicalEngCategories.put("대학원 공지", "https://me.pusan.ac.kr/new/sub05/sub01_02.asp");
+        departmentHtmlMap.put("기계공학부", mechanicalEngCategories);
+
     }
 
-
-    private void fetchNoticesForDepartment(String departmentName, boolean isUndergraduate) {
+    private void fetchNoticesForDepartment(String departmentName, String category) {
         if (departmentHtmlMap.containsKey(departmentName)) {
-            Pair<String[], String[]> urls = departmentHtmlMap.get(departmentName);
-
-            if (urls == null || (isUndergraduate && urls.first == null) || (!isUndergraduate && urls.second == null)) {
-                Log.e("HtmlDepartmentNoticeActivity", "URL 배열이 null입니다: " + departmentName);
-                return;
-            }
-
-            String url = null;
-            if (isUndergraduate) {
-                if (urls.first != null && urls.first.length > 0) {
-                    url = urls.first[0];
-                }
-            } else {
-                if (urls.second != null && urls.second.length > 0) {
-                    url = urls.second[0];
-                }
-            }
+            Map<String, String> noticeCategories = departmentHtmlMap.get(departmentName);
+            String url = noticeCategories.get(category);
 
             if (url != null && !url.isEmpty()) {
                 fetchHtmlNotices(departmentName, url);
@@ -103,9 +176,6 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
             Log.e("HtmlDepartmentNoticeActivity", "해당 학과에 대한 공지사항 URL을 찾을 수 없습니다.");
         }
     }
-
-
-
 
     private void fetchHtmlNotices(String departmentName, String url) {
         new HtmlFetcher().fetch(departmentName, url, new HtmlFetcher.Callback() {
@@ -135,7 +205,4 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
 
         Log.d("HtmlDepartmentNoticeActivity", "Number of items: " + items.size());
     }
-
-
-
 }
