@@ -146,7 +146,9 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
         // 아래는 페이지 디자인 다른 학과들
         // 국제학부
         Map<String, String> internationalStudiesCategories = new HashMap<>();
-        internationalStudiesCategories.put("학부 공지", "https://pnudgs.com:44954/board/bbs/board.php?bo_table=Notice");
+        internationalStudiesCategories.put("공지사항", "https://pnudgs.com:44954/board/bbs/board.php?bo_table=Notice");
+        internationalStudiesCategories.put("News", "https://pnudgs.com:44954/board/bbs/board.php?bo_table=News");
+        internationalStudiesCategories.put("News", "https://pnudgs.com:44954/board/bbs/board.php?bo_table=Writing_Lab");
         departmentHtmlMap.put("국제학부", internationalStudiesCategories);
 
         // 스포츠과학과
