@@ -109,29 +109,35 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
 
         // 물리학과
         Map<String, String> physicsCategories = new HashMap<>();
-        physicsCategories.put("학부 공지", "https://phys.pusan.ac.kr/phys/14948/subview.do");
-        physicsCategories.put("대학원 공지", "https://phys.pusan.ac.kr/phys/14949/subview.do");
+        physicsCategories.put("학부공지", "https://phys.pusan.ac.kr/phys/14948/subview.do");
+        physicsCategories.put("대학원공지", "https://phys.pusan.ac.kr/phys/14949/subview.do");
+        physicsCategories.put("채용공고", "https://phys.pusan.ac.kr/phys/14950/subview.do");
         departmentHtmlMap.put("물리학과", physicsCategories);
 
         // 화공생명환경공학부 화공생명공학전공
         Map<String, String> chemicalEngCategories = new HashMap<>();
-        chemicalEngCategories.put("학부 공지", "https://chemeng.pusan.ac.kr/chemeng/15735/subview.do");
+        chemicalEngCategories.put("학사", "https://chemeng.pusan.ac.kr/chemeng/15735/subview.do");
+        chemicalEngCategories.put("취업 및 장학", "https://chemeng.pusan.ac.kr/chemeng/15737/subview.do");
+        chemicalEngCategories.put("CBE 세미나", "https://chemeng.pusan.ac.kr/chemeng/15736/subview.do");
         departmentHtmlMap.put("화공생명환경공학부 화공생명공학전공", chemicalEngCategories);
 
         // 화공생명환경공학부 환경공학전공
         Map<String, String> environmentalEngCategories = new HashMap<>();
-        environmentalEngCategories.put("학부 공지", "https://pnuenv.pusan.ac.kr/pnuenv/15177/subview.do");
-        environmentalEngCategories.put("대학원 공지", "https://pnuenv.pusan.ac.kr/pnuenv/15181/subview.do");
+        environmentalEngCategories.put("공지사항", "https://pnuenv.pusan.ac.kr/pnuenv/15177/subview.do");
+        environmentalEngCategories.put("취업정보", "https://pnuenv.pusan.ac.kr/pnuenv/15180/subview.do");
+        environmentalEngCategories.put("환경대학원공지", "https://pnuenv.pusan.ac.kr/pnuenv/15181/subview.do");
         departmentHtmlMap.put("화공생명환경공학부 환경공학전공", environmentalEngCategories);
 
         // 전기전자공학부 반도체공학전공
         Map<String, String> semiconductorEngCategories = new HashMap<>();
-        semiconductorEngCategories.put("학부 공지", "https://semi.pusan.ac.kr/semi/71943/subview.do");
+        semiconductorEngCategories.put("공지사항", "https://semi.pusan.ac.kr/semi/71943/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGc2VtaSUyRjE3OTQ4JTJGYXJ0Y2xMaXN0LmRvJTNGc3JjaFdyZCUzRCUyNnNyY2hDb2x1bW4lM0RzaiUyNmJic09wZW5XcmRTZXElM0QlMjZpc1ZpZXdNaW5lJTNEZmFsc2UlMjZiYnNDbFNlcSUzRCUyNg%3D%3D");
         departmentHtmlMap.put("전기전자공학부 반도체공학전공", semiconductorEngCategories);
 
         // 산업공학과
         Map<String, String> industrialEngCategories = new HashMap<>();
-        industrialEngCategories.put("학부 공지", "https://ie.pusan.ac.kr/ie/19424/subview.do");
+        industrialEngCategories.put("공지사항", "https://ie.pusan.ac.kr/ie/73110/subview.do");
+        industrialEngCategories.put("학과세미나", "https://ie.pusan.ac.kr/ie/73111/subview.do");
+        industrialEngCategories.put("취업정보", "https://ie.pusan.ac.kr/ie/19428/subview.do");
         departmentHtmlMap.put("산업공학과", industrialEngCategories);
 
         // 실내환경디자인학과
@@ -156,8 +162,13 @@ public class HtmlDepartmentNoticeActivity extends AppCompatActivity {
 
         // 기계공학부
         Map<String, String> mechanicalEngCategories = new HashMap<>();
-        mechanicalEngCategories.put("학부 공지", "https://me.pusan.ac.kr/new/sub05/sub01_01.asp");
-        mechanicalEngCategories.put("대학원 공지", "https://me.pusan.ac.kr/new/sub05/sub01_02.asp");
+        mechanicalEngCategories.put("공지(학부)", "https://me.pusan.ac.kr/new/sub05/sub01_01.asp");
+        mechanicalEngCategories.put("공지(대학원)", "https://me.pusan.ac.kr/new/sub05/sub01_02.asp");
+        mechanicalEngCategories.put("공지(장학)", "https://me.pusan.ac.kr/new/sub05/sub01_05.asp");
+        mechanicalEngCategories.put("공지(홍보)", "https://me.pusan.ac.kr/new/sub05/sub01_03.asp");
+        mechanicalEngCategories.put("공지(기자재)", "https://me.pusan.ac.kr/new/sub05/sub01_04.asp");
+        mechanicalEngCategories.put("학부 소식", "https://me.pusan.ac.kr/new/sub05/sub02.asp");
+        mechanicalEngCategories.put("취업 정보", "https://me.pusan.ac.kr/new/sub05/sub05.asp");
         departmentHtmlMap.put("기계공학부", mechanicalEngCategories);
 
     }
