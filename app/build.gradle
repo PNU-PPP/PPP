@@ -7,15 +7,15 @@ plugins {
 }
 
 android {
-    namespace 'com.pnuppp.pplusplus'
+    namespace 'com.pnuppp.ppp'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.pnuppp.pplusplus"
+        applicationId "com.pnuppp.ppp"
         minSdk 24
         targetSdk 34
-        versionCode 3
-        versionName "1.0.1a"
+        versionCode 5
+        versionName "1.0.2a"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

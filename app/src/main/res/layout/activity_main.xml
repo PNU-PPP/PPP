@@ -118,7 +118,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <com.pnuppp.pplusplus.SquareButton
+                <com.pnuppp.ppp.SquareButton
                     android:id="@+id/button7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                     android:paddingTop="23dp"
                     android:text="학점 예측" />
 
-                <com.pnuppp.pplusplus.SquareButton
+                <com.pnuppp.ppp.SquareButton
                     android:id="@+id/button3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <com.pnuppp.pplusplus.SquareButton
+                <com.pnuppp.ppp.SquareButton
                     android:id="@+id/noticeButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
                     android:paddingTop="28dp"
                     android:text="학과 공지사항" />
 
-                <com.pnuppp.pplusplus.SquareButton
+                <com.pnuppp.ppp.SquareButton
                     android:id="@+id/button_extra"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
