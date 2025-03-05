@@ -14,7 +14,8 @@
 비교과 활동 통합 조회 | 학생지원시스템의 학생역량 페이지에 게시된 대회, 공모전 등 비교과 활동 정보를 한눈에 확인 가능합니다.
 각종 알림 제공 | 학사 일정 및 지정 학과의 새 공지사항을 알림으로 받아볼 수 있어, 중요한 정보를 놓치지 않고 즉시 확인 가능할 수 있습니다.
 맛집 검색 및 랜덤 추천 기능 | 학교 근처 맛집을 검색하고 랜덤으로 추천받아 새로운 맛집을 발견할 수 있습니다.
- 
+
+## 제작결과
 ![Screenshot_20240905_200941 2](https://github.com/user-attachments/assets/f46e2de3-31c4-4f91-81fc-528b68a1f549)|![Screenshot_20240905_201002 2](https://github.com/user-attachments/assets/bcffac18-c35b-4f56-b5ec-241972e4c57c)|![Screenshot_20240905_203631 2](https://github.com/user-attachments/assets/7c2025bd-03b6-40de-848d-c33f67531e5b)|![Screenshot_20240905_202929 2](https://github.com/user-attachments/assets/ba510277-792f-4a86-bcaf-3fa04a03f50d)
 :--:|:--:|:--:|:--:
 메인화면|메인화면(학사일정)|메인화면(학사일정)|내 정보 수정
