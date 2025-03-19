@@ -1,7 +1,7 @@
 # PPlusPlus (피플플) ![CI](https://github.com/PNU-PPP/PPP/actions/workflows/android.yml/badge.svg) [![CodeFactor](https://www.codefactor.io/repository/github/pnu-ppp/ppp/badge)](https://www.codefactor.io/repository/github/pnu-ppp/ppp)
 - 부산대학교 학생 편의를 위한 안드로이드 어플리케이션 제작 프로젝트 (4인)
 - 목표: 학업 관리와 일상 생활의 편리함을 한 곳에서 해결하여 더욱 효율적이고 즐거운 대학 생활을 제공
-- 사용 기술: [Front] Android(Java) + KakaoMaps / [Back] Java, Node.JS(Express), FCM
+- 사용 기술: [Frontend] Android(Java) + KakaoMaps / [Backend] Java, Node.JS(Express), FCM
 - 2024년 3분기 (여름방학)
 
 ## 주요기능
